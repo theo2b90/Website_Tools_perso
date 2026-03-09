@@ -1,90 +1,90 @@
 <!DOCTYPE html>
-<HTML langue="fr">
-<tête>
-    <méta jeu de caractères="UTF-8">
-    <méta nom="fenêtre d'affichage" contenu="largeur=largeur de l'apparence, échelle initiale=1,0">
-    <titre>Calculateur de Mélange E-Liquide</titre>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Mélange E-Liquide</title>
     <style>
-        corps {
-            famille de politiques: Arial, sans importance;
-            largeur maximum: 600px;
-            marge: 50px auto;
-            rembourrage: 20px;
-            couleurur d'arrière-plan: #f5f5f5;
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
         }
-        .conteneur {
-            arrière-plan: blanc;
-            rembourrage: 30px;
-            rayonne de bordure: 8px;
-            ombre-boîte: 0 2px 10px rgba(0,0,0,0,1);
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         h1 {
-            alignement de texte: centre;
-            couleurur: #333;
+            text-align: center;
+            color: #333;
         }
-        .groupe de formules {
-            marge inférieure: 20px;
+        .form-group {
+            margin-bottom: 20px;
         }
-        étiquette {
-            afficher: bloc;
-            marge inférieure: 5px;
-            couleurur: #555;
-            poïdes de la police: audacieux;
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
         }
-        entrée {
-            largeur: 100%;
-            rembourrage: 10px;
-            frontière: 1px solide #ddd;
-            rayonne de bordure: 4px;
-            dimensionnement de la boîte: boîte frontière;
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
-        bouton {
-            largeur: 100%;
-            rembourrage: 12px;
-            couleurur d'arrière-plan: #007bff;
-            couleurur: blanc;
-            frontière: aucun;
-            rayonne de bordure: 4px;
-            malédiction: pointeur;
-            taille de la police: 16px;
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
         }
-        bouton:survivaliste {
-            couleurur d'arrière-plan: #0056b3;
+        button:hover {
+            background-color: #0056b3;
         }
-        .résultats {
-            marge supérieure: 30px;
-            rembourrage: 20px;
-            couleurur d'arrière-plan: #f9f9f9;
-            frontière gauche: 4px solide #007mieux amie;
-            afficher: aucun;
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #007bff;
+            display: none;
         }
-        .élément de résultat {
-            marge: 10px 0;
-            taille de la police: 16px;
+        .result-item {
+            margin: 10px 0;
+            font-size: 16px;
         }
-        .valeur du résultat {
-            poïdes de la police: audacieux;
-            couleurur: #007mieux amie;
+        .result-value {
+            font-weight: bold;
+            color: #007bff;
         }
     </style>
-</tête>
-<corps>
-    <div classe="conteneur">
+</head>
+<body>
+    <div class="container">
         <h1>Calculateur E-Liquide</h1>
         
-        <formule sursoumettre="calculateur(événement)">
-            <div classe="groupe de formulaires">
-                <étiquette verset="volumeTotal">Volume total (ml) :</étiquette>
-                <entrée type="nombre" id="volumeTotal" espace servir="Ex: 100" exiger min="1" ruban adhésif="0,1">
+        <form onsubmit="calculer(event)">
+            <div class="form-group">
+                <label for="volumeTotal">Volume total (ml):</label>
+                <input type="number" id="volumeTotal" placeholder="Ex: 100" required min="1" step="0.1">
+            </div>
+            
+            <div class="form-group">
+                <label for="nicocine">Nicotine désirée (mg/ml):</label>
+                <input type="number" id="nicocine" placeholder="Ex: 3" required min="0" step="0.1">
             </div>
             
             <div classe="groupe de formulaires">
-                <étiquette verset="nicocine">Nicotine désirée (mg/ml) :</étiquette>
-                <entrée type="nombre" id="nicocine" espace servir="Ex: 3" exiger min="0" ruban adhésif="0,1">
-            </div>
-            
-            <div classe="groupe de formulaires">
-                <étiquette verset="tauxBase">Taux de base (%) :</étiquette>
+                <étiquette verser="tauxBase">Taux de base (%) :</étiquette>
                 <entrée type="nombre" id="tauxBase" espace servir="Ex: 70" exiger min="0" max="100" ruban adhésif="0,1">
             </div>
             
@@ -133,3 +133,7 @@
     </script>
 </corps>
 </HTML>
+    </script>
+</corps>
+</HTML>
+
