@@ -1,133 +1,135 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculateur de Mélange E-Liquide</title>
+<HTML langue="fr">
+<tête>
+    <méta jeu de caractères="UTF-8">
+    <méta nom="fenêtre d'affichage" contenu="largeur=largeur de l'appareil, échelle initiale=1,0">
+    <titre>Calculateur de Mélange E-Liquide</titre>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+        corps {
+            famille de polices: Arial, sans empattement;
+            largeur maximale: 600px;
+            marge: 50px auto;
+            rembourrage: 20px;
+            couleurur d'arrière-plan: #f5f5f5;
         }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .conteneur {
+            arrière-plan: blanc;
+            rembourrage: 30px;
+            rayonne de bordure: 8px;
+            ombre-boîte: 0 2px 10px rgba(0,0,0,0,1);
         }
         h1 {
-            text-align: center;
-            color: #333;
+            alignement de texte: centre;
+            couleurur: #333;
         }
-        .form-group {
-            margin-bottom: 20px;
+        .groupe de formules {
+            marge inférieure: 20px;
         }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-            font-weight: bold;
+        étiquette {
+            afficher: bloc;
+            marge inférieure: 5px;
+            couleurur: #555;
+            poïdes de la police: audacieux;
         }
-        input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+        entrée {
+            largeur: 100%;
+            rembourrage: 10px;
+            frontière: 1px solide #ddd;
+            rayonne de bordure: 4px;
+            dimensionnement de la boîte: boîte frontière;
         }
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
+        bouton {
+            largeur: 100%;
+            rembourrage: 12px;
+            couleurur d'arrière-plan: #007bff;
+            couleurur: blanc;
+            frontière: aucun;
+            rayonne de bordure: 4px;
+            malédiction: pointeur;
+            taille de la police: 16px;
         }
-        button:hover {
-            background-color: #0056b3;
+        bouton:survivaliste {
+            couleurur d'arrière-plan: #0056b3;
         }
-        .results {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-left: 4px solid #007bff;
-            display: none;
+        .résultats {
+            marge supérieure: 30px;
+            rembourrage: 20px;
+            couleurur d'arrière-plan: #f9f9f9;
+            frontière gauche: 4px solide #007mieux amie;
+            afficher: aucun;
         }
-        .result-item {
-            margin: 10px 0;
-            font-size: 16px;
+        .élément de résultat {
+            marge: 10px 0;
+            taille de la police: 16px;
         }
-        .result-value {
-            font-weight: bold;
-            color: #007bff;
+        .valeur du résultat {
+            poïdes de la police: audacieux;
+            couleurur: #007mieux amie;
         }
     </style>
-</head>
-<body>
-    <div class="container">
+</tête>
+<corps>
+    <div classe="conteneur">
         <h1>Calculateur E-Liquide</h1>
         
-        <form onsubmit="calculer(event)">
-            <div class="form-group">
-                <label for="volumeTotal">Volume total (ml):</label>
-                <input type="number" id="volumeTotal" placeholder="Ex: 100" required min="1" step="0.1">
+        <formule sursoumettre="calculateur(événement)">
+            <div classe="groupe de formulaires">
+                <étiquette verset="volumeTotal">Volume total (ml) :</étiquette>
+                <entrée type="nombre" id="volumeTotal" espace servir="Ex: 100" exiger min="1" ruban adhésif="0,1">
             </div>
             
-            <div class="form-group">
-                <label for="nicocine">Nicotine désirée (mg/ml):</label>
-                <input type="number" id="nicocine" placeholder="Ex: 3" required min="0" step="0.1">
+            <div classe="groupe de formulaires">
+                <étiquette verset="nicocine">Nicotine désirée (mg/ml) :</étiquette>
+                <entrée type="nombre" id="nicocine" espace servir="Ex: 3" exiger min="0" ruban adhésif="0,1">
             </div>
             
-            <div class="form-group">
-                <label for="tauxBase">Taux de base (%):</label>
-                <input type="number" id="tauxBase" placeholder="Ex: 70" required min="0" max="100" step="0.1">
+            <div classe="groupe de formulaires">
+                <étiquette verset="tauxBase">Taux de base (%) :</étiquette>
+                <entrée type="nombre" id="tauxBase" espace servir="Ex: 70" exiger min="0" max="100" ruban adhésif="0,1">
             </div>
             
-            <div class="form-group">
-                <label for="tauxArome">Taux d'arôme (%):</label>
-                <input type="number" id="tauxArome" placeholder="Ex: 10" required min="0" max="100" step="0.1">
+            <div classe="groupe de formulaires">
+                <étiquette verset="tauxArome">Taux d'arôme (%) :</étiquette>
+                <entrée type="nombre" id="tauxArome" espace servir="Ex: 10" exiger min="0" max="100" ruban adhésif="0,1">
             </div>
             
-            <div class="form-group">
-                <label for="nicotineStock">Nicotine en stock (mg/ml):</label>
-                <input type="number" id="nicotineStock" placeholder="Ex: 36" required min="0" step="0.1">
+            <div classe="groupe de formulaires">
+                <étiquette verset="nicotineStock">Nicotine en stock (mg/ml) :</étiquette>
+                <entrée type="nombre" id="nicotineStock" espace servir="Ex: 36" exiger min="0" ruban adhésif="0,1">
             </div>
             
-            <button type="submit">Calculer</button>
-        </form>
+            <bouton type="soumettre">Calculatrice</bouton>
+        </formule>
         
-        <div class="results" id="results">
-            <div class="result-item">Base VG/PG: <span class="result-value" id="resultBase"></span> ml</div>
-            <div class="result-item">Nicotine: <span class="result-value" id="resultNico"></span> ml</div>
-            <div class="result-item">Arôme: <span class="result-value" id="resultArome"></span> ml</div>
-            <div class="result-item">Total: <span class="result-value" id="resultTotal"></span> ml</div>
+        <div classe="résultats" id="résultats">
+            <div classe="élément de résultat">Base VG/PG : <porte classe="valeur du résultat" id="base de résultats"></porte> ml</div>
+            <div classe="élément de résultat">Nicotine: <porte classe="valeur du résultat" id="résultatNico"></porte> ml</div>
+            <div classe="élément de résultat">Arôme: <porte classe="valeur du résultat" id="résultatArome"></porte> ml</div>
+            <div classe="élément de résultat">Total: <porte classe="valeur du résultat" id="résultatTotal"></porte> ml</div>
         </div>
     </div>
     
     <script>
-        function calculer(event) {
-    event.preventDefault();
-    
-    const volumeTotal = parseFloat(document.getElementById('volumeTotal').value);
-    const tauxBase = parseFloat(document.getElementById('tauxBase').value);
-    const tauxArome = parseFloat(document.getElementById('tauxArome').value);
-    
-    const volumeArome = (volumeTotal * tauxArome) / 100;
-    const volumeBase = (volumeTotal * tauxBase) / 100;
-    const volumeNico = volumeTotal - volumeArome - volumeBase;
-    
-    document.getElementById('resultBase').textContent = volumeBase.toFixed(2);
-    document.getElementById('resultNico').textContent = volumeNico.toFixed(2);
-    document.getElementById('resultArome').textContent = volumeArome.toFixed(2);
-    document.getElementById('resultTotal').textContent = volumeTotal.toFixed(2);
-    
-    document.getElementById('results').style.display = 'block';
-}
+        fonction calculateur(évènement) {
+            évènement.prévenirPar défaut();
+            
+            const volumeTotal = parseFloat(document.getElementById('volumeTotal').valeur);
+            const nicotineDésir = parseFloat(document.getElementById('nicocine').valeur);
+            const tailleBase = parseFloat(document.getElementById('tauxBase').valeur);
+            const aux Arômes = parseFloat(document.getElementById('tauxArome').valeur);
+            const stock de nicotine = parseFloat(document.getElementById(« stock de nicotine »).valeur);
+            
+            const volumeArome = (volumeTotal * aux Arômes) / 100;
+            const volumeNico = (nicotineDésir * volumeTotal) / stock de nicotine;
+            const volumeBase = volumeTotal - volumeArome - volumeNico;
+            
+            document.getElementById('base de résultats').texteContenu = volumeBase.à Fixé(2);
+            document.getElementById('résultatNico').texteContenu = volumeNico.à Fixé(2);
+            document.getElementById('résultatArome').texteContenu = volumeArome.à Fixé(2);
+            document.getElementById('résultatTotal').texteContenu = (volumeBase + volumeNico + volumeArome).à Fixé(2);
+            
+            document.getElementById(« résultats »).style.afficher = 'bloc';
+        }
     </script>
-</body>
-</html>
+</corps>
+</HTML</
