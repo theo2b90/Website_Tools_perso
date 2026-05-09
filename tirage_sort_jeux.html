@@ -39,6 +39,58 @@
                         margin-bottom: 30px;
                         font-size: 2em;
                 }
+
+                .draw-note {
+                        color: #555;
+                        font-size: 0.95em;
+                        margin-top: -14px;
+                        margin-bottom: 18px;
+                }
+
+                .draw-note strong {
+                        color: #2d3436;
+                }
+
+                .search-section {
+                        margin: 0 auto 20px;
+                        max-width: 520px;
+                        text-align: left;
+                }
+
+                .search-label {
+                        display: block;
+                        color: #2d3436;
+                        font-size: 0.9em;
+                        font-weight: 600;
+                        margin-bottom: 8px;
+                }
+
+                .search-input {
+                        width: 100%;
+                        border: 2px solid #dfe6e9;
+                        border-radius: 12px;
+                        padding: 12px 14px;
+                        font-size: 1em;
+                        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+                }
+
+                .search-input:focus {
+                        outline: none;
+                        border-color: #667eea;
+                        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+                }
+
+                .search-result {
+                        min-height: 22px;
+                        margin-top: 8px;
+                        color: #636e72;
+                        font-size: 0.9em;
+                }
+
+                .search-section.completed {
+                        margin-top: -6px;
+                        margin-bottom: 24px;
+                }
                 
                 .games-grid {
                         display: grid;
@@ -148,8 +200,21 @@
 <body>
         <div class="container">
                 <h1>🎮 Tirage Aléatoire</h1>
+                <p class="draw-note"><strong>Règle :</strong> 3 jeux principaux + 1 jeu indé</p>
+                <div class="search-section">
+                        <label class="search-label" for="gameSearch">Rechercher un jeu</label>
+                        <input class="search-input" id="gameSearch" list="gamesDatalist" placeholder="Ex: Machinarium, Elden ring...">
+                        <datalist id="gamesDatalist"></datalist>
+                        <div class="search-result" id="searchResult"></div>
+                </div>
+                <div class="search-section completed">
+                        <label class="search-label" for="completedSearch">Rechercher un jeu terminé</label>
+                        <input class="search-input" id="completedSearch" list="completedDatalist" placeholder="Ex: GTA V, Witcher 3...">
+                        <datalist id="completedDatalist"></datalist>
+                        <div class="search-result" id="completedSearchResult"></div>
+                </div>
                 <div class="games-grid" id="gamesContainer"></div>
-                <button id="drawBtn">Tirer 3 Jeux</button>
+                <button id="drawBtn">Tirer 4 Jeux</button>
         </div>
         
         <script>
@@ -158,163 +223,325 @@
 const gamesRaw = [
         // ACTION
         // Action aventure
-        'Uncharted 4',
-        'Uncharted the lost legacy',
-        'God of war ragnarok',
-        'A plage tale: innocence',
+        'Uncharted 4 (DD4)',
+        'Uncharted the lost legacy (DD4)',
+        'God of war ragnarok (CD)',
+        'A plage tale: innocence (DD1)',
         // Monde ouvert
-        'Red dead redemption 2',
-        'Horizon forbidden west',
-        'Ghost of tsushima',
-        'Sleeping dog',
-        'Spider man',
-        'Far cry 3',
+        'Red dead redemption 2 (DD3)',
+        'Horizon forbidden west (CD)',
+        'Ghost of tsushima (CD)',
+        'Sleeping dog (CD)',
+        'Spider man (Console)',
+        'Far cry 3 (DD2)',
         // Survival Horror
-        'Last of us',
-        'Last of us 2',
-        'resident evil 4',
-        'resident evil 5',
-        'resident evil 6',
-        'resident evil 7',
-        'resident evil village',
+        'Last of us (CD)',
+        'Last of us 2 (CD)',
+        'resident evil 4 (DD3)',
+        'resident evil 5 (DD3)',
+        'resident evil 6 (DD3)',
+        'resident evil 7 (DD3)',
+        'resident evil village (DD3)',
         // RPG AU SENS LARGE
         // Jrpg
-        'Personna 3',
-        'Personna 4',
-        'Personna 5',
-        'Tales of berseria',
-        'Tales of vesperia',
-        'Tales of arise',
-        'Tales of grace f',
-        'World of FF',
+        'Personna 3 (DD2)',
+        'Personna 4 (DD2)',
+        'Personna 5 (DD3)',
+        'Tales of berseria (DD1)',
+        'Tales of vesperia (DD1)',
+        'Tales of arise (DD1)',
+        'Tales of grace f (DD1)',
+        'World of FF (CD)',
         // Trpg
-        'Solasta',
-        'Pillards of eternity 2',
-        'Baldurs gate 3',
-        'divinity 2',
-        'warhammer 40000 rogue trader',
+        'Solasta (PC)',
+        'Pillards of eternity 2 (PC)',
+        'Baldurs gate 3 (PC)',
+        'divinity 2 (DD2)',
+        'warhammer 40000 rogue trader (PC)',
         // Arpg
-        'hogwarts Legacy',
-        'Niear replicant',
-        'Cyberpunk',
-        'Mass effect 1',
-        'Mass effect 2',
-        'Mass effect 3',
-        'La terre du millieu, l`ombre de la guerre',
-        'La terre du millieu, l`ombre du mordor',
-        'Assassin creed origin',
-        'Assassin creed odyssey',
-        'Dragon age',
-        'Monster hunter',
+        'hogwarts Legacy (DD2)',
+        'Niear replicant (CD)',
+        'Cyberpunk (DD2)',
+        'Mass effect 1 (DD2)',
+        'Mass effect 2 (DD2)',
+        'Mass effect 3 (DD2)',
+        'La terre du millieu, l`ombre de la guerre (DD2)',
+        'La terre du millieu, l`ombre du mordor (DD2)',
+        'Assassin creed origin (DD1)',
+        'Assassin creed odyssey (DD1)',
+        'Dragon age (CD)',
+        'Monster hunter (DD2)',
         // DarkSouls like
-        'Dark soul 3',
-        'Nioh2',
-        'BloodBorne',
-        'Seikiro',
-        'Elden ring',
-        'Lie of P',
-        'Mortal shell',
-        'Lord of the fallen',
+        'Dark soul 3 (CD)',
+        'Nioh2 (CD)',
+        'BloodBorne (CD)',
+        'Seikiro (DD4)',
+        'Elden ring (CD)',
+        'Lie of P (DD2)',
+        'Mortal shell (DD2)',
+        'Lord of the fallen (DD2)',
         // Hack'n'slash
-        'Diablo 3',
-        'Diablo 4',
-        'Path of exile', 
+        'Diablo 3 (PC)',
+        'Diablo 4 (DD2)',
+        'Path of exile (DD2)', 
         // Beat them all
-        'Devil may cry',
-        'Bayonetta',
-        'Ades',
+        'Devil may cry (CD)',
+        'Bayonetta (DD2)',
         // AVENTURE
         // Point'n click
-        'goblins 1',
-        'goblins 2',
-        'goblins 3',
-        'grim fandango',
-        'legend of kyrandia 1',
-        'legend of kyrandia 2',
-        'legend of kyrandia 3',
-        'machinarium',
-        'stasis',
-        'monkey island 4',
-        'monkey island 5',
-        'monkey island 6',
-        'Walkig dead',
-        'full throttle',
-        'Runaway 1',
-        'Runaway 2',
-        'Runaway 3',
-        'sam & max  1 2 3',
+        'goblins 1 (PC)',
+        'goblins 2 (PC)',
+        'goblins 3 (PC)',
+        'grim fandango (PC)',
+        'legend of kyrandia 1 (PC)',
+        'legend of kyrandia 2 (PC)',
+        'legend of kyrandia 3 (PC)',
+        'machinarium (PC)',
+        'stasis (PC)',
+        'monkey island 4 (PC)',
+        'monkey island 5 (PC)',
+        'monkey island 6 (PC)',
+        'Walkig dead (DD4)',
+        'full throttle (PC)',
+        'Runaway 1 (PC)',
+        'Runaway 2 (PC)',
+        'Runaway 3 (PC)',
+        'sam & max  1 2 3 (PC)',
         //Plate-forme
-        'Rayman',
-        'Cuphead',
+        'Rayman (CD)',
+        'Cuphead (DD2)',
         // STRATEGIE & TACTIQUE
-        'Starcraft',
-        'Ancestors',
-        'Unicorn overlord',
-        'Valkyrie chronicle',
-        'Valkyrie chronicle 4',
+        'Starcraft (PC)',
+        'Ancestors (DD1)',
+        'Unicorn overlord (DD4)',
+        'Valkyrie chronicle (DD3)',
+        'Valkyrie chronicle 4 (DD3)',
         // FPS
-        'Doom',
+        'Doom (DD2)',
+        //Indé ; autre
+        "Ades (DD1)",
+        "Outher wild (DD1)",
+        "Blasphemous (DD1)",
+        "The witness (DD1)",
+        "Oxenfree (DD1)",
+        "Amnesia collection (DD1)",
+        "Subnautica (DD1)",
+        "Stanley parable (DD1)",
+        "Talos principe (DD1)",
+        "Unravel one &  two (DD1)",
+        "Human fall flat (DD1)",
+        "Inside (DD1)",
+        "Darkest dungeon (DD1)",
+        "Abzu (DD1)",
+        "Child of light (DD1)",
+        "Thumber (DD1)",
+        "Action henk (DD1)",
+        "Enter the dungeon (DD1)",
+        "Reus (DD1)",
+        "This war of mine (DD1)",
+        "Hotline miami 1 & 2 (DD1)",
+        "Hue (DD1)",
+        "The swappers (DD1)",
+        "Stealth inc 2 (DD1)",
+        "Axiom verge 2 (DD1)",
+        "Town of light (DD1)",
+        "Days gone (DD2)",
+        "Prey (DD3)",
+        "Children of morta (DD3)",
+        "Salt and sanctuary (DD3)",
+        "Stickbold! (DD3)",
+        "Moving Out (DD3)",
+        "Flat Heroes (DD3)",
+        
+        //Terminé ; Completionniste
+        "GTA V (DD1)",
+        "tales of zestiria (DD1)",
+        "dead or alive (DD1)",
+        "witcher 3 (DD1)",
+        "kingdom heart (tous sauf le 3) (DD1)",
+        "kingdom heart 3 (DD3)",
+        "ffx/x2 (DD1)",
+        "ff XII (DD4)",
+        "ni no kuni 2 (DD1)",
+        "Kingdom come deliverance (DD1)",
+        "shadow of tomb rider (DD1)",
+        "ratchet & clank (DD3)",
+        "resident evil 2, 3 (DD3)",
+        "Nioh (DD4)",
+        "Nier automata (DD4)",
+        "starwars jedi (DD4)",
+        "Mortal kombat x (DD4)",
+        "Dark soul 1 et 2 (DD4)",
+        "ff7 remake (console)",
+        "fallout 4 (console)",
+        "stardew valley (console)",
+
+
+
+        
+        
+
+
+
+
+
+
+
+
+
+
+
 ];
 
-// On va parser la liste pour associer chaque jeu à son genre
-const games = [];
-let currentGenre = '';
-let currentSubGenre = '';
+const indieStartName = 'Ades (DD1)';
+const completedStartName = 'GTA V (DD1)';
+const indieStartIndex = gamesRaw.indexOf(indieStartName);
+const completedStartIndex = gamesRaw.indexOf(completedStartName);
 
-gamesRaw.forEach(line => {
-    const trimmed = line.trim();
-    if (trimmed.startsWith('//')) {
-        // C'est un commentaire, on met à jour le genre ou sous-genre
-        const genreText = trimmed.replace('//', '').trim();
-        // Si le commentaire contient "ACTION", "RPG", etc. on considère que c'est un genre principal
-        if (
-            genreText.toUpperCase().includes('ACTION') ||
-            genreText.toUpperCase().includes('RPG') ||
-            genreText.toUpperCase().includes('AVENTURE') ||
-            genreText.toUpperCase().includes('STRATEGIE') ||
-            genreText.toUpperCase().includes('FPS')
-        ) {
-            currentGenre = genreText;
-            currentSubGenre = '';
-        } else {
-            currentSubGenre = genreText;
+const games = gamesRaw.map((line, index) => {
+        const trimmed = line.trim();
+        let genre = '';
+
+        if (indieStartIndex !== -1 && completedStartIndex !== -1 && index >= indieStartIndex && index < completedStartIndex) {
+                genre = 'Inde ; autre';
+        } else if (completedStartIndex !== -1 && index >= completedStartIndex) {
+                genre = 'Termine ; Completionniste';
         }
-    } else if (trimmed.length > 0) {
-        games.push({
-            name: trimmed,
-            genre: currentGenre,
-            subGenre: currentSubGenre
-        });
-    }
+
+        return {
+                name: trimmed,
+                genre,
+                subGenre: ''
+        };
 });
+
+const excludedGenres = new Set(['Inde ; autre', 'Termine ; Completionniste']);
+const mainDrawGames = games.filter(game => !excludedGenres.has(game.genre));
+const indieGames = games.filter(game => game.genre === 'Inde ; autre');
+const completedGames = games.filter(game => game.genre === 'Termine ; Completionniste');
+
+function initGameSearch() {
+        const datalist = document.getElementById('gamesDatalist');
+        const searchInput = document.getElementById('gameSearch');
+        const searchResult = document.getElementById('searchResult');
+        const completedDatalist = document.getElementById('completedDatalist');
+        const completedSearchInput = document.getElementById('completedSearch');
+        const completedSearchResult = document.getElementById('completedSearchResult');
+
+        if (!datalist || !searchInput || !searchResult || !completedDatalist || !completedSearchInput || !completedSearchResult) {
+                return;
+        }
+
+        datalist.innerHTML = gamesRaw
+                .slice()
+                .sort((a, b) => a.localeCompare(b, 'fr'))
+                .map(name => `<option value="${name.replace(/"/g, '&quot;')}"></option>`)
+                .join('');
+
+        completedDatalist.innerHTML = completedGames
+                .map(game => game.name)
+                .slice()
+                .sort((a, b) => a.localeCompare(b, 'fr'))
+                .map(name => `<option value="${name.replace(/"/g, '&quot;')}"></option>`)
+                .join('');
+
+        const updateSearchResult = () => {
+                const term = searchInput.value.trim().toLowerCase();
+                if (!term) {
+                        searchResult.textContent = '';
+                        return;
+                }
+
+                const match = games.find(game => game.name.toLowerCase() === term);
+                if (!match) {
+                        searchResult.textContent = 'Jeu introuvable dans la liste.';
+                        return;
+                }
+
+                let section = 'Principal';
+                if (match.genre === 'Inde ; autre') {
+                        section = 'Inde ; autre';
+                } else if (match.genre === 'Termine ; Completionniste') {
+                        section = 'Termine ; Completionniste';
+                }
+
+                searchResult.textContent = `Trouve: ${match.name} | Section: ${section}`;
+        };
+
+        searchInput.addEventListener('input', updateSearchResult);
+        searchInput.addEventListener('change', updateSearchResult);
+
+        const updateCompletedSearchResult = () => {
+                const term = completedSearchInput.value.trim().toLowerCase();
+                if (!term) {
+                        completedSearchResult.textContent = '';
+                        return;
+                }
+
+                const match = completedGames.find(game => game.name.toLowerCase() === term);
+                if (!match) {
+                        completedSearchResult.textContent = 'Jeu introuvable dans la section Terminé ; Completionniste.';
+                        return;
+                }
+
+                completedSearchResult.textContent = `Trouve: ${match.name} | Section: Termine ; Completionniste`;
+        };
+
+        completedSearchInput.addEventListener('input', updateCompletedSearchResult);
+        completedSearchInput.addEventListener('change', updateCompletedSearchResult);
+}
                 
 let flipped = false;
 
 function showEmptyCards() {
         const container = document.getElementById('gamesContainer');
         container.innerHTML = '';
-        for (let i = 0; i < 3; i++) {
-                container.innerHTML += `
-                        <div class="flip-card" id="flipCard${i}">
-                                <div class="flip-card-inner">
-                                        <div class="flip-card-front">?</div>
-                                        <div class="flip-card-back"></div>
-                                </div>
+        container.innerHTML = `
+                <div class="flip-card" id="flipCard0">
+                        <div class="flip-card-inner">
+                                <div class="flip-card-front">?</div>
+                                <div class="flip-card-back"></div>
                         </div>
-                `;
-        }
+                </div>
+                <div class="flip-card" id="flipCard1">
+                        <div class="flip-card-inner">
+                                <div class="flip-card-front">?</div>
+                                <div class="flip-card-back"></div>
+                        </div>
+                </div>
+                <div class="flip-card" id="flipCard2">
+                        <div class="flip-card-inner">
+                                <div class="flip-card-front">?</div>
+                                <div class="flip-card-back"></div>
+                        </div>
+                </div>
+                <div class="flip-card" id="flipCardInde">
+                        <div class="flip-card-inner">
+                                <div class="flip-card-front">Inde</div>
+                                <div class="flip-card-back"></div>
+                        </div>
+                </div>
+        `;
 }
 
 function drawGames() {
         if (!flipped) {
+                if (mainDrawGames.length < 3 || indieGames.length === 0) {
+                        alert('Pas assez de jeux pour effectuer le tirage.');
+                        return;
+                }
+
                 // Tirage et affichage
                 const selected = [];
-                const gamesCopy = [...games];
+                const gamesCopy = [...mainDrawGames];
                 for (let i = 0; i < 3; i++) {
                         const randomIndex = Math.floor(Math.random() * gamesCopy.length);
                         selected.push(gamesCopy[randomIndex]);
                         gamesCopy.splice(randomIndex, 1);
                 }
+
+                const indieSelected = indieGames[Math.floor(Math.random() * indieGames.length)];
+
                 // Couleurs à attribuer
                 const colors = ['red', 'yellow', 'green'];
                 // Mélange aléatoire
@@ -336,12 +563,27 @@ function drawGames() {
                                 `;
                         }
                 }
+
+                const indieCard = document.getElementById('flipCardInde');
+                if (indieCard) {
+                        indieCard.classList.add('flipped');
+                        const back = indieCard.querySelector('.flip-card-back');
+                        back.className = 'flip-card-back yellow';
+                        back.innerHTML = `
+                                <div>${indieSelected.name}</div>
+                                <div style="font-size:0.9em;font-weight:normal;margin-top:6px;">
+                                        <em>Inde ; autre</em>
+                                </div>
+                        `;
+                }
+
                 flipped = true;
                 document.getElementById('drawBtn').textContent = 'Réinitialiser';
         } else {
                 // Réinitialise
-                for (let i = 0; i < 3; i++) {
-                        const card = document.getElementById('flipCard'+i);
+                const cardIds = ['flipCard0', 'flipCard1', 'flipCard2', 'flipCardInde'];
+                for (const cardId of cardIds) {
+                        const card = document.getElementById(cardId);
                         if (card) {
                                 card.classList.remove('flipped');
                                 const back = card.querySelector('.flip-card-back');
@@ -350,11 +592,12 @@ function drawGames() {
                         }
                 }
                 flipped = false;
-                document.getElementById('drawBtn').textContent = 'Tirer 3 Jeux';
+                document.getElementById('drawBtn').textContent = 'Tirer 4 Jeux';
         }
 }
 
 showEmptyCards();
+initGameSearch();
 document.getElementById('drawBtn').addEventListener('click', drawGames);
         </script>
 </body>
