@@ -91,6 +91,79 @@
                         margin-top: -6px;
                         margin-bottom: 24px;
                 }
+
+                .manage-section {
+                        margin: 0 auto 26px;
+                        max-width: 520px;
+                        text-align: left;
+                        border: 1px solid #d7dbe2;
+                        border-radius: 14px;
+                        padding: 14px;
+                        background: linear-gradient(180deg, #fcfdff 0%, #f4f7ff 100%);
+                        box-shadow: 0 4px 14px rgba(31, 41, 55, 0.08);
+                }
+
+                .manage-row {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        gap: 10px;
+                        margin-bottom: 10px;
+                }
+
+                .manage-select {
+                        width: 100%;
+                        border: 2px solid #dfe6e9;
+                        border-radius: 10px;
+                        padding: 10px 12px;
+                        font-size: 0.95em;
+                        background: #fff;
+                }
+
+                .manage-actions {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 8px;
+                        margin-top: 10px;
+                }
+
+                .manage-actions button {
+                        padding: 8px 12px;
+                        border-radius: 9px;
+                        font-size: 0.9em;
+                        border: none;
+                        color: #fff;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: transform 0.15s ease, opacity 0.15s ease;
+                }
+
+                .manage-actions button:hover {
+                        transform: translateY(-1px);
+                        opacity: 0.95;
+                }
+
+                .manage-actions button:active {
+                        transform: translateY(0);
+                }
+
+                .btn-secondary {
+                        background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+                }
+
+                .btn-warn {
+                        background: linear-gradient(135deg, #f39c12 0%, #d35400 100%);
+                }
+
+                .btn-danger {
+                        background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+                }
+
+                .manage-status {
+                        min-height: 20px;
+                        margin-top: 8px;
+                        font-size: 0.9em;
+                        color: #2d3436;
+                }
                 
                 .games-grid {
                         display: grid;
@@ -196,7 +269,7 @@
                         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
                 }
                 
-                button {
+                #drawBtn {
                         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                         color: white;
                         border: none;
@@ -208,11 +281,11 @@
                         font-weight: bold;
                 }
                 
-                button:hover {
+                #drawBtn:hover {
                         transform: scale(1.05);
                 }
                 
-                button:active {
+                #drawBtn:active {
                         transform: scale(0.95);
                 }
                 
@@ -226,6 +299,10 @@
                         }
                         
                         .games-grid {
+                                grid-template-columns: 1fr;
+                        }
+
+                        .manage-row {
                                 grid-template-columns: 1fr;
                         }
                 }
@@ -247,17 +324,36 @@
                         <datalist id="completedDatalist"></datalist>
                         <div class="search-result" id="completedSearchResult"></div>
                 </div>
+                <div class="manage-section">
+                        <label class="search-label" for="manageCategory">Gérer la bibliothèque</label>
+                        <div class="manage-row">
+                                <select class="manage-select" id="manageCategory"></select>
+                                <input class="search-input" id="manageGameInput" list="manageGamesDatalist" placeholder="Nom exact du jeu">
+                        </div>
+                        <datalist id="manageGamesDatalist"></datalist>
+                        <div class="manage-actions">
+                                <button class="btn-secondary" id="addGameBtn" type="button">Ajouter</button>
+                                <button class="btn-danger" id="deleteGameBtn" type="button">Supprimer</button>
+                                <button class="btn-warn" id="markCompletedBtn" type="button">Déplacer vers Terminé</button>
+                                <button class="btn-secondary" id="exportJsonBtn" type="button">Exporter JSON</button>
+                                <button class="btn-secondary" id="resetLocalBtn" type="button">Recharger depuis fichier</button>
+                        </div>
+                        <div class="manage-status" id="manageStatus"></div>
+                </div>
                 <div class="games-grid" id="gamesContainer"></div>
                 <button id="drawBtn">Tirer 4 Jeux</button>
         </div>
         
         <script>
 const GAME_DATA_URL = './games.json';
+const LOCAL_STORAGE_KEY = 'games_data_v2';
 
+let dataModel = { categories: [] };
 let games = [];
 let mainDrawGames = [];
 let indieGames = [];
 let completedGames = [];
+let flipped = false;
 
 function normalizeGames(list, genre) {
         return list
@@ -266,8 +362,74 @@ function normalizeGames(list, genre) {
                 .map(name => ({ name, genre, subGenre: '' }));
 }
 
+function isValidModel(model) {
+        return !!model && Array.isArray(model.categories);
+}
+
+function buildGamesFromModel() {
+        games = [];
+        mainDrawGames = [];
+        indieGames = [];
+        completedGames = [];
+
+        for (const category of dataModel.categories) {
+                const names = Array.isArray(category.games) ? category.games : [];
+                const genreLabel = category.label || 'Principal';
+                const normalized = normalizeGames(names, genreLabel);
+
+                games.push(...normalized);
+
+                if (category.type === 'completed') {
+                        completedGames.push(...normalized);
+                } else if (category.type === 'indie') {
+                        indieGames.push(...normalized);
+                } else {
+                        mainDrawGames.push(...normalized);
+                }
+        }
+}
+
+function saveLocalModel() {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataModel));
+}
+
+function getCategoryById(categoryId) {
+        return dataModel.categories.find(category => category.id === categoryId) || null;
+}
+
+function getCompletedCategory() {
+        return dataModel.categories.find(category => category.type === 'completed') || null;
+}
+
+function refreshAllFromModel() {
+        buildGamesFromModel();
+        initGameSearch();
+        initManagePanel();
+}
+
+function showManageStatus(message, isError) {
+        const manageStatus = document.getElementById('manageStatus');
+        if (!manageStatus) {
+                return;
+        }
+
+        manageStatus.textContent = message;
+        manageStatus.style.color = isError ? '#c0392b' : '#1e8449';
+}
+
+function normalizeName(text) {
+        return String(text || '').trim().toLowerCase();
+}
+
+function findGameIndex(gamesList, gameName) {
+        const target = normalizeName(gameName);
+        return gamesList.findIndex(item => normalizeName(item) === target);
+}
+
 async function loadGamesData() {
         const drawBtn = document.getElementById('drawBtn');
+        const localRaw = localStorage.getItem(LOCAL_STORAGE_KEY);
+
         try {
                 const response = await fetch(GAME_DATA_URL, { cache: 'no-store' });
                 if (!response.ok) {
@@ -275,26 +437,52 @@ async function loadGamesData() {
                 }
 
                 const data = await response.json();
-                const main = Array.isArray(data.main) ? data.main : [];
-                const indie = Array.isArray(data.indie) ? data.indie : [];
-                const completed = Array.isArray(data.completed) ? data.completed : [];
+                if (!isValidModel(data)) {
+                        throw new Error('Format JSON invalide: categories manquantes.');
+                }
 
-                mainDrawGames = normalizeGames(main, 'Principal');
-                indieGames = normalizeGames(indie, 'Inde ; autre');
-                completedGames = normalizeGames(completed, 'Termine ; Completionniste');
-                games = [...mainDrawGames, ...indieGames, ...completedGames];
+                if (localRaw) {
+                        try {
+                                const localModel = JSON.parse(localRaw);
+                                dataModel = isValidModel(localModel) ? localModel : data;
+                        } catch {
+                                dataModel = data;
+                        }
+                } else {
+                        dataModel = data;
+                }
+
+                refreshAllFromModel();
 
                 return true;
         } catch (error) {
                 console.error(error);
+
+                if (localRaw) {
+                        try {
+                                const localModel = JSON.parse(localRaw);
+                                if (isValidModel(localModel) && localModel.categories.length > 0) {
+                                        dataModel = localModel;
+                                        refreshAllFromModel();
+                                        showManageStatus('Mode local: données chargées depuis la sauvegarde navigateur.', false);
+                                        return true;
+                                }
+                        } catch {
+                                // Ignore local fallback parse errors
+                        }
+                }
+
                 if (drawBtn) {
                         drawBtn.disabled = true;
                         drawBtn.textContent = 'Erreur de chargement';
                 }
                 const searchResult = document.getElementById('searchResult');
                 if (searchResult) {
-                        searchResult.textContent = 'Impossible de charger games.json. En local, lance via un serveur; en ligne (GitHub Pages), cela fonctionne.';
+                        searchResult.textContent = 'Impossible de charger games.json. En local: lance un serveur web ou utilise d\'abord une sauvegarde locale.';
                 }
+
+                initManagePanel();
+                showManageStatus('Aucune donnée disponible. Vérifie games.json ou lance la page via serveur.', true);
                 return false;
         }
 }
@@ -306,6 +494,7 @@ function initGameSearch() {
         const completedDatalist = document.getElementById('completedDatalist');
         const completedSearchInput = document.getElementById('completedSearch');
         const completedSearchResult = document.getElementById('completedSearchResult');
+        const manageDatalist = document.getElementById('manageGamesDatalist');
 
         if (!datalist || !searchInput || !searchResult || !completedDatalist || !completedSearchInput || !completedSearchResult) {
                 return;
@@ -325,6 +514,15 @@ function initGameSearch() {
                 .map(name => `<option value="${name.replace(/"/g, '&quot;')}"></option>`)
                 .join('');
 
+        if (manageDatalist) {
+                manageDatalist.innerHTML = games
+                        .map(game => game.name)
+                        .slice()
+                        .sort((a, b) => a.localeCompare(b, 'fr'))
+                        .map(name => `<option value="${name.replace(/"/g, '&quot;')}"></option>`)
+                        .join('');
+        }
+
         const updateSearchResult = () => {
                 const term = searchInput.value.trim().toLowerCase();
                 if (!term) {
@@ -338,18 +536,13 @@ function initGameSearch() {
                         return;
                 }
 
-                let section = 'Principal';
-                if (match.genre === 'Inde ; autre') {
-                        section = 'Inde ; autre';
-                } else if (match.genre === 'Termine ; Completionniste') {
-                        section = 'Termine ; Completionniste';
-                }
+                const section = match.genre || 'Principal';
 
                 searchResult.textContent = `Trouve: ${match.name} | Section: ${section}`;
         };
 
-        searchInput.addEventListener('input', updateSearchResult);
-        searchInput.addEventListener('change', updateSearchResult);
+        searchInput.oninput = updateSearchResult;
+        searchInput.onchange = updateSearchResult;
 
         const updateCompletedSearchResult = () => {
                 const term = completedSearchInput.value.trim().toLowerCase();
@@ -367,11 +560,165 @@ function initGameSearch() {
                 completedSearchResult.textContent = `Trouve: ${match.name} | Section: Termine ; Completionniste`;
         };
 
-        completedSearchInput.addEventListener('input', updateCompletedSearchResult);
-        completedSearchInput.addEventListener('change', updateCompletedSearchResult);
+        completedSearchInput.oninput = updateCompletedSearchResult;
+        completedSearchInput.onchange = updateCompletedSearchResult;
 }
-                
-let flipped = false;
+
+function initManagePanel() {
+        const select = document.getElementById('manageCategory');
+        if (!select) {
+                return;
+        }
+
+        if (!Array.isArray(dataModel.categories) || dataModel.categories.length === 0) {
+                select.innerHTML = '<option value="">Aucune catégorie disponible</option>';
+                return;
+        }
+
+        const previousValue = select.value;
+        select.innerHTML = dataModel.categories
+                .map(category => `<option value="${category.id}">${category.label}</option>`)
+                .join('');
+
+        if (previousValue && getCategoryById(previousValue)) {
+                select.value = previousValue;
+        }
+}
+
+function addGameToCategory() {
+        const select = document.getElementById('manageCategory');
+        const input = document.getElementById('manageGameInput');
+        if (!select || !input) {
+                return;
+        }
+
+        const category = getCategoryById(select.value);
+        const gameName = input.value.trim();
+        if (!category || !gameName) {
+                showManageStatus('Choisis une catégorie et un nom de jeu.', true);
+                return;
+        }
+
+        if (findGameIndex(category.games, gameName) !== -1) {
+                        showManageStatus('Ce jeu existe déjà dans cette catégorie.', true);
+                return;
+        }
+
+        category.games.push(gameName);
+        saveLocalModel();
+        refreshAllFromModel();
+        input.value = '';
+        showManageStatus(`Ajouté dans ${category.label}.`, false);
+}
+
+function deleteGameFromCategory() {
+        const select = document.getElementById('manageCategory');
+        const input = document.getElementById('manageGameInput');
+        if (!select || !input) {
+                return;
+        }
+
+        const category = getCategoryById(select.value);
+        const gameName = input.value.trim();
+        if (!category || !gameName) {
+                showManageStatus('Choisis une catégorie et un nom de jeu.', true);
+                return;
+        }
+
+        const index = findGameIndex(category.games, gameName);
+        if (index === -1) {
+                showManageStatus('Jeu introuvable dans la catégorie sélectionnée.', true);
+                return;
+        }
+
+        category.games.splice(index, 1);
+        saveLocalModel();
+        refreshAllFromModel();
+        input.value = '';
+        showManageStatus(`Supprimé de ${category.label}.`, false);
+}
+
+function moveGameToCompleted() {
+        const select = document.getElementById('manageCategory');
+        const input = document.getElementById('manageGameInput');
+        if (!select || !input) {
+                return;
+        }
+
+        const sourceCategory = getCategoryById(select.value);
+        const completedCategory = getCompletedCategory();
+        const gameName = input.value.trim();
+
+        if (!sourceCategory || !completedCategory || !gameName) {
+                showManageStatus('Action impossible: catégorie source/terminée manquante ou nom vide.', true);
+                return;
+        }
+
+        if (sourceCategory.id === completedCategory.id) {
+                showManageStatus('Le jeu est déjà dans Terminé ; Completionniste.', true);
+                return;
+        }
+
+        const sourceIndex = findGameIndex(sourceCategory.games, gameName);
+        if (sourceIndex === -1) {
+                showManageStatus('Jeu introuvable dans la catégorie source.', true);
+                return;
+        }
+
+        const existingInCompleted = findGameIndex(completedCategory.games, gameName);
+        if (existingInCompleted === -1) {
+                completedCategory.games.push(sourceCategory.games[sourceIndex]);
+        }
+        sourceCategory.games.splice(sourceIndex, 1);
+
+        saveLocalModel();
+        refreshAllFromModel();
+        input.value = '';
+        showManageStatus('Jeu déplacé vers Terminé ; Completionniste.', false);
+}
+
+function exportCurrentJson() {
+        const blob = new Blob([JSON.stringify(dataModel, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'games.json';
+        link.click();
+        URL.revokeObjectURL(url);
+        showManageStatus('Export JSON téléchargé.', false);
+}
+
+async function resetFromFile() {
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
+        const loaded = await loadGamesData();
+        if (loaded) {
+                showManageStatus('Données rechargées depuis games.json.', false);
+        }
+}
+
+function bindManageActions() {
+        const addBtn = document.getElementById('addGameBtn');
+        const deleteBtn = document.getElementById('deleteGameBtn');
+        const moveBtn = document.getElementById('markCompletedBtn');
+        const exportBtn = document.getElementById('exportJsonBtn');
+        const resetBtn = document.getElementById('resetLocalBtn');
+
+        if (addBtn) {
+                addBtn.onclick = addGameToCategory;
+        }
+        if (deleteBtn) {
+                deleteBtn.onclick = deleteGameFromCategory;
+        }
+        if (moveBtn) {
+                moveBtn.onclick = moveGameToCompleted;
+        }
+        if (exportBtn) {
+                exportBtn.onclick = exportCurrentJson;
+        }
+        if (resetBtn) {
+                resetBtn.onclick = resetFromFile;
+        }
+}
 
 function showEmptyCards() {
         const container = document.getElementById('gamesContainer');
@@ -490,7 +837,7 @@ async function initApp() {
                 return;
         }
 
-        initGameSearch();
+        bindManageActions();
         if (drawBtn) {
                 drawBtn.disabled = false;
                 drawBtn.textContent = 'Tirer 4 Jeux';
