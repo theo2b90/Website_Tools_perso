@@ -564,6 +564,26 @@ function initGameSearch() {
         completedSearchInput.onchange = updateCompletedSearchResult;
 }
 
+function updateManageGamesList() {
+        const select = document.getElementById('manageCategory');
+        const manageDatalist = document.getElementById('manageGamesDatalist');
+        if (!select || !manageDatalist) {
+                return;
+        }
+
+        const category = getCategoryById(select.value);
+        if (!category) {
+                manageDatalist.innerHTML = '';
+                return;
+        }
+
+        manageDatalist.innerHTML = category.games
+                .slice()
+                .sort((a, b) => a.localeCompare(b, 'fr'))
+                .map(name => `<option value="${name.replace(/"/g, '&quot;')}"></option>`)
+                .join('');
+}
+
 function initManagePanel() {
         const select = document.getElementById('manageCategory');
         if (!select) {
@@ -583,6 +603,9 @@ function initManagePanel() {
         if (previousValue && getCategoryById(previousValue)) {
                 select.value = previousValue;
         }
+
+        select.onchange = updateManageGamesList;
+        updateManageGamesList();
 }
 
 function addGameToCategory() {
