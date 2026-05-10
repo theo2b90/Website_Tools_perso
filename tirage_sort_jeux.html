@@ -312,18 +312,6 @@
         <div class="container">
                 <h1>🎮 Tirage Aléatoire</h1>
                 <p class="draw-note"><strong>Règle :</strong> 3 jeux principaux + 1 jeu indé</p>
-                <div class="search-section">
-                        <label class="search-label" for="gameSearch">Rechercher un jeu</label>
-                        <input class="search-input" id="gameSearch" list="gamesDatalist" placeholder="Ex: Machinarium, Elden ring...">
-                        <datalist id="gamesDatalist"></datalist>
-                        <div class="search-result" id="searchResult"></div>
-                </div>
-                <div class="search-section completed">
-                        <label class="search-label" for="completedSearch">Rechercher un jeu terminé</label>
-                        <input class="search-input" id="completedSearch" list="completedDatalist" placeholder="Ex: GTA V, Witcher 3...">
-                        <datalist id="completedDatalist"></datalist>
-                        <div class="search-result" id="completedSearchResult"></div>
-                </div>
                 <div class="manage-section">
                         <label class="search-label" for="manageCategory">Gérer la bibliothèque</label>
                         <div class="manage-row">
@@ -403,7 +391,6 @@ function getCompletedCategory() {
 
 function refreshAllFromModel() {
         buildGamesFromModel();
-        initGameSearch();
         initManagePanel();
 }
 
@@ -485,83 +472,6 @@ async function loadGamesData() {
                 showManageStatus('Aucune donnée disponible. Vérifie games.json ou lance la page via serveur.', true);
                 return false;
         }
-}
-
-function initGameSearch() {
-        const datalist = document.getElementById('gamesDatalist');
-        const searchInput = document.getElementById('gameSearch');
-        const searchResult = document.getElementById('searchResult');
-        const completedDatalist = document.getElementById('completedDatalist');
-        const completedSearchInput = document.getElementById('completedSearch');
-        const completedSearchResult = document.getElementById('completedSearchResult');
-        const manageDatalist = document.getElementById('manageGamesDatalist');
-
-        if (!datalist || !searchInput || !searchResult || !completedDatalist || !completedSearchInput || !completedSearchResult) {
-                return;
-        }
-
-        datalist.innerHTML = games
-                .map(game => game.name)
-                .slice()
-                .sort((a, b) => a.localeCompare(b, 'fr'))
-                .map(name => `<option value="${name.replace(/"/g, '&quot;')}"></option>`)
-                .join('');
-
-        completedDatalist.innerHTML = completedGames
-                .map(game => game.name)
-                .slice()
-                .sort((a, b) => a.localeCompare(b, 'fr'))
-                .map(name => `<option value="${name.replace(/"/g, '&quot;')}"></option>`)
-                .join('');
-
-        if (manageDatalist) {
-                manageDatalist.innerHTML = games
-                        .map(game => game.name)
-                        .slice()
-                        .sort((a, b) => a.localeCompare(b, 'fr'))
-                        .map(name => `<option value="${name.replace(/"/g, '&quot;')}"></option>`)
-                        .join('');
-        }
-
-        const updateSearchResult = () => {
-                const term = searchInput.value.trim().toLowerCase();
-                if (!term) {
-                        searchResult.textContent = '';
-                        return;
-                }
-
-                const match = games.find(game => game.name.toLowerCase() === term);
-                if (!match) {
-                        searchResult.textContent = 'Jeu introuvable dans la liste.';
-                        return;
-                }
-
-                const section = match.genre || 'Principal';
-
-                searchResult.textContent = `Trouve: ${match.name} | Section: ${section}`;
-        };
-
-        searchInput.oninput = updateSearchResult;
-        searchInput.onchange = updateSearchResult;
-
-        const updateCompletedSearchResult = () => {
-                const term = completedSearchInput.value.trim().toLowerCase();
-                if (!term) {
-                        completedSearchResult.textContent = '';
-                        return;
-                }
-
-                const match = completedGames.find(game => game.name.toLowerCase() === term);
-                if (!match) {
-                        completedSearchResult.textContent = 'Jeu introuvable dans la section Terminé ; Completionniste.';
-                        return;
-                }
-
-                completedSearchResult.textContent = `Trouve: ${match.name} | Section: Termine ; Completionniste`;
-        };
-
-        completedSearchInput.oninput = updateCompletedSearchResult;
-        completedSearchInput.onchange = updateCompletedSearchResult;
 }
 
 function updateManageGamesList() {
