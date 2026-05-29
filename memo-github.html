@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mémo Git & GitHub</title>
+<style>
+  :root {
+    --bg: #f9f8f6;
+    --surface: #ffffff;
+    --surface2: #f2f0ec;
+    --border: #e0ddd7;
+    --text: #1c1b18;
+    --muted: #6b6860;
+    --accent: #1a7f37;
+    --accent2: #0969da;
+    --accent-light: #e6f4ea;
+    --accent2-light: #dbeafe;
+    --code-bg: #1e1e2e;
+    --code-text: #cdd6f4;
+    --cmd: #89b4fa;
+    --arg: #a6e3a1;
+    --flag: #fab387;
+    --cm: #6c7086;
+    --str: #f9e2af;
+    --radius: 10px;
+    --font-mono: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    --font-sans: 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-sans); font-size: 14px; line-height: 1.65; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+  header { border-bottom: 2px solid var(--text); padding-bottom: 1.5rem; margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 0.5rem; }
+  header h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
+  header h1 .g { color: var(--accent); }
+  header h1 .gh { color: var(--accent2); }
+  header .meta { font-size: 12px; color: var(--muted); text-align: right; line-height: 1.8; }
+
+  .chapter { margin-bottom: 3.5rem; }
+  .chapter-title { font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); border-top: 1px solid var(--border); padding-top: 0.6rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 8px; }
+  .chapter-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1.25rem; }
+  .card-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.8rem; }
+
+  .note { font-size: 13px; color: var(--muted); background: var(--surface2); border-left: 3px solid var(--accent); padding: 0.6rem 0.9rem; border-radius: 0 6px 6px 0; margin-bottom: 1rem; line-height: 1.55; }
+  .note strong { color: var(--text); font-weight: 600; }
+  .note.blue { border-left-color: var(--accent2); }
+  .note.warn { border-left-color: #d97706; }
+
+  pre { background: var(--code-bg); border-radius: 8px; padding: 12px 14px; font-family: var(--font-mono); font-size: 12px; line-height: 1.8; overflow-x: auto; margin-top: 6px; color: var(--code-text); }
+  .cmd  { color: var(--cmd); font-weight: 600; }
+  .arg  { color: var(--arg); }
+  .flag { color: var(--flag); }
+  .cm   { color: var(--cm); font-style: italic; }
+  .str  { color: var(--str); }
+
+  .kv { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 4px 0; border-bottom: 1px solid var(--border); }
+  .kv:last-child { border-bottom: none; }
+  .kv .k { color: var(--muted); font-size: 12.5px; flex-shrink: 0; }
+  .kv .v { font-family: var(--font-mono); font-size: 11.5px; color: var(--text); text-align: right; }
+
+  .flow { display: flex; align-items: center; gap: 0; margin: 10px 0; flex-wrap: wrap; }
+  .flow-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 12px; font-weight: 500; text-align: center; }
+  .flow-box.hl { background: var(--accent-light); border-color: #86efac; color: var(--accent); }
+  .flow-box.hl2 { background: var(--accent2-light); border-color: #93c5fd; color: var(--accent2); }
+  .flow-box sub { display: block; font-size: 10px; font-weight: 400; color: var(--muted); }
+  .arrow { font-size: 16px; color: var(--muted); padding: 0 6px; }
+
+  .badge { display: inline-block; font-size: 10.5px; font-family: var(--font-mono); padding: 2px 7px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); }
+  .badge.green { background: var(--accent-light); border-color: #86efac; color: var(--accent); }
+  .badge.blue { background: var(--accent2-light); border-color: #93c5fd; color: var(--accent2); }
+  .badge.orange { background: #fff7ed; border-color: #fcd34d; color: #d97706; }
+
+  .scenario { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-top: 6px; }
+  .scenario-head { background: var(--surface2); padding: 6px 12px; font-size: 12px; font-weight: 600; color: var(--muted); border-bottom: 1px solid var(--border); }
+  .scenario pre { border-radius: 0; margin: 0; }
+
+  footer { border-top: 1px solid var(--border); padding-top: 1.5rem; margin-top: 4rem; font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+
+  @media print { body { background: white; } .page { padding: 1.5rem; } pre { font-size: 11px; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div>
+      <h1><span class="g">Git</span> &amp; <span class="gh">GitHub</span> — Mémo</h1>
+      <div style="font-size:13px; color:var(--muted); margin-top:4px;">Du premier commit aux workflows collaboratifs</div>
+    </div>
+    <div class="meta">Pour débutant complet<br>Référence à garder</div>
+  </header>
+
+
+  <!-- ══════════════════════════════════ CONCEPTS -->
+  <div class="chapter">
+    <div class="chapter-title">01 — Comprendre Git</div>
+
+    <div class="note">
+      <strong>Git ≠ GitHub.</strong> Git est un logiciel de gestion de versions installé sur ta machine. GitHub est une plateforme en ligne qui héberge des dépôts Git et ajoute des outils collaboratifs (pull requests, issues…). On peut utiliser Git sans GitHub — mais pas l'inverse.
+    </div>
+
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-title">Les 4 zones de Git</div>
+        <p style="font-size:12px; color:var(--muted); margin-bottom:10px">Comprendre où vivent tes fichiers à chaque instant :</p>
+        <div class="flow" style="flex-direction:column; align-items:stretch; gap:8px">
+          <div class="flow-box"><strong>Working directory</strong><sub>tes fichiers sur disque — tu édites ici</sub></div>
+          <div style="text-align:center; font-size:11px; color:var(--muted)">git add ↓</div>
+          <div class="flow-box hl"><strong>Staging area (index)</strong><sub>snapshot de ce que contiendra le prochain commit</sub></div>
+          <div style="text-align:center; font-size:11px; color:var(--muted)">git commit ↓</div>
+          <div class="flow-box hl2"><strong>Dépôt local (.git/)</strong><sub>historique complet sur ta machine</sub></div>
+          <div style="text-align:center; font-size:11px; color:var(--muted)">git push ↓ / git pull ↑</div>
+          <div class="flow-box" style="border-color:#93c5fd; background:#eff6ff"><strong>Dépôt distant (GitHub)</strong><sub>copie sur les serveurs GitHub — partagée avec l'équipe</sub></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Vocabulaire essentiel</div>
+        <div class="kv"><span class="k">repository (repo)</span><span class="v">dossier versionné par Git</span></div>
+        <div class="kv"><span class="k">commit</span><span class="v">snapshot de l'état des fichiers + message</span></div>
+        <div class="kv"><span class="k">branch</span><span class="v">ligne de développement indépendante</span></div>
+        <div class="kv"><span class="k">main / master</span><span class="v">branche principale par convention</span></div>
+        <div class="kv"><span class="k">HEAD</span><span class="v">pointeur vers le commit courant</span></div>
+        <div class="kv"><span class="k">origin</span><span class="v">alias du dépôt distant (GitHub) par défaut</span></div>
+        <div class="kv"><span class="k">clone</span><span class="v">copier un repo distant en local</span></div>
+        <div class="kv"><span class="k">fork</span><span class="v">copier un repo GitHub dans ton compte</span></div>
+        <div class="kv"><span class="k">merge</span><span class="v">fusionner deux branches</span></div>
+        <div class="kv"><span class="k">rebase</span><span class="v">réécrire l'historique en déplaçant des commits</span></div>
+        <div class="kv"><span class="k">stash</span><span class="v">mettre de côté des changements non commités</span></div>
+        <div class="kv"><span class="k">tag</span><span class="v">commit nommé (ex: v1.0.0)</span></div>
+        <div class="kv"><span class="k">pull request (PR)</span><span class="v">demande de fusion de branche sur GitHub</span></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════ INSTALLATION & CONFIG -->
+  <div class="chapter">
+    <div class="chapter-title">02 — Installation &amp; Configuration</div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Première installation</div>
+        <pre><span class="cm"># Vérifier si Git est installé</span>
+<span class="cmd">git</span> <span class="flag">--version</span>
+
+<span class="cm"># macOS (via Homebrew)</span>
+<span class="cmd">brew</span> install <span class="arg">git</span>
+
+<span class="cm"># Ubuntu / Debian</span>
+<span class="cmd">sudo apt</span> install <span class="arg">git</span>
+
+<span class="cm"># Windows → télécharger Git for Windows</span>
+<span class="cm"># https://git-scm.com/download/win</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Configuration initiale (à faire une fois)</div>
+        <p style="font-size:12px; color:var(--muted); margin-bottom:8px">Ces infos apparaissent dans chaque commit. Utilise la même adresse que ton compte GitHub.</p>
+        <pre><span class="cmd">git config</span> <span class="flag">--global</span> user.name  <span class="str">"Prénom Nom"</span>
+<span class="cmd">git config</span> <span class="flag">--global</span> user.email <span class="str">"toi@exemple.com"</span>
+
+<span class="cm"># Éditeur par défaut (messages de commit)</span>
+<span class="cmd">git config</span> <span class="flag">--global</span> core.editor <span class="str">"code --wait"</span> <span class="cm"># VS Code</span>
+<span class="cmd">git config</span> <span class="flag">--global</span> core.editor <span class="str">"nano"</span>       <span class="cm"># nano</span>
+
+<span class="cm"># Branche principale nommée "main" (recommandé)</span>
+<span class="cmd">git config</span> <span class="flag">--global</span> init.defaultBranch <span class="arg">main</span>
+
+<span class="cm"># Voir toute la config</span>
+<span class="cmd">git config</span> <span class="flag">--list</span></pre>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════ WORKFLOW DE BASE -->
+  <div class="chapter">
+    <div class="chapter-title">03 — Workflow quotidien</div>
+
+    <div class="note">
+      Le cycle de base est toujours le même : <strong>modifier → vérifier → stager → commiter → pousser</strong>. Commiter souvent avec des messages clairs vaut mieux que de tout mettre dans un seul gros commit.
+    </div>
+
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-title">Démarrer un projet</div>
+        <pre><span class="cm"># Option A : nouveau projet local</span>
+<span class="cmd">git init</span>                   <span class="cm"># crée le dossier .git/</span>
+<span class="cmd">git init</span> <span class="arg">mon-projet</span>       <span class="cm"># + crée le dossier</span>
+
+<span class="cm"># Option B : cloner un repo existant (GitHub)</span>
+<span class="cmd">git clone</span> <span class="arg">https://github.com/user/repo.git</span>
+<span class="cmd">git clone</span> <span class="arg">url</span> <span class="str">nom-local</span>  <span class="cm"># clone dans un dossier renommé</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Observer l'état du repo</div>
+        <pre><span class="cm"># Vue d'ensemble (fichiers modifiés, staged, untracked)</span>
+<span class="cmd">git status</span>
+<span class="cmd">git status</span> <span class="flag">-s</span>            <span class="cm"># version courte</span>
+
+<span class="cm"># Voir les différences</span>
+<span class="cmd">git diff</span>                  <span class="cm"># working dir vs index</span>
+<span class="cmd">git diff</span> <span class="flag">--staged</span>         <span class="cm"># index vs dernier commit</span>
+<span class="cmd">git diff</span> <span class="arg">main..feature</span>   <span class="cm"># entre deux branches</span>
+
+<span class="cm"># Historique des commits</span>
+<span class="cmd">git log</span>
+<span class="cmd">git log</span> <span class="flag">--oneline --graph --all</span>  <span class="cm"># vue condensée + arbre</span>
+<span class="cmd">git log</span> <span class="flag">-p</span> <span class="arg">fichier.txt</span>           <span class="cm"># historique d'un fichier</span></pre>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Stager &amp; commiter</div>
+        <pre><span class="cm"># Stager des fichiers</span>
+<span class="cmd">git add</span> <span class="arg">fichier.txt</span>       <span class="cm"># un fichier</span>
+<span class="cmd">git add</span> <span class="arg">src/</span>             <span class="cm"># un dossier entier</span>
+<span class="cmd">git add</span> <span class="flag">.</span>                <span class="cm"># tout le working dir</span>
+<span class="cmd">git add</span> <span class="flag">-p</span>               <span class="cm"># choisir les hunks interactivement</span>
+
+<span class="cm"># Désélectionner du staging</span>
+<span class="cmd">git restore</span> <span class="flag">--staged</span> <span class="arg">fichier.txt</span>
+
+<span class="cm"># Commiter</span>
+<span class="cmd">git commit</span> <span class="flag">-m</span> <span class="str">"feat: ajoute la page d'accueil"</span>
+<span class="cmd">git commit</span>               <span class="cm"># ouvre l'éditeur configuré</span>
+<span class="cmd">git commit</span> <span class="flag">--amend</span>      <span class="cm"># modifier le dernier commit (avant push)</span>
+
+<span class="cm"># Raccourci : stage + commit en une étape (fichiers suivis)</span>
+<span class="cmd">git commit</span> <span class="flag">-am</span> <span class="str">"fix: corrige le bug de login"</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Synchroniser avec GitHub</div>
+        <pre><span class="cm"># Lier un repo local à GitHub (première fois)</span>
+<span class="cmd">git remote add</span> <span class="arg">origin</span> <span class="arg">https://github.com/user/repo.git</span>
+<span class="cmd">git remote</span> <span class="flag">-v</span>           <span class="cm"># vérifier les remotes</span>
+
+<span class="cm"># Pousser vers GitHub</span>
+<span class="cmd">git push</span>                 <span class="cm"># push branche courante</span>
+<span class="cmd">git push</span> <span class="flag">-u</span> <span class="arg">origin main</span> <span class="cm"># première fois + mémorise</span>
+<span class="cmd">git push</span> <span class="arg">origin feature</span> <span class="cm"># pousser une branche spécifique</span>
+
+<span class="cm"># Récupérer depuis GitHub</span>
+<span class="cmd">git pull</span>                 <span class="cm"># fetch + merge</span>
+<span class="cmd">git pull</span> <span class="flag">--rebase</span>       <span class="cm"># fetch + rebase (historique propre)</span>
+<span class="cmd">git fetch</span>                <span class="cm"># télécharge sans merger</span>
+<span class="cmd">git fetch</span> <span class="flag">--all</span>         <span class="cm"># toutes les branches distantes</span></pre>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════ BRANCHES -->
+  <div class="chapter">
+    <div class="chapter-title">04 — Branches</div>
+
+    <div class="note">
+      Une branche est juste un <strong>pointeur vers un commit</strong> — créer une branche est instantané et quasi-gratuit. La règle d'or : <strong>ne jamais travailler directement sur main</strong>. Toujours créer une branche pour chaque feature ou bugfix.
+    </div>
+
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-title">Gérer les branches</div>
+        <pre><span class="cm"># Lister les branches</span>
+<span class="cmd">git branch</span>               <span class="cm"># locales</span>
+<span class="cmd">git branch</span> <span class="flag">-a</span>           <span class="cm"># locales + distantes</span>
+
+<span class="cm"># Créer</span>
+<span class="cmd">git branch</span> <span class="arg">feature/login</span>
+<span class="cmd">git switch</span> <span class="flag">-c</span> <span class="arg">feature/login</span>  <span class="cm"># crée + bascule (moderne)</span>
+<span class="cmd">git checkout</span> <span class="flag">-b</span> <span class="arg">feature/login</span> <span class="cm"># ancienne syntaxe</span>
+
+<span class="cm"># Basculer entre branches</span>
+<span class="cmd">git switch</span> <span class="arg">main</span>
+<span class="cmd">git switch</span> <span class="flag">-</span>             <span class="cm"># revenir à la branche précédente</span>
+
+<span class="cm"># Supprimer</span>
+<span class="cmd">git branch</span> <span class="flag">-d</span> <span class="arg">feature/login</span>   <span class="cm"># si mergée</span>
+<span class="cmd">git branch</span> <span class="flag">-D</span> <span class="arg">feature/login</span>   <span class="cm"># forcer</span>
+<span class="cmd">git push origin</span> <span class="flag">--delete</span> <span class="arg">feature/login</span> <span class="cm"># distante</span>
+
+<span class="cm"># Renommer</span>
+<span class="cmd">git branch</span> <span class="flag">-m</span> <span class="arg">ancien</span> <span class="arg">nouveau</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Fusionner des branches</div>
+        <p style="font-size:12px; color:var(--muted); margin-bottom:8px">
+          <strong style="color:var(--text)">Merge</strong> préserve l'historique exact. <strong style="color:var(--text)">Rebase</strong> réécrit les commits sur la cible — historique plus linéaire mais ne jamais rebaser une branche partagée.
+        </p>
+        <pre><span class="cm"># Merge : se placer sur la cible, fusionner la source</span>
+<span class="cmd">git switch</span> <span class="arg">main</span>
+<span class="cmd">git merge</span> <span class="arg">feature/login</span>
+<span class="cmd">git merge</span> <span class="flag">--no-ff</span> <span class="arg">feature/login</span>  <span class="cm"># force un merge commit</span>
+<span class="cmd">git merge</span> <span class="flag">--squash</span> <span class="arg">feature/login</span> <span class="cm"># compresse en 1 commit</span>
+
+<span class="cm"># Rebase : déplacer la branche sur main</span>
+<span class="cmd">git switch</span> <span class="arg">feature/login</span>
+<span class="cmd">git rebase</span> <span class="arg">main</span>
+
+<span class="cm"># En cas de conflit (merge ou rebase)</span>
+<span class="cm"># → éditer les fichiers conflictuels, puis :</span>
+<span class="cmd">git add</span> <span class="arg">fichier-conflictuel.txt</span>
+<span class="cmd">git merge</span> <span class="flag">--continue</span>
+<span class="cm"># ou abandonner :</span>
+<span class="cmd">git merge</span> <span class="flag">--abort</span></pre>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════ ANNULER -->
+  <div class="chapter">
+    <div class="chapter-title">05 — Annuler &amp; Corriger</div>
+
+    <div class="note warn">
+      <strong>Règle critique :</strong> <code>git reset</code> et <code>git rebase</code> <strong>réécrivent l'historique</strong>. Ne jamais les utiliser sur des commits déjà poussés sur une branche partagée — ça crée des conflits pour tout le monde. Sur ta branche locale non partagée : tout est permis.
+    </div>
+
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-title">Annuler des modifications</div>
+        <pre><span class="cm"># Restaurer un fichier (working dir → dernier commit)</span>
+<span class="cmd">git restore</span> <span class="arg">fichier.txt</span>
+
+<span class="cm"># Désélectionner du staging (keep changes in working dir)</span>
+<span class="cmd">git restore</span> <span class="flag">--staged</span> <span class="arg">fichier.txt</span>
+
+<span class="cm"># Supprimer fichiers non suivis</span>
+<span class="cmd">git clean</span> <span class="flag">-fd</span>           <span class="cm"># fichiers + dossiers</span>
+<span class="cmd">git clean</span> <span class="flag">-n</span>            <span class="cm"># dry-run (voir ce qui serait supprimé)</span>
+
+<span class="cm"># Annuler le dernier commit</span>
+<span class="cm"># → garde les changements dans staging :</span>
+<span class="cmd">git reset</span> <span class="flag">--soft</span> <span class="arg">HEAD~1</span>
+<span class="cm"># → garde les changements dans working dir :</span>
+<span class="cmd">git reset</span> <span class="flag">--mixed</span> <span class="arg">HEAD~1</span>  <span class="cm"># défaut</span>
+<span class="cm"># → supprime tout (dangereux) :</span>
+<span class="cmd">git reset</span> <span class="flag">--hard</span> <span class="arg">HEAD~1</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Annuler sans réécrire l'historique</div>
+        <p style="font-size:12px; color:var(--muted); margin-bottom:8px">
+          <code>git revert</code> crée un <em>nouveau</em> commit qui inverse les changements. Sûr sur les branches partagées.
+        </p>
+        <pre><span class="cm"># Annuler un commit spécifique (ajoute un commit inverse)</span>
+<span class="cmd">git revert</span> <span class="arg">abc1234</span>
+<span class="cmd">git revert</span> <span class="arg">HEAD</span>          <span class="cm"># annule le dernier commit</span>
+<span class="cmd">git revert</span> <span class="arg">HEAD~3..HEAD</span>  <span class="cm"># annule les 3 derniers</span>
+
+<span class="cm"># Récupérer un fichier depuis un commit précédent</span>
+<span class="cmd">git checkout</span> <span class="arg">abc1234</span> <span class="flag">--</span> <span class="arg">fichier.txt</span>
+
+<span class="cm"># Retrouver un commit perdu (reflog = filet de sécurité)</span>
+<span class="cmd">git reflog</span>               <span class="cm"># tout l'historique de HEAD</span>
+<span class="cmd">git reset</span> <span class="flag">--hard</span> <span class="arg">HEAD@{2}</span>  <span class="cm"># revenir à cet état</span></pre>
+
+        <div style="margin-top:10px; background:var(--surface2); border-radius:6px; padding:8px 10px; font-size:12px; color:var(--muted)">
+          <strong style="color:var(--text)">Le reflog</strong> enregistre tous les mouvements de HEAD, même les reset --hard. C'est le filet de sécurité ultime — les données sont conservées ~90 jours.
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Stash — mettre de côté</div>
+        <p style="font-size:12px; color:var(--muted); margin-bottom:8px">
+          Utile quand on doit changer de branche avec des modifications en cours non commitées.
+        </p>
+        <pre><span class="cmd">git stash</span>                 <span class="cm"># range working dir + index</span>
+<span class="cmd">git stash push</span> <span class="flag">-m</span> <span class="str">"WIP login form"</span>  <span class="cm"># avec message</span>
+<span class="cmd">git stash</span> <span class="flag">-u</span>             <span class="cm"># inclut les fichiers non suivis</span>
+
+<span class="cmd">git stash list</span>            <span class="cm"># voir tous les stashs</span>
+<span class="cmd">git stash pop</span>             <span class="cm"># réapplique le dernier + supprime</span>
+<span class="cmd">git stash apply</span> <span class="arg">stash@{1}</span> <span class="cm"># réapplique sans supprimer</span>
+<span class="cmd">git stash drop</span> <span class="arg">stash@{0}</span>
+<span class="cmd">git stash clear</span>           <span class="cm"># vide tout</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Cherry-pick — copier un commit</div>
+        <p style="font-size:12px; color:var(--muted); margin-bottom:8px">
+          Applique un commit spécifique sur la branche courante, sans merger toute la branche source.
+        </p>
+        <pre><span class="cm"># Copier le commit abc1234 sur la branche courante</span>
+<span class="cmd">git cherry-pick</span> <span class="arg">abc1234</span>
+<span class="cmd">git cherry-pick</span> <span class="arg">abc1234..def5678</span>  <span class="cm"># une plage</span>
+<span class="cmd">git cherry-pick</span> <span class="flag">-n</span> <span class="arg">abc1234</span>       <span class="cm"># sans commiter</span></pre>
+
+        <div style="margin-top:12px">
+          <div class="card-title" style="margin-bottom:8px">Tags — marquer une version</div>
+          <pre style="margin-top:0"><span class="cmd">git tag</span> <span class="arg">v1.0.0</span>              <span class="cm"># tag léger</span>
+<span class="cmd">git tag</span> <span class="flag">-a</span> <span class="arg">v1.0.0</span> <span class="flag">-m</span> <span class="str">"Release 1.0"</span> <span class="cm"># annoté</span>
+<span class="cmd">git push origin</span> <span class="arg">v1.0.0</span>      <span class="cm"># pousser le tag</span>
+<span class="cmd">git push origin</span> <span class="flag">--tags</span>      <span class="cm"># pousser tous les tags</span>
+<span class="cmd">git tag</span>                     <span class="cm"># lister</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════ GITHUB -->
+  <div class="chapter">
+    <div class="chapter-title">06 — GitHub — Collaboration</div>
+
+    <div class="note blue">
+      Le workflow standard sur GitHub : <strong>fork → branch → commit → pull request → review → merge</strong>. Sur un projet en équipe sans fork, on saute l'étape fork : branch directement sur le repo partagé.
+    </div>
+
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-title">Workflow Pull Request (PR)</div>
+        <div class="scenario">
+          <div class="scenario-head">Contribuer à un projet</div>
+          <pre><span class="cm"># 1. Forker sur GitHub (bouton "Fork")</span>
+<span class="cm"># 2. Cloner son fork</span>
+<span class="cmd">git clone</span> <span class="arg">https://github.com/TOI/repo.git</span>
+
+<span class="cm"># 3. Ajouter l'original comme remote "upstream"</span>
+<span class="cmd">git remote add upstream</span> <span class="arg">https://github.com/ORIGINAL/repo.git</span>
+
+<span class="cm"># 4. Créer une branche</span>
+<span class="cmd">git switch</span> <span class="flag">-c</span> <span class="arg">feature/ma-contribution</span>
+
+<span class="cm"># 5. Faire ses commits, puis pousser</span>
+<span class="cmd">git push</span> <span class="flag">-u</span> <span class="arg">origin feature/ma-contribution</span>
+
+<span class="cm"># 6. Ouvrir la PR sur GitHub (bouton "Compare & pull request")</span>
+
+<span class="cm"># 7. Mettre à jour son fork depuis l'original</span>
+<span class="cmd">git fetch upstream</span>
+<span class="cmd">git rebase upstream/main</span></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">.gitignore</div>
+        <p style="font-size:12px; color:var(--muted); margin-bottom:8px">
+          Fichier à la racine du repo listant les chemins que Git doit ignorer. À créer dès le début — les fichiers déjà suivis ne sont pas rétroactivement ignorés.
+        </p>
+        <pre><span class="cm"># Dossiers</span>
+<span class="arg">node_modules/</span>
+<span class="arg">.next/</span>
+<span class="arg">dist/</span>
+<span class="arg">build/</span>
+
+<span class="cm"># Fichiers d'environnement (ne jamais commiter !)</span>
+<span class="arg">.env</span>
+<span class="arg">.env.local</span>
+<span class="arg">.env.*.local</span>
+
+<span class="cm"># OS et éditeurs</span>
+<span class="arg">.DS_Store</span>
+<span class="arg">Thumbs.db</span>
+<span class="arg">.vscode/</span>
+<span class="arg">*.log</span>
+
+<span class="cm"># Ignorer toutes les extensions .key sauf une</span>
+<span class="arg">*.key</span>
+<span class="flag">!public.key</span></pre>
+        <p style="font-size:12px; color:var(--muted); margin-top:8px">
+          Modèles prêts à l'emploi : <code>gitignore.io</code> ou GitHub propose des templates à la création.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="card">
+        <div class="card-title">Conventions de commit</div>
+        <p style="font-size:12px; color:var(--muted); margin-bottom:8px">Format <strong>Conventional Commits</strong> — lisible, compatible avec le changelog automatique :</p>
+        <div class="kv"><span class="k"><span class="badge green">feat</span></span><span class="v">nouvelle fonctionnalité</span></div>
+        <div class="kv"><span class="k"><span class="badge orange">fix</span></span><span class="v">correction de bug</span></div>
+        <div class="kv"><span class="k"><span class="badge">docs</span></span><span class="v">documentation</span></div>
+        <div class="kv"><span class="k"><span class="badge">style</span></span><span class="v">formatage, pas de logique</span></div>
+        <div class="kv"><span class="k"><span class="badge">refactor</span></span><span class="v">restructuration sans bug fix</span></div>
+        <div class="kv"><span class="k"><span class="badge">test</span></span><span class="v">ajout ou modif de tests</span></div>
+        <div class="kv"><span class="k"><span class="badge">chore</span></span><span class="v">maintenance, dépendances</span></div>
+        <div style="margin-top:10px">
+          <pre style="margin-top:0"><span class="cm"># Exemples</span>
+<span class="str">feat(auth): ajoute le login OAuth</span>
+<span class="str">fix: corrige crash sur mobile Safari</span>
+<span class="str">docs: met à jour le README</span></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Commandes utiles GitHub CLI</div>
+        <p style="font-size:12px; color:var(--muted); margin-bottom:8px">
+          <code>gh</code> est l'outil officiel GitHub en ligne de commande — évite d'aller sur le site pour les opérations courantes.
+        </p>
+        <pre><span class="cm"># Authentification</span>
+<span class="cmd">gh auth login</span>
+
+<span class="cm"># Créer un repo</span>
+<span class="cmd">gh repo create</span> <span class="arg">mon-projet</span> <span class="flag">--public</span>
+
+<span class="cm"># Créer une PR</span>
+<span class="cmd">gh pr create</span> <span class="flag">--title</span> <span class="str">"feat: login"</span> <span class="flag">--body</span> <span class="str">"..."</span>
+
+<span class="cm"># Voir les PRs</span>
+<span class="cmd">gh pr list</span>
+<span class="cmd">gh pr view</span> <span class="arg">42</span>
+<span class="cmd">gh pr checkout</span> <span class="arg">42</span>      <span class="cm"># tester une PR localement</span>
+
+<span class="cm"># Issues</span>
+<span class="cmd">gh issue create</span>
+<span class="cmd">gh issue list</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">SSH — authentification</div>
+        <p style="font-size:12px; color:var(--muted); margin-bottom:8px">
+          SSH évite de saisir son mot de passe à chaque push. À faire une fois par machine.
+        </p>
+        <pre><span class="cm"># Générer une clé SSH</span>
+<span class="cmd">ssh-keygen</span> <span class="flag">-t ed25519</span> <span class="flag">-C</span> <span class="str">"toi@exemple.com"</span>
+
+<span class="cm"># Afficher la clé publique (à coller sur GitHub)</span>
+<span class="cm"># Settings → SSH keys → New SSH key</span>
+<span class="cmd">cat</span> <span class="arg">~/.ssh/id_ed25519.pub</span>
+
+<span class="cm"># Tester la connexion</span>
+<span class="cmd">ssh</span> <span class="flag">-T</span> <span class="arg">git@github.com</span>
+
+<span class="cm"># Passer un remote de HTTPS à SSH</span>
+<span class="cmd">git remote set-url origin</span>
+  <span class="arg">git@github.com:user/repo.git</span></pre>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════ SCENARIOS -->
+  <div class="chapter">
+    <div class="chapter-title">07 — Scénarios fréquents</div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Situations du quotidien</div>
+
+        <div class="scenario" style="margin-bottom:10px">
+          <div class="scenario-head">J'ai commité sur main par erreur</div>
+          <pre><span class="cm"># Déplacer le dernier commit sur une nouvelle branche</span>
+<span class="cmd">git branch</span> <span class="arg">feature/correction</span>   <span class="cm"># crée la branche</span>
+<span class="cmd">git reset</span> <span class="flag">--hard</span> <span class="arg">HEAD~1</span>         <span class="cm"># retire le commit de main</span>
+<span class="cmd">git switch</span> <span class="arg">feature/correction</span>  <span class="cm"># le commit est là</span></pre>
+        </div>
+
+        <div class="scenario" style="margin-bottom:10px">
+          <div class="scenario-head">Je veux mettre à jour ma branche depuis main</div>
+          <pre><span class="cmd">git switch</span> <span class="arg">feature/login</span>
+<span class="cmd">git fetch origin</span>
+<span class="cmd">git rebase origin/main</span>   <span class="cm"># ou merge, selon les habitudes</span></pre>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-head">Résoudre un conflit de merge</div>
+          <pre><span class="cm"># Git marque les conflits ainsi :</span>
+<span class="cm"><<<<<<< HEAD</span>
+<span class="arg">mon code actuel</span>
+<span class="cm">=======</span>
+<span class="arg">code entrant</span>
+<span class="cm">>>>>>>> feature/login</span>
+
+<span class="cm"># 1. Éditer le fichier pour choisir / fusionner</span>
+<span class="cm"># 2. Supprimer les marqueurs <<<<, ====, >>>></span>
+<span class="cmd">git add</span> <span class="arg">fichier-conflit.txt</span>
+<span class="cmd">git merge</span> <span class="flag">--continue</span></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Autres situations</div>
+
+        <div class="scenario" style="margin-bottom:10px">
+          <div class="scenario-head">Push refusé (remote a des commits que je n'ai pas)</div>
+          <pre><span class="cmd">git pull</span> <span class="flag">--rebase</span>   <span class="cm"># intègre les nouveautés, rejoue mes commits</span>
+<span class="cmd">git push</span>             <span class="cm"># fonctionne maintenant</span></pre>
+        </div>
+
+        <div class="scenario" style="margin-bottom:10px">
+          <div class="scenario-head">Trouver quel commit a introduit un bug (git bisect)</div>
+          <pre><span class="cmd">git bisect start</span>
+<span class="cmd">git bisect bad</span>         <span class="cm"># HEAD est cassé</span>
+<span class="cmd">git bisect good</span> <span class="arg">v1.2</span>  <span class="cm"># v1.2 était OK</span>
+<span class="cm"># Git checkout un commit intermédiaire</span>
+<span class="cm"># Tester, puis : git bisect good / git bisect bad</span>
+<span class="cmd">git bisect reset</span>       <span class="cm"># revenir à HEAD</span></pre>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-head">Voir qui a écrit quelle ligne (git blame)</div>
+          <pre><span class="cmd">git blame</span> <span class="arg">fichier.txt</span>
+<span class="cmd">git blame</span> <span class="flag">-L 10,20</span> <span class="arg">fichier.txt</span>  <span class="cm"># lignes 10 à 20</span>
+<span class="cm"># → chaque ligne montre : hash, auteur, date</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════ GITHUB ACTIONS -->
+  <div class="chapter">
+    <div class="chapter-title">08 — GitHub Actions (CI/CD, aperçu)</div>
+
+    <div class="note blue">
+      GitHub Actions automatise des tâches déclenchées par des événements GitHub (push, PR, schedule…). Les workflows sont définis dans <code>.github/workflows/*.yml</code>.
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Workflow minimal — tests automatiques</div>
+        <pre><span class="cm"># .github/workflows/ci.yml</span>
+<span class="arg">name</span>: CI
+
+<span class="arg">on</span>:
+  <span class="arg">push</span>:
+    <span class="arg">branches</span>: [<span class="str">main</span>]
+  <span class="arg">pull_request</span>:
+
+<span class="arg">jobs</span>:
+  <span class="arg">test</span>:
+    <span class="arg">runs-on</span>: <span class="str">ubuntu-latest</span>
+    <span class="arg">steps</span>:
+      - <span class="arg">uses</span>: <span class="str">actions/checkout@v4</span>
+
+      - <span class="arg">name</span>: <span class="str">Setup Node.js</span>
+        <span class="arg">uses</span>: <span class="str">actions/setup-node@v4</span>
+        <span class="arg">with</span>:
+          <span class="arg">node-version</span>: <span class="str">'20'</span>
+
+      - <span class="arg">name</span>: <span class="str">Install & test</span>
+        <span class="arg">run</span>: |
+          <span class="cmd">npm ci</span>
+          <span class="cmd">npm test</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Concepts Actions</div>
+        <div class="kv"><span class="k">workflow</span><span class="v">fichier YAML = pipeline complet</span></div>
+        <div class="kv"><span class="k">trigger (on:)</span><span class="v">push, pull_request, schedule, workflow_dispatch…</span></div>
+        <div class="kv"><span class="k">job</span><span class="v">ensemble de steps sur une même machine</span></div>
+        <div class="kv"><span class="k">step</span><span class="v">commande shell ou action réutilisable</span></div>
+        <div class="kv"><span class="k">action (uses:)</span><span class="v">bloc réutilisable depuis le Marketplace</span></div>
+        <div class="kv"><span class="k">runner</span><span class="v">machine virtuelle GitHub (ubuntu/windows/macos)</span></div>
+        <div class="kv"><span class="k">secrets</span><span class="v">variables chiffrées (Settings → Secrets)</span></div>
+        <div class="kv"><span class="k">artifacts</span><span class="v">fichiers produits par le workflow (logs, dist…)</span></div>
+
+        <div style="margin-top:12px">
+          <pre style="margin-top:0"><span class="cm"># Utiliser un secret</span>
+<span class="arg">env</span>:
+  <span class="arg">API_KEY</span>: <span class="str">${{ secrets.API_KEY }}</span>
+
+<span class="cm"># Condition</span>
+<span class="arg">if</span>: <span class="str">github.ref == 'refs/heads/main'</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <footer>
+    <span>Mémo Git &amp; GitHub — référence débutant</span>
+    <span>Docs complètes : git-scm.com/doc · docs.github.com</span>
+  </footer>
+
+</div>
+</body>
+</html>

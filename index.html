@@ -1,60 +1,304 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-        <!-- Favicon trousse à outils -->
-        <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23764ba2'/%3E%3Cpath d='M8 18v-2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2h1a1 1 0 0 1 1 1v5a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-5a1 1 0 0 1 1-1h1zm2-2v2h12v-2a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1zm2 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2h-8z' fill='white'/%3E%3C/svg%3E">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <!-- Favicon trousse à outils -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23764ba2'/%3E%3Cpath d='M8 18v-2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2h1a1 1 0 0 1 1 1v5a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-5a1 1 0 0 1 1-1h1zm2-2v2h12v-2a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1zm2 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2h-8z' fill='white'/%3E%3C/svg%3E"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mes Outils Perso</title>
     <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+      :root {
+        --bg-dark: #0f172a;
+        --bg-mid: #1e293b;
+        --panel: rgba(255, 255, 255, 0.9);
+        --panel-border: rgba(255, 255, 255, 0.18);
+        --text: #0f172a;
+        --muted: #475569;
+        --pro-start: #0f766e;
+        --pro-end: #155e75;
+        --perso-start: #c2410c;
+        --perso-end: #9a3412;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(20, 184, 166, 0.22),
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at bottom right,
+            rgba(249, 115, 22, 0.18),
+            transparent 28%
+          ),
+          linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-mid) 100%);
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+
+      .container {
+        width: min(980px, 100%);
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        border-radius: 28px;
+        box-shadow: 0 24px 70px rgba(15, 23, 42, 0.35);
+        padding: 42px;
+        backdrop-filter: blur(12px);
+      }
+
+      .hero {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
+      h1 {
+        color: var(--text);
+        margin: 0;
+        font-size: clamp(2.2rem, 4vw, 3.4rem);
+        line-height: 1.05;
+        letter-spacing: -0.04em;
+      }
+
+      .subtitle {
+        margin: 12px auto 0;
+        max-width: 620px;
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+
+      .sections {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 22px;
+      }
+
+      .section-card {
+        border-radius: 24px;
+        padding: 24px;
+        color: white;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      }
+
+      .section-card.pro {
+        background: linear-gradient(
+          160deg,
+          var(--pro-start) 0%,
+          var(--pro-end) 100%
+        );
+      }
+
+      .section-card.perso {
+        background: linear-gradient(
+          160deg,
+          var(--perso-start) 0%,
+          var(--perso-end) 100%
+        );
+      }
+
+      .section-label {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.14);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .section-card h2 {
+        margin: 14px 0 10px;
+        font-size: 1.55rem;
+        line-height: 1.15;
+      }
+
+      .section-card p {
+        margin: 0 0 18px;
+        color: rgba(255, 255, 255, 0.82);
+        line-height: 1.55;
+      }
+
+      .link-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .tool-link {
+        display: block;
+        background: rgba(255, 255, 255, 0.14);
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.02rem;
+        border-radius: 12px;
+        padding: 16px 18px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 12px 26px rgba(15, 23, 42, 0.15);
+        transition:
+          background 0.18s,
+          box-shadow 0.18s,
+          transform 0.18s,
+          border-color 0.18s;
+        text-align: left;
+      }
+
+      .tool-link:hover {
+        background: rgba(255, 255, 255, 0.22);
+        border-color: rgba(255, 255, 255, 0.32);
+        box-shadow: 0 16px 30px rgba(15, 23, 42, 0.24);
+        transform: translateY(-2px);
+      }
+
+      .tool-link span {
+        display: block;
+        font-size: 0.84rem;
+        font-weight: 400;
+        opacity: 0.82;
+        margin-top: 4px;
+      }
+
+      @media (max-width: 760px) {
         .container {
-            background: white;
-            border-radius: 18px;
-            box-shadow: 0 8px 32px #667eea33, 0 2px 8px #764ba244;
-            padding: 40px 30px 32px 30px;
-            min-width: 320px;
-            max-width: 400px;
-            text-align: center;
+          padding: 28px 18px;
         }
-        h1 {
-            color: #232526;
-            margin-bottom: 32px;
-            font-size: 2em;
+
+        .sections {
+          grid-template-columns: 1fr;
         }
-        .tool-link {
-            display: block;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.15em;
-            border-radius: 12px;
-            margin: 18px 0;
-            padding: 18px 0;
-            box-shadow: 0 2px 8px #667eea22;
-            transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
-        }
-        .tool-link:hover {
-            background: linear-gradient(90deg, #764ba2 0%, #667eea 100%);
-            box-shadow: 0 4px 16px #764ba244;
-            transform: translateY(-3px) scale(1.03);
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>🛠️ Mes Outils Perso</h1>
-        <a class="tool-link" href="tirage_sort_jeux.html">🎲 Tirage Aléatoire de Jeux</a>
-        <a class="tool-link" href="parfums_fragrantica.html">🧴 Collection de Parfums</a>
-        <a class="tool-link" href="calcul_liquid_e-cig.html">💧 Calculateur E-Liquide</a>
+      <div class="hero">
+        <h1>Ma boîte à outils</h1>
+        <p class="subtitle">
+          Une page d'accueil séparée en deux espaces : les ressources de
+          développement pour la partie professionnelle, et mes outils du
+          quotidien pour la partie personnelle.
+        </p>
+      </div>
+
+      <div class="sections" id="sections"></div>
     </div>
-</body>
+
+    <script>
+      const sectionsData = [
+        {
+          theme: "pro",
+          label: "Espace pro",
+          title: "Outils et memos de developpement",
+          description:
+            "Acces rapide a mes supports de reference pour coder, structurer et versionner mes projets.",
+          links: [
+            {
+              href: "memo-html-css.html",
+              title: "Memo HTML & CSS",
+              description:
+                "Reference condensee sur la structure HTML, le CSS moderne et le responsive.",
+            },
+            {
+              href: "memo-github.html",
+              title: "Memo Git & GitHub",
+              description:
+                "Reperes pratiques sur Git, GitHub et les workflows de collaboration.",
+            },
+          ],
+        },
+        {
+          theme: "pro",
+          label: "Les cours",
+          title: "Cours et tutoriels",
+          description:
+            "Mes supports d'apprentissage plus complets, organises a part pour rester faciles a retrouver.",
+          links: [
+            {
+              href: "github-tuto.html",
+              title: "GitHub tuto",
+              description:
+                "Cours progressif sur Git et GitHub, du niveau debutant jusqu'aux workflows avances.",
+            },
+            {
+              href: "cours-uml-complet.html",
+              title: "Cours UML complet",
+              description:
+                "Cours UML du niveau debutant jusqu'au niveau ingenieur, avec exemples et ressources.",
+            },
+          ],
+        },
+        {
+          theme: "perso",
+          label: "Espace perso",
+          title: "Mes outils personnels",
+          description:
+            "Les outils deja existants restent regroupes ici pour les retrouver rapidement depuis l'accueil.",
+          links: [
+            {
+              href: "tirage_sort_jeux.html",
+              title: "Tirage aleatoire de jeux",
+              description: "Choisir un jeu au hasard parmi ma collection.",
+            },
+            {
+              href: "parfums_fragrantica.html",
+              title: "Collection de parfums",
+              description: "Consulter et organiser mes references parfum.",
+            },
+            {
+              href: "calcul_liquid_e-cig.html",
+              title: "Calculateur e-liquide",
+              description:
+                "Calculer rapidement les dosages pour mes preparatifs.",
+            },
+          ],
+        },
+      ];
+
+      const sectionsContainer = document.getElementById("sections");
+
+      const createLink = ({ href, title, description }) => {
+        const link = document.createElement("a");
+        link.className = "tool-link";
+        link.href = href;
+        link.innerHTML = `${title}<span>${description}</span>`;
+        return link;
+      };
+
+      const createSection = ({ theme, label, title, description, links }) => {
+        const section = document.createElement("section");
+        section.className = `section-card ${theme}`;
+
+        const linkList = document.createElement("div");
+        linkList.className = "link-list";
+        links.forEach((linkData) => linkList.appendChild(createLink(linkData)));
+
+        section.innerHTML = `
+                <span class="section-label">${label}</span>
+                <h2>${title}</h2>
+                <p>${description}</p>
+            `;
+        section.appendChild(linkList);
+
+        return section;
+      };
+
+      sectionsData.forEach((sectionData) => {
+        sectionsContainer.appendChild(createSection(sectionData));
+      });
+    </script>
+  </body>
 </html>

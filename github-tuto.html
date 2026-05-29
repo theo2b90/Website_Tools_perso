@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Git & GitHub — Du débutant à l'expert</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js" defer></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --sb:#16181e;--sb2:#1e2028;--sbt:#a8b2c4;--sbact:#fff;--acc:#4f8ef7;
+  --bg:#fff;--tp:#111827;--ts:#6b7280;--bd:#e5e7eb;
+  --tip-bg:#eff6ff;--tip-b:#bfdbfe;--tip-t:#1e40af;
+  --warn-bg:#fffbeb;--warn-b:#fde68a;--warn-t:#92400e;
+  --ok-bg:#f0fdf4;--ok-b:#bbf7d0;--ok-t:#166534;
+  --err-bg:#fef2f2;--err-b:#fecaca;--err-t:#991b1b;
+}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,'Segoe UI',system-ui,sans-serif;display:flex;min-height:100vh;background:var(--bg);color:var(--tp)}
+
+/* ── Sidebar ── */
+#sidebar{width:256px;min-height:100vh;background:var(--sb);position:fixed;top:0;left:0;overflow-y:auto;z-index:100;display:flex;flex-direction:column}
+.sb-head{padding:1.25rem 1.1rem .9rem;border-bottom:1px solid rgba(255,255,255,.07)}
+.sb-head h1{font-size:14px;font-weight:700;color:#fff;letter-spacing:.02em}
+.sb-head p{font-size:11px;color:var(--sbt);margin-top:3px}
+.pb-wrap{margin-top:10px;background:rgba(255,255,255,.1);border-radius:4px;height:3px}
+.pb{height:3px;background:var(--acc);border-radius:4px;transition:width .4s ease;width:0}
+.sb-prog{font-size:10px;color:var(--sbt);margin-top:5px}
+.sb-nav{padding:.5rem 0;flex:1}
+.ch-btn{display:flex;align-items:center;gap:9px;width:100%;padding:.5rem 1.1rem;background:none;border:none;border-left:2px solid transparent;cursor:pointer;text-align:left;color:var(--sbt);font-size:12.5px;transition:all .15s;font-family:inherit}
+.ch-btn:hover{color:#fff;background:rgba(255,255,255,.05)}
+.ch-btn.active{color:#fff;background:rgba(79,142,247,.15);border-left-color:var(--acc)}
+.ch-btn.done .ch-num{background:#22c55e!important;color:#fff!important}
+.ch-num{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;color:#aaa;transition:.2s}
+.ch-btn.active .ch-num{background:var(--acc);color:#fff}
+.ch-info{line-height:1.35}
+.ch-label{font-size:12.5px;font-weight:500;color:inherit}
+.ch-sub{font-size:10.5px;color:rgba(168,178,196,.55);margin-top:1px}
+
+/* ── Main ── */
+#main{margin-left:256px;flex:1;min-height:100vh}
+.top-bar{position:sticky;top:0;background:rgba(255,255,255,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--bd);padding:.65rem 2rem;display:flex;align-items:center;justify-content:space-between;z-index:50}
+.top-title{font-size:13px;color:var(--ts)}
+.top-nav{display:flex;gap:8px}
+.nbtn{padding:5px 14px;font-size:12px;border:1px solid var(--bd);background:#fff;border-radius:6px;cursor:pointer;color:var(--tp);transition:all .15s;font-family:inherit}
+.nbtn:hover{background:#f9fafb}
+.nbtn.prim{background:var(--acc);color:#fff;border-color:var(--acc)}
+.nbtn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ── Chapter ── */
+.ch{display:none;max-width:800px;margin:0 auto;padding:2.5rem 2rem 5rem}
+.ch.active{display:block}
+.ch-head{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--bd)}
+.ch-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);margin-bottom:.6rem}
+.ch h2{font-size:26px;font-weight:700;line-height:1.25;margin-bottom:.6rem}
+.ch-meta{display:flex;gap:1.25rem;font-size:12px;color:var(--ts)}
+.ch h3{font-size:18px;font-weight:600;margin:2rem 0 .65rem;color:var(--tp)}
+.ch h4{font-size:14.5px;font-weight:600;margin:1.5rem 0 .4rem}
+.ch p{font-size:14.5px;line-height:1.8;color:#374151;margin-bottom:.9rem}
+.ch ul,.ch ol{margin:.4rem 0 1rem 1.5rem}
+.ch li{font-size:14.5px;line-height:1.75;color:#374151;margin-bottom:.3rem}
+.ch strong{font-weight:600;color:var(--tp)}
+.divider{height:1px;background:var(--bd);margin:1.75rem 0}
+ic{font-family:monospace;font-size:12.5px;background:#f3f4f6;padding:2px 7px;border-radius:4px;color:#be185d;white-space:nowrap}
+
+/* ── Code ── */
+.cb{margin:1rem 0 1.5rem;border-radius:8px;overflow:hidden;border:1px solid #2d3748}
+.cb-head{display:flex;align-items:center;justify-content:space-between;background:#252d3d;padding:7px 14px;font-size:11px;color:#7c8fa6}
+.lang{font-family:monospace;text-transform:uppercase;letter-spacing:.05em}
+.cpbtn{background:none;border:1px solid rgba(255,255,255,.13);color:#9ca3af;font-size:10px;padding:3px 10px;border-radius:4px;cursor:pointer;transition:all .15s;font-family:inherit}
+.cpbtn:hover{background:rgba(255,255,255,.08);color:#fff}
+.cb pre[class*=language-]{margin:0!important;border-radius:0!important;background:#1e2433!important;font-size:12.5px!important;padding:.9rem 1.1rem!important;overflow-x:auto}
+
+/* ── Callouts ── */
+.note{display:flex;gap:12px;padding:.9rem 1.1rem;border-radius:8px;margin:1rem 0 1.4rem;font-size:13.5px;line-height:1.7}
+.note .ni{font-size:17px;flex-shrink:0;margin-top:1px}
+.note.tip{background:var(--tip-bg);border:1px solid var(--tip-b);color:var(--tip-t)}
+.note.warn{background:var(--warn-bg);border:1px solid var(--warn-b);color:var(--warn-t)}
+.note.ok{background:var(--ok-bg);border:1px solid var(--ok-b);color:var(--ok-t)}
+.note.err{background:var(--err-bg);border:1px solid var(--err-b);color:var(--err-t)}
+.note p{font-size:13.5px;margin:0;color:inherit}
+
+/* ── Exercise ── */
+.exo{background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #22c55e;border-radius:8px;padding:1.1rem 1.4rem;margin:1.5rem 0}
+.exo-head{display:flex;align-items:center;gap:9px;margin-bottom:.7rem}
+.exo-badge{background:#22c55e;color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px}
+.exo h4{margin:0;font-size:14.5px}
+.exo ol{margin:.6rem 0 0 1.25rem}
+.exo li{font-size:13.5px;line-height:1.75;color:#374151;margin-bottom:.35rem}
+
+/* ── Schema ── */
+.schema{background:#f8fafc;border:1px solid var(--bd);border-radius:8px;padding:1.1rem;margin:1rem 0 1.4rem;font-family:monospace;font-size:12.5px;line-height:1.7;color:#374151;overflow-x:auto}
+
+/* ── Concept grid ── */
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:1rem 0 1.5rem}
+.cc{background:#fff;border:1px solid var(--bd);border-radius:8px;padding:.85rem 1rem}
+.cc .ico{font-size:20px;margin-bottom:7px}
+.cc h5{font-size:12.5px;font-weight:600;margin-bottom:3px}
+.cc p{font-size:11.5px;color:var(--ts);margin:0;line-height:1.5}
+
+/* ── Table ── */
+.ch table{width:100%;border-collapse:collapse;margin:.75rem 0 1.4rem;font-size:13.5px}
+.ch th{background:#f9fafb;padding:9px 13px;text-align:left;font-weight:600;font-size:11px;color:var(--ts);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--bd)}
+.ch td{padding:9px 13px;border-bottom:1px solid #f3f4f6;color:#374151}
+.ch tr:last-child td{border-bottom:none}
+
+/* ── Footer ── */
+.ch-foot{display:flex;align-items:center;justify-content:space-between;margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--bd)}
+.done-btn{display:flex;align-items:center;gap:8px;padding:9px 20px;background:#22c55e;color:#fff;border:none;border-radius:8px;font-size:13.5px;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit}
+.done-btn:hover{background:#16a34a}
+.done-btn.done{background:#9ca3af;cursor:default}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ SIDEBAR ══════════════ -->
+<nav id="sidebar" role="navigation" aria-label="Chapitres">
+  <div class="sb-head">
+    <h1>Git &amp; GitHub</h1>
+    <p>Du débutant à l'expert</p>
+    <div class="pb-wrap"><div class="pb" id="pb"></div></div>
+    <div class="sb-prog" id="prog-txt">0 / 7 chapitres complétés</div>
+  </div>
+  <div class="sb-nav" id="sb-nav">
+    <!-- injected by JS -->
+  </div>
+</nav>
+
+<!-- ══════════════ MAIN ══════════════ -->
+<main id="main">
+  <div class="top-bar">
+    <span class="top-title" id="cur-title">Module 1 — Les Fondations</span>
+    <div class="top-nav">
+      <button class="nbtn" id="prev-btn" onclick="navigate(-1)" disabled>← Précédent</button>
+      <button class="nbtn prim" id="next-btn" onclick="navigate(1)">Suivant →</button>
+    </div>
+  </div>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPITRE 1 — FONDATIONS
+═══════════════════════════════════════════════ -->
+<article class="ch active" data-ch="0">
+  <div class="ch-head">
+    <div class="ch-tag">Module 1 · ~45 min</div>
+    <h2>Les Fondations</h2>
+    <div class="ch-meta">
+      <span>📖 Théorie + pratique</span>
+      <span>🎯 Objectif : Git configuré &amp; concepts maîtrisés</span>
+    </div>
+  </div>
+
+  <h3>Git vs GitHub — quelle différence ?</h3>
+  <p>C'est la première confusion à lever. <strong>Git</strong> est un logiciel qui tourne sur ta machine, il suit l'historique de tes fichiers. <strong>GitHub</strong> est un site web qui héberge tes dépôts Git en ligne et ajoute des outils collaboratifs par-dessus.</p>
+  <div class="schema">
+Git      →  moteur de versioning (local, sur ton PC)
+GitHub   →  plateforme cloud (remote, sur internet)
+          + interface web, Issues, Pull Requests, Actions…
+  </div>
+  <p>Analogie : Git = ton appareil photo. GitHub = l'album photo en ligne que tu partages avec tes amis.</p>
+  <div class="note tip"><span class="ni">💡</span><p>Il existe des alternatives à GitHub : <strong>GitLab</strong> (souvent auto-hébergé en entreprise) et <strong>Bitbucket</strong> (intégré à l'écosystème Atlassian). Tout ce que tu apprends ici s'applique aux deux, la syntaxe Git étant identique.</p></div>
+
+  <h3>Les concepts fondamentaux</h3>
+  <p>Avant de toucher au terminal, assimile ces 5 concepts — tout le reste en découle.</p>
+  <div class="cg">
+    <div class="cc"><div class="ico">📁</div><h5>Repository (repo)</h5><p>Un dossier de projet suivi par Git, contenant tout l'historique.</p></div>
+    <div class="cc"><div class="ico">📸</div><h5>Commit</h5><p>Une photo de tes fichiers à un instant T, avec un message explicatif.</p></div>
+    <div class="cc"><div class="ico">🌿</div><h5>Branch</h5><p>Une ligne de développement parallèle. <ic>main</ic> est la branche principale.</p></div>
+    <div class="cc"><div class="ico">☁️</div><h5>Remote</h5><p>La version du repo hébergée sur GitHub. S'appelle conventionnellement <ic>origin</ic>.</p></div>
+    <div class="cc"><div class="ico">🔁</div><h5>Push / Pull</h5><p>Envoyer ses commits vers le remote / récupérer ceux des autres.</p></div>
+  </div>
+
+  <h3>Installation de Git</h3>
+  <h4>macOS</h4>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash"># Option 1 — Homebrew (recommandé)
+brew install git
+
+# Option 2 — Xcode Command Line Tools
+xcode-select --install</code></pre>
+  </div>
+  <h4>Windows</h4>
+  <p>Télécharge <strong>Git for Windows</strong> sur <ic>git-scm.com/download/win</ic>. L'installateur inclut <strong>Git Bash</strong> (terminal Linux-like) — utilise-le pour ce cours.</p>
+  <h4>Linux (Debian/Ubuntu)</h4>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">sudo apt update && sudo apt install git</code></pre>
+  </div>
+  <p>Vérifie l'installation :</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">git --version
+# → git version 2.x.x</code></pre>
+  </div>
+
+  <h3>Configuration initiale</h3>
+  <p>Git doit savoir qui tu es pour signer tes commits. À faire une seule fois :</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">git config --global user.name "Ton Prénom Nom"
+git config --global user.email "ton@email.com"
+
+# Éditeur par défaut (VS Code recommandé)
+git config --global core.editor "code --wait"
+
+# Nom de branche par défaut (moderne)
+git config --global init.defaultBranch main
+
+# Afficher la config
+git config --list</code></pre>
+  </div>
+  <div class="note warn"><span class="ni">⚠️</span><p>L'email doit être le même que celui de ton compte GitHub pour que tes commits soient associés à ton profil.</p></div>
+
+  <h3>Créer un compte GitHub</h3>
+  <p>Rends-toi sur <strong>github.com</strong> et crée un compte. Quelques conseils :</p>
+  <ul>
+    <li>Choisis un nom d'utilisateur <strong>professionnel</strong> — il sera visible sur toutes tes contributions open source.</li>
+    <li>Active l'<strong>authentification à deux facteurs</strong> (Settings → Password and authentication).</li>
+    <li>Configure une <strong>clé SSH</strong> pour ne pas retaper ton mot de passe à chaque push (voir ci-dessous).</li>
+  </ul>
+  <h4>Configurer SSH (recommandé)</h4>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash"># 1. Générer une clé SSH
+ssh-keygen -t ed25519 -C "ton@email.com"
+# Appuie sur Entrée 3 fois (emplacement par défaut, pas de passphrase)
+
+# 2. Copier la clé publique
+cat ~/.ssh/id_ed25519.pub
+# Copie tout le texte qui s'affiche
+
+# 3. Sur GitHub : Settings → SSH and GPG keys → New SSH key
+# Colle la clé, donne-lui un nom (ex: "Mon PC")
+
+# 4. Tester la connexion
+ssh -T git@github.com
+# → Hi username! You've successfully authenticated.</code></pre>
+  </div>
+
+  <div class="exo">
+    <div class="exo-head"><span class="exo-badge">🛠 Exercice 1</span><h4>Setup complet</h4></div>
+    <ol class="exo ol">
+      <li>Installe Git et vérifie la version.</li>
+      <li>Configure <ic>user.name</ic>, <ic>user.email</ic> et <ic>init.defaultBranch</ic>.</li>
+      <li>Crée un compte GitHub si ce n'est pas déjà fait.</li>
+      <li>Configure une clé SSH et teste la connexion avec <ic>ssh -T git@github.com</ic>.</li>
+      <li>Lance <ic>git config --list</ic> — tu dois voir tes infos.</li>
+    </ol>
+  </div>
+
+  <div class="ch-foot">
+    <span style="font-size:13px;color:var(--ts)">Marque ce chapitre terminé pour suivre ta progression</span>
+    <button class="done-btn" onclick="markDone(0, this)">✓ Chapitre terminé</button>
+  </div>
+</article>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPITRE 2 — PREMIER DÉPÔT
+═══════════════════════════════════════════════ -->
+<article class="ch" data-ch="1">
+  <div class="ch-head">
+    <div class="ch-tag">Module 2 · ~1h</div>
+    <h2>Ton Premier Dépôt</h2>
+    <div class="ch-meta">
+      <span>📖 Théorie + pratique</span>
+      <span>🎯 Objectif : créer un repo et maîtriser le cycle add/commit/push</span>
+    </div>
+  </div>
+
+  <h3>Créer un dépôt sur GitHub</h3>
+  <p>Sur GitHub, clique sur le bouton vert <strong>New</strong> (ou le <strong>+</strong> en haut à droite → "New repository"). Remplis :</p>
+  <ul>
+    <li><strong>Repository name</strong> : <ic>mon-premier-projet</ic> (pas d'espaces, tirets OK)</li>
+    <li><strong>Description</strong> : optionnel mais utile</li>
+    <li><strong>Visibilité</strong> : Public ou Private</li>
+    <li>☑ <strong>Add a README file</strong></li>
+    <li>☑ <strong>Add .gitignore</strong> → choisis le template selon ton langage</li>
+  </ul>
+  <p>Clique sur <strong>Create repository</strong>.</p>
+
+  <h3>Cloner le dépôt en local</h3>
+  <p>Sur la page du repo, clique sur le bouton vert <strong>Code</strong> et copie l'URL SSH (commence par <ic>git@github.com:</ic>).</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">git clone git@github.com:TON_USERNAME/mon-premier-projet.git
+cd mon-premier-projet
+ls -la</code></pre>
+  </div>
+  <div class="note tip"><span class="ni">💡</span><p><ic>git clone</ic> crée un dossier local, télécharge le code, et configure automatiquement <ic>origin</ic> (le remote) pour toi.</p></div>
+
+  <h3>Le cycle de vie d'un fichier</h3>
+  <p>Comprendre les états d'un fichier est crucial — c'est là où les débutants se perdent le plus :</p>
+  <div class="schema">
+Untracked  →  (git add)  →  Staged  →  (git commit)  →  Committed
+                                                              ↓
+                                                        (git push)
+                                                              ↓
+                                                          Remote (GitHub)
+  </div>
+
+  <table>
+    <thead><tr><th>État</th><th>Signification</th><th>Commande suivante</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Untracked</strong></td><td>Fichier nouveau, pas encore suivi par Git</td><td><ic>git add</ic></td></tr>
+      <tr><td><strong>Modified</strong></td><td>Fichier existant, modifié depuis le dernier commit</td><td><ic>git add</ic></td></tr>
+      <tr><td><strong>Staged</strong></td><td>Dans la "zone de transit" — prêt pour le commit</td><td><ic>git commit</ic></td></tr>
+      <tr><td><strong>Committed</strong></td><td>Sauvegardé dans l'historique local</td><td><ic>git push</ic></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Les commandes essentielles</h3>
+  <h4>Voir l'état de son dépôt</h4>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">git status        # Vue d'ensemble des fichiers modifiés
+git diff          # Voir les modifications ligne par ligne
+git log --oneline # Historique compact des commits</code></pre>
+  </div>
+  <h4>Ajouter des fichiers au staging</h4>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">git add nom-du-fichier.txt   # Un fichier spécifique
+git add .                    # Tous les fichiers modifiés
+git add src/                 # Tout un dossier</code></pre>
+  </div>
+  <div class="note warn"><span class="ni">⚠️</span><p><ic>git add .</ic> est pratique mais ajoute <em>tout</em>. Vérifie toujours avec <ic>git status</ic> avant de committer pour ne pas inclure des fichiers secrets (.env, credentials…)</p></div>
+  <h4>Créer un commit</h4>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">git commit -m "feat: ajouter la page d'accueil"
+
+# Raccourci : add + commit en une commande (fichiers déjà trackés seulement)
+git commit -am "fix: corriger le bug de connexion"</code></pre>
+  </div>
+  <div class="note tip"><span class="ni">💡</span><p><strong>Convention de messages</strong> : adopte le format <strong>Conventional Commits</strong>. Commence par un type : <ic>feat:</ic> (nouvelle fonctionnalité), <ic>fix:</ic> (correction), <ic>docs:</ic> (documentation), <ic>refactor:</ic>, <ic>chore:</ic>. Les messages clairs = un historique lisible.</p></div>
+  <h4>Envoyer sur GitHub</h4>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">git push                     # Envoie la branche courante
+git push origin main         # Explicite : branche main vers origin
+
+# Récupérer les derniers commits de GitHub
+git pull                     # = git fetch + git merge</code></pre>
+  </div>
+
+  <h3>Annuler des erreurs courantes</h3>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash"># Désindexer un fichier ajouté par erreur (avant commit)
+git restore --staged fichier.txt
+
+# Annuler les modifications d'un fichier (retour au dernier commit)
+git restore fichier.txt
+
+# Modifier le dernier message de commit (AVANT push)
+git commit --amend -m "Nouveau message"</code></pre>
+  </div>
+  <div class="note err"><span class="ni">🚫</span><p>Ne fais <strong>jamais</strong> <ic>git commit --amend</ic> ni <ic>git push --force</ic> sur des commits déjà poussés sur une branche partagée — tu réécrirais l'historique et casseras le travail des autres.</p></div>
+
+  <div class="exo">
+    <div class="exo-head"><span class="exo-badge">🛠 Exercice 2</span><h4>Premier workflow complet</h4></div>
+    <ol>
+      <li>Crée un repo <ic>mon-premier-projet</ic> sur GitHub (avec README).</li>
+      <li>Clone-le en local.</li>
+      <li>Crée un fichier <ic>notes.md</ic> et ajoute du texte dedans.</li>
+      <li>Fais <ic>git status</ic> pour voir l'état.</li>
+      <li>Stage le fichier, puis commit avec un message au format Conventional Commits.</li>
+      <li>Modifie <ic>notes.md</ic>, fais un deuxième commit.</li>
+      <li>Pousse les deux commits sur GitHub avec <ic>git push</ic>.</li>
+      <li>Vérifie sur GitHub que tes commits apparaissent.</li>
+    </ol>
+  </div>
+
+  <div class="ch-foot">
+    <span style="font-size:13px;color:var(--ts)">Marque ce chapitre terminé pour suivre ta progression</span>
+    <button class="done-btn" onclick="markDone(1, this)">✓ Chapitre terminé</button>
+  </div>
+</article>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPITRE 3 — BRANCHES
+═══════════════════════════════════════════════ -->
+<article class="ch" data-ch="2">
+  <div class="ch-head">
+    <div class="ch-tag">Module 3 · ~1h30</div>
+    <h2>Les Branches</h2>
+    <div class="ch-meta">
+      <span>📖 Théorie + pratique</span>
+      <span>🎯 Objectif : créer, merger des branches et résoudre des conflits</span>
+    </div>
+  </div>
+
+  <h3>Pourquoi brancher ?</h3>
+  <p>Une branche est une copie légère de ton code sur laquelle tu travailles sans toucher à <ic>main</ic>. Tu développes ta fonctionnalité, tu testes, puis tu fusionnes quand c'est prêt.</p>
+  <div class="schema">
+main    ●──────────────────────────────●──── (stable, en production)
+         \                            /
+feature   ●──●──●──●──●  (ton travail isolé)
+  </div>
+  <p>Règle d'or : <strong>ne jamais committer directement sur <ic>main</ic></strong>. Toujours passer par une branche.</p>
+
+  <h3>Créer et naviguer entre les branches</h3>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash"># Lister les branches locales (* = branche courante)
+git branch
+
+# Lister aussi les branches distantes
+git branch -a
+
+# Créer une nouvelle branche
+git branch feature/ma-fonctionnalite
+
+# Basculer sur une branche
+git switch feature/ma-fonctionnalite
+
+# Créer ET basculer en une commande (le plus courant)
+git switch -c feature/ma-fonctionnalite
+
+# Voir sur quelle branche on est
+git branch --show-current</code></pre>
+  </div>
+  <div class="note tip"><span class="ni">💡</span><p><ic>git switch</ic> est la commande moderne (Git 2.23+). Tu verras souvent <ic>git checkout</ic> dans d'anciens tutoriels — c'est l'équivalent, mais <ic>switch</ic> est plus lisible.</p></div>
+
+  <h3>Nommer ses branches</h3>
+  <p>Une convention répandue :</p>
+  <table>
+    <thead><tr><th>Préfixe</th><th>Usage</th><th>Exemple</th></tr></thead>
+    <tbody>
+      <tr><td><ic>feature/</ic></td><td>Nouvelle fonctionnalité</td><td><ic>feature/login-oauth</ic></td></tr>
+      <tr><td><ic>fix/</ic></td><td>Correction de bug</td><td><ic>fix/crash-au-demarrage</ic></td></tr>
+      <tr><td><ic>docs/</ic></td><td>Documentation</td><td><ic>docs/readme-update</ic></td></tr>
+      <tr><td><ic>refactor/</ic></td><td>Refactoring</td><td><ic>refactor/api-client</ic></td></tr>
+      <tr><td><ic>chore/</ic></td><td>Tâches techniques</td><td><ic>chore/update-deps</ic></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Fusionner une branche (Merge)</h3>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash"># 1. Revenir sur la branche cible (souvent main)
+git switch main
+
+# 2. Fusionner la feature branch
+git merge feature/ma-fonctionnalite
+
+# 3. Supprimer la branche devenue inutile
+git branch -d feature/ma-fonctionnalite          # local
+git push origin --delete feature/ma-fonctionnalite  # remote</code></pre>
+  </div>
+
+  <h3>Résoudre un conflit de merge</h3>
+  <p>Un conflit arrive quand deux branches ont modifié <em>les mêmes lignes</em> d'un même fichier. Git ne sait pas quelle version garder — c'est à toi de décider.</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash"># Git marque les conflits dans les fichiers concernés :
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+Texte de ta branche main
+=======
+Texte de la branche feature
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/ma-fonctionnalite</code></pre>
+  </div>
+  <p>Pour résoudre :</p>
+  <ol>
+    <li>Ouvre le fichier conflictuel dans ton éditeur.</li>
+    <li>Supprime les marqueurs <ic>&lt;&lt;&lt;</ic>, <ic>===</ic>, <ic>&gt;&gt;&gt;</ic> et garde/fusionne le contenu voulu.</li>
+    <li>Stage le fichier résolu et crée un commit.</li>
+  </ol>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">git add fichier-conflictuel.txt
+git commit -m "merge: résoudre le conflit sur fichier-conflictuel"</code></pre>
+  </div>
+  <div class="note tip"><span class="ni">💡</span><p>VS Code et IntelliJ ont des interfaces visuelles pour résoudre les conflits. Cherche "Merge Conflicts" dans la palette de commandes — bien plus confortable que l'édition manuelle.</p></div>
+
+  <h3>Visualiser l'historique</h3>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">git log --oneline --graph --all
+# Exemple de sortie :
+# * a1b2c3d (HEAD -> main) merge: feature login
+# |\
+# | * f4e5d6c feat: ajouter formulaire de login
+# | * 7a8b9c0 feat: créer la page login
+# |/
+# * 1234abc docs: update readme</code></pre>
+  </div>
+
+  <div class="exo">
+    <div class="exo-head"><span class="exo-badge">🛠 Exercice 3</span><h4>Feature branch workflow</h4></div>
+    <ol>
+      <li>Sur ton repo de l'exercice précédent, crée une branche <ic>feature/ajout-section</ic>.</li>
+      <li>Ajoute un nouveau fichier <ic>section.md</ic> sur cette branche, avec 3 commits.</li>
+      <li>Reviens sur <ic>main</ic> et modifie <ic>notes.md</ic> (simule un commit concurrent).</li>
+      <li>Fusionne <ic>feature/ajout-section</ic> dans <ic>main</ic>.</li>
+      <li>Si conflit : résous-le, puis finalise le merge.</li>
+      <li>Affiche l'historique avec <ic>git log --oneline --graph --all</ic>.</li>
+      <li>Supprime la branche feature locale et remote.</li>
+    </ol>
+  </div>
+
+  <div class="ch-foot">
+    <span style="font-size:13px;color:var(--ts)">Marque ce chapitre terminé pour suivre ta progression</span>
+    <button class="done-btn" onclick="markDone(2, this)">✓ Chapitre terminé</button>
+  </div>
+</article>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPITRE 4 — GITHUB AU QUOTIDIEN
+═══════════════════════════════════════════════ -->
+<article class="ch" data-ch="3">
+  <div class="ch-head">
+    <div class="ch-tag">Module 4 · ~1h30</div>
+    <h2>GitHub au Quotidien</h2>
+    <div class="ch-meta">
+      <span>📖 Interface web + terminal</span>
+      <span>🎯 Objectif : maîtriser README, Issues et Pull Requests</span>
+    </div>
+  </div>
+
+  <h3>Un README qui en impose</h3>
+  <p>Le <ic>README.md</ic> est la première chose que les gens voient sur ton repo. Il s'écrit en <strong>Markdown</strong>.</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash"># Titre du projet
+
+Description courte et claire en 1-2 phrases.
+
+## Installation
+```bash
+npm install
+npm start
+```
+
+## Utilisation
+Exemple concret d'utilisation...
+
+## Contribution
+Voir [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Licence
+MIT</code></pre>
+  </div>
+  <p>Les éléments Markdown les plus utiles :</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash"># H1, ## H2, ### H3          → titres
+**gras**, *italique*          → emphase
+`code inline`                 → code
+```bash ... ```               → bloc de code
+- item / 1. item numéroté     → listes
+[texte](url)                  → lien
+![alt](url-image)             → image
+| col1 | col2 |               → tableau
+---                           → séparateur</code></pre>
+  </div>
+
+  <h3>Le fichier .gitignore</h3>
+  <p>Dit à Git d'ignorer certains fichiers : dépendances, secrets, fichiers de build, logs…</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash"># Exemple .gitignore pour un projet Node.js
+node_modules/
+dist/
+.env
+.env.local
+*.log
+.DS_Store
+.vscode/</code></pre>
+  </div>
+  <div class="note tip"><span class="ni">💡</span><p><strong>gitignore.io</strong> génère des .gitignore adaptés à ton stack (Node, Python, Java…). Si tu as déjà commité un fichier par erreur, utilise <ic>git rm --cached fichier</ic> pour le désindexer sans le supprimer.</p></div>
+
+  <h3>Issues — gérer le travail à faire</h3>
+  <p>Les <strong>Issues</strong> sont le système de tickets de GitHub. Sers-t'en pour : bug reports, demandes de fonctionnalités, tâches, questions.</p>
+  <p>Interface web → onglet <strong>Issues</strong> → <strong>New issue</strong>. Un bon template :</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">## 🐛 Description du bug
+Quand je clique sur "Connexion", la page plante.
+
+## Reproduction
+1. Aller sur /login
+2. Saisir n'importe quel email
+3. Cliquer sur "Se connecter"
+4. Voir l'erreur 500
+
+## Comportement attendu
+L'utilisateur est redirigé vers /dashboard
+
+## Environnement
+- OS: macOS 14
+- Node: 20.x</code></pre>
+  </div>
+  <p>Tu peux référencer une issue dans un commit avec <ic>fix #12</ic> — GitHub fermera automatiquement l'issue à la fusion.</p>
+
+  <h3>Pull Requests — la pièce maîtresse</h3>
+  <p>Une <strong>Pull Request (PR)</strong> est une demande de fusion d'une branche dans une autre, avec un espace de discussion et de review. C'est le cœur du workflow collaboratif.</p>
+  <p>Sur GitHub, après avoir poussé une branche :</p>
+  <ol>
+    <li>GitHub affiche une bannière "<strong>Compare &amp; pull request</strong>" → clique dessus.</li>
+    <li>Remplis le titre (format Conventional Commits), la description (ce qui change, pourquoi, comment tester).</li>
+    <li>Assigne des <strong>Reviewers</strong> si tu travailles en équipe.</li>
+    <li>Ajoute des <strong>Labels</strong> (<ic>bug</ic>, <ic>enhancement</ic>, <ic>help wanted</ic>…).</li>
+    <li>Clique <strong>Create pull request</strong>.</li>
+  </ol>
+  <div class="note ok"><span class="ni">✅</span><p>Un bon titre de PR : <ic>feat(auth): ajouter la connexion OAuth Google (#23)</ic> — type, scope, description, numéro d'issue liée.</p></div>
+  <h4>Merger une PR</h4>
+  <p>GitHub propose 3 stratégies de merge :</p>
+  <table>
+    <thead><tr><th>Stratégie</th><th>Résultat</th><th>Quand l'utiliser</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Merge commit</strong></td><td>Conserve tous les commits + un commit de merge</td><td>Projet où l'historique complet compte</td></tr>
+      <tr><td><strong>Squash &amp; merge</strong></td><td>Condense tous les commits en un seul</td><td>PRs avec beaucoup de "wip: fixes" parasites</td></tr>
+      <tr><td><strong>Rebase &amp; merge</strong></td><td>Rejoue les commits sur main sans commit de merge</td><td>Historique linéaire propre</td></tr>
+    </tbody>
+  </table>
+  <p>Pour un projet solo ou débutant : <strong>Squash &amp; merge</strong> est souvent le plus propre.</p>
+
+  <div class="exo">
+    <div class="exo-head"><span class="exo-badge">🛠 Exercice 4</span><h4>PR complète de bout en bout</h4></div>
+    <ol>
+      <li>Crée une Issue sur ton repo : "Ajouter une section Résumé au README".</li>
+      <li>Crée la branche <ic>feature/readme-resume</ic>.</li>
+      <li>Améliore ton <ic>README.md</ic> avec du vrai Markdown (titres, listes, code…).</li>
+      <li>Pousse la branche et ouvre une Pull Request qui référence ton Issue (<ic>Closes #1</ic>).</li>
+      <li>Observe la PR sur GitHub : onglets Commits, Files changed.</li>
+      <li>Merge avec "Squash &amp; merge".</li>
+      <li>Vérifie que l'Issue s'est fermée automatiquement.</li>
+    </ol>
+  </div>
+
+  <div class="ch-foot">
+    <span style="font-size:13px;color:var(--ts)">Marque ce chapitre terminé pour suivre ta progression</span>
+    <button class="done-btn" onclick="markDone(3, this)">✓ Chapitre terminé</button>
+  </div>
+</article>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPITRE 5 — COLLABORATION
+═══════════════════════════════════════════════ -->
+<article class="ch" data-ch="4">
+  <div class="ch-head">
+    <div class="ch-tag">Module 5 · ~1h30</div>
+    <h2>Collaboration &amp; Open Source</h2>
+    <div class="ch-meta">
+      <span>📖 Interface web + terminal</span>
+      <span>🎯 Objectif : contribuer à un projet externe, faire une code review</span>
+    </div>
+  </div>
+
+  <h3>Fork — contribuer sans permissions</h3>
+  <p>Tu ne peux pas pousser directement sur le repo d'un inconnu. Le <strong>fork</strong> crée une copie du repo dans ton compte GitHub, sur laquelle tu as tous les droits.</p>
+  <div class="schema">
+Projet original (upstream)   →   Fork dans ton compte   →   Clone sur ton PC
+        ↑                              ↓                          ↓
+        └──── Pull Request ────── ta branche ─── git push ────────┘
+  </div>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash"># 1. Forker via l'interface GitHub (bouton "Fork")
+
+# 2. Cloner TON fork
+git clone git@github.com:TON_USERNAME/projet-forkee.git
+cd projet-forkee
+
+# 3. Ajouter le repo original comme remote "upstream"
+git remote add upstream git@github.com:AUTEUR_ORIGINAL/projet-forkee.git
+
+# Vérifier les remotes
+git remote -v
+# origin    git@github.com:TON_USERNAME/... (fetch/push)
+# upstream  git@github.com:AUTEUR_ORIGINAL/... (fetch/push)</code></pre>
+  </div>
+
+  <h3>Garder son fork à jour</h3>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash"># Récupérer les nouveaux commits de l'upstream
+git fetch upstream
+
+# Les intégrer dans ta branche main locale
+git switch main
+git merge upstream/main
+
+# Mettre à jour ton fork sur GitHub
+git push origin main</code></pre>
+  </div>
+
+  <h3>Workflow de contribution</h3>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash"># Toujours partir d'un main à jour
+git switch main
+git pull upstream main
+
+# Créer une branche dédiée
+git switch -c fix/correction-typo
+
+# Travailler, committer...
+git add .
+git commit -m "fix: corriger la typo dans CONTRIBUTING.md"
+
+# Pousser sur TON fork
+git push origin fix/correction-typo
+
+# → Ouvrir la PR sur GitHub depuis TON fork vers le repo original</code></pre>
+  </div>
+  <div class="note tip"><span class="ni">💡</span><p>Avant de contribuer, lis toujours le fichier <strong>CONTRIBUTING.md</strong> du projet (s'il existe). Il indique les conventions de code, comment lancer les tests, etc. Ne pas le lire est la première raison pour laquelle les PRs sont refusées.</p></div>
+
+  <h3>Faire une code review</h3>
+  <p>Sur GitHub, onglet <strong>Files changed</strong> d'une PR :</p>
+  <ul>
+    <li>Clique sur le <strong>+</strong> à gauche d'une ligne pour commenter.</li>
+    <li>Utilise <strong>Suggest changes</strong> pour proposer une modification directement dans le code.</li>
+    <li>En haut, clique sur <strong>Review changes</strong> → choisir <strong>Comment</strong>, <strong>Approve</strong> ou <strong>Request changes</strong>.</li>
+  </ul>
+  <p>Bonnes pratiques de review :</p>
+  <ul>
+    <li>Sois constructif, pas condescendant. Préfère "<em>Ici, on pourrait utiliser X pour gagner en lisibilité</em>" à "<em>Ce code est mauvais</em>".</li>
+    <li>Distingue les <strong>blockers</strong> (doit changer) des <strong>suggestions</strong> (serait mieux). Préfixe tes commentaires : <ic>nit:</ic> (nitpick), <ic>blocker:</ic>, <ic>idea:</ic>.</li>
+    <li>Complimente le bon travail !</li>
+  </ul>
+
+  <h3>Collaborer sur un repo en équipe</h3>
+  <p>Pour un projet où tu travailles avec des collègues (pas en open source) :</p>
+  <ol>
+    <li>Le propriétaire va dans <strong>Settings → Collaborators → Add people</strong>.</li>
+    <li>Les collaborateurs clonent directement le repo (pas besoin de fork).</li>
+    <li>Chacun crée sa branche, pousse, et ouvre des PRs.</li>
+  </ol>
+  <div class="note ok"><span class="ni">✅</span><p><strong>Protection de branche</strong> (Settings → Branches → Branch protection rules) : oblige à passer par une PR et à avoir au moins 1 approbation avant de merger sur <ic>main</ic>. Indispensable en équipe.</p></div>
+
+  <div class="exo">
+    <div class="exo-head"><span class="exo-badge">🛠 Exercice 5</span><h4>Simuler une contribution</h4></div>
+    <ol>
+      <li>Fork le repo public <ic>github.com/nicklockwood/SwiftFormat</ic> (ou n'importe quel projet avec un bon README).</li>
+      <li>Clone ton fork, configure le remote <ic>upstream</ic>.</li>
+      <li>Crée une branche <ic>docs/fix-example</ic>.</li>
+      <li>Fais une modification mineure (ex: corriger une typo dans README si tu en trouves une, sinon ajoute un commentaire dans un exemple).</li>
+      <li>Pousse sur ton fork — <strong>n'ouvre pas la PR sur l'original</strong> pour cet exercice, reste dans ton fork.</li>
+      <li>Ouvre la PR de ta branche vers le <ic>main</ic> de <strong>ton fork</strong>.</li>
+      <li>Laisse un commentaire de review sur ta propre PR (exercice de prise en main).</li>
+    </ol>
+  </div>
+
+  <div class="ch-foot">
+    <span style="font-size:13px;color:var(--ts)">Marque ce chapitre terminé pour suivre ta progression</span>
+    <button class="done-btn" onclick="markDone(4, this)">✓ Chapitre terminé</button>
+  </div>
+</article>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPITRE 6 — WORKFLOW PRO
+═══════════════════════════════════════════════ -->
+<article class="ch" data-ch="5">
+  <div class="ch-head">
+    <div class="ch-tag">Module 6 · ~2h</div>
+    <h2>Workflow Professionnel</h2>
+    <div class="ch-meta">
+      <span>📖 Terminal + interface GitHub</span>
+      <span>🎯 Objectif : rebase, tags, releases, et première GitHub Action</span>
+    </div>
+  </div>
+
+  <h3>Rebase — l'alternative au merge</h3>
+  <p>Le <ic>rebase</ic> rejoue tes commits sur une autre branche, produisant un historique <strong>linéaire</strong> et plus lisible qu'un merge avec commit de fusion.</p>
+  <div class="schema">
+Avant rebase :                    Après rebase :
+main  ●──A──B                     main  ●──A──B──C'──D'
+        \                                              ↑
+feature  C──D                     (feature rejouée sur B)
+  </div>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">git switch feature/ma-branche
+
+# Rebase sur main (rejouer mes commits sur le dernier main)
+git rebase main
+
+# Si conflit pendant le rebase :
+# 1. Résoudre le fichier conflictuel
+# 2. git add fichier-corrige.txt
+# 3. git rebase --continue   (ou --abort pour annuler)
+
+# Pousser après un rebase (force nécessaire car historique réécrit)
+git push --force-with-lease   # plus sûr que --force</code></pre>
+  </div>
+  <div class="note warn"><span class="ni">⚠️</span><p>Ne jamais rebaser une branche <strong>partagée</strong> (genre <ic>main</ic> ou une branche sur laquelle d'autres travaillent). Le rebase réécrit l'historique — sur une branche solo, c'est parfait.</p></div>
+
+  <h3>Rebase interactif — nettoyer son historique</h3>
+  <p>L'outil le plus puissant pour réécrire proprement ses commits avant une PR :</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash"># Modifier les 4 derniers commits
+git rebase -i HEAD~4
+
+# Dans l'éditeur qui s'ouvre, pour chaque ligne :
+# pick   → garder tel quel
+# reword → changer le message
+# squash → fusionner avec le commit précédent
+# drop   → supprimer ce commit</code></pre>
+  </div>
+
+  <h3>Tags et Releases</h3>
+  <p>Les <strong>tags</strong> marquent des points importants dans l'historique — typiquement des versions. La convention <strong>semver</strong> : <ic>v1.2.3</ic> (major.minor.patch).</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash"># Créer un tag annoté
+git tag -a v1.0.0 -m "Version 1.0.0 — première release stable"
+
+# Pousser le tag sur GitHub
+git push origin v1.0.0
+
+# Pousser tous les tags
+git push --tags
+
+# Lister les tags
+git tag -l</code></pre>
+  </div>
+  <p>Sur GitHub, va dans <strong>Releases → Draft a new release</strong> → choisis ton tag → rédige les notes de version (changelog). Les releases permettent d'attacher des binaires téléchargeables.</p>
+
+  <h3>GitHub Actions — CI/CD en 10 minutes</h3>
+  <p>GitHub Actions automatise des tâches : tester ton code à chaque push, déployer sur merge, envoyer des notifications…</p>
+  <p>Un <strong>workflow</strong> est un fichier YAML dans <ic>.github/workflows/</ic>.</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">yaml</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-yaml"># .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Lancer les tests
+        run: npm test
+
+      - name: Linter
+        run: npm run lint</code></pre>
+  </div>
+  <div class="note tip"><span class="ni">💡</span><p>Le <strong>Marketplace GitHub Actions</strong> (github.com/marketplace) référence des milliers d'actions prêtes à l'emploi : déploiement sur AWS/Vercel, envoi de notifications Slack, release automatique…</p></div>
+  <h4>Anatomie d'un workflow</h4>
+  <table>
+    <thead><tr><th>Terme</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><ic>on:</ic></td><td>Déclencheur (push, PR, schedule, manuel…)</td></tr>
+      <tr><td><ic>jobs:</ic></td><td>Unités de travail qui s'exécutent en parallèle par défaut</td></tr>
+      <tr><td><ic>runs-on:</ic></td><td>Machine virtuelle (ubuntu-latest, windows-latest, macos-latest)</td></tr>
+      <tr><td><ic>steps:</ic></td><td>Étapes séquentielles d'un job</td></tr>
+      <tr><td><ic>uses:</ic></td><td>Action externe réutilisable</td></tr>
+      <tr><td><ic>run:</ic></td><td>Commande shell à exécuter</td></tr>
+    </tbody>
+  </table>
+
+  <div class="exo">
+    <div class="exo-head"><span class="exo-badge">🛠 Exercice 6</span><h4>Pipeline CI + première release</h4></div>
+    <ol>
+      <li>Dans ton repo, crée le dossier <ic>.github/workflows/</ic>.</li>
+      <li>Crée un fichier <ic>ci.yml</ic> avec un workflow basique (adapte-le à ton langage : si pas de tests, fais juste un <ic>echo "Build OK"</ic>).</li>
+      <li>Pousse sur main — va dans l'onglet <strong>Actions</strong> de ton repo GitHub et regarde ton workflow s'exécuter.</li>
+      <li>Corrige le workflow si erreur, jusqu'à voir une coche verte ✅.</li>
+      <li>Crée et pousse un tag <ic>v0.1.0</ic>.</li>
+      <li>Sur GitHub, crée une Release à partir de ce tag avec des notes de version.</li>
+    </ol>
+  </div>
+
+  <div class="ch-foot">
+    <span style="font-size:13px;color:var(--ts)">Marque ce chapitre terminé pour suivre ta progression</span>
+    <button class="done-btn" onclick="markDone(5, this)">✓ Chapitre terminé</button>
+  </div>
+</article>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPITRE 7 — MAÎTRISE
+═══════════════════════════════════════════════ -->
+<article class="ch" data-ch="6">
+  <div class="ch-head">
+    <div class="ch-tag">Module 7 · ~2h</div>
+    <h2>Techniques Avancées &amp; Maîtrise</h2>
+    <div class="ch-meta">
+      <span>📖 Terminal avancé</span>
+      <span>🎯 Objectif : outils de pro, alias, GitHub Pages, projet final</span>
+    </div>
+  </div>
+
+  <h3>git stash — mettre son travail de côté</h3>
+  <p>Tu travailles sur quelque chose et on te demande d'urgence de fixer un bug sur une autre branche. <ic>git stash</ic> met tes modifications en suspens sans créer de commit.</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">git stash                    # Empile les modifs non commitées
+git stash push -m "WIP: feature login"  # Avec un nom
+
+git stash list               # Voir la pile de stash
+# stash@{0}: On main: WIP: feature login
+# stash@{1}: On feature/ui: boutons redesign
+
+git stash pop                # Applique et supprime le dernier stash
+git stash apply stash@{1}    # Applique un stash spécifique sans le supprimer
+git stash drop stash@{0}     # Supprimer un stash
+git stash clear              # Vider toute la pile</code></pre>
+  </div>
+
+  <h3>git cherry-pick — transplanter un commit</h3>
+  <p>Tu veux appliquer un commit spécifique d'une branche sur une autre, sans tout merger.</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash"># Trouver le hash du commit à transplanter
+git log --oneline feature/experimental
+# a1b2c3d fix: corriger la validation email
+
+git switch main
+git cherry-pick a1b2c3d    # Applique ce commit sur main</code></pre>
+  </div>
+
+  <h3>git bisect — trouver quel commit a introduit un bug</h3>
+  <p>La recherche dichotomique dans l'historique : indispensable quand un bug est apparu "quelque part" dans 200 commits.</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">git bisect start
+git bisect bad              # Le commit actuel est buggé
+git bisect good v2.0.0      # Ce tag fonctionnait bien
+
+# Git checkout automatiquement un commit intermédiaire
+# Tu testes → tu dis à Git si c'est bon ou mauvais
+git bisect good             # ou
+git bisect bad
+
+# Git continue jusqu'à isoler le commit coupable
+# À la fin :
+git bisect reset            # Revenir à HEAD</code></pre>
+  </div>
+
+  <h3>git reflog — la machine à remonter le temps</h3>
+  <p>Le <ic>reflog</ic> enregistre <em>tout</em> ce qui s'est passé localement — même un <ic>git reset --hard</ic> n'efface pas ces traces. C'est ton filet de sécurité ultime.</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">git reflog
+# HEAD@{0}: reset: moving to HEAD~3
+# HEAD@{1}: commit: feat: ajout authentification
+# HEAD@{2}: commit: fix: corriger typo
+
+# Récupérer des commits "perdus" après un reset
+git checkout HEAD@{1}       # Retourner à ce point
+# ou
+git reset --hard HEAD@{1}   # Restaurer complètement</code></pre>
+  </div>
+  <div class="note ok"><span class="ni">✅</span><p>Si tu fais un <ic>git reset --hard</ic> par erreur, ne panique pas. Le <ic>reflog</ic> garde tout pendant 90 jours. Tes commits ne sont jamais vraiment perdus.</p></div>
+
+  <h3>Alias Git — accélérer son workflow</h3>
+  <p>Configure des raccourcis dans <ic>~/.gitconfig</ic> :</p>
+  <div class="cb">
+    <div class="cb-head"><span class="lang">bash</span><button class="cpbtn" onclick="cp(this)">Copier</button></div>
+    <pre><code class="language-bash">git config --global alias.st "status"
+git config --global alias.co "switch"
+git config --global alias.br "branch"
+git config --global alias.lg "log --oneline --graph --all --decorate"
+git config --global alias.undo "reset HEAD~1 --mixed"
+git config --global alias.save "!git add -A && git commit -m 'SAVEPOINT'"
+
+# Utilisation
+git st        # git status
+git lg        # historique graphique
+git undo      # défaire le dernier commit (garde les fichiers)</code></pre>
+  </div>
+
+  <h3>GitHub Pages — héberger gratuitement</h3>
+  <p>GitHub Pages déploie un site statique directement depuis ton repo. Idéal pour : portfolio, documentation, landing page, blog.</p>
+  <ol>
+    <li>Repo → <strong>Settings → Pages</strong></li>
+    <li>Source : <strong>Deploy from a branch</strong></li>
+    <li>Branch : <strong>main</strong>, dossier : <strong>/(root)</strong> ou <strong>/docs</strong></li>
+    <li>Ton site sera disponible sur <ic>username.github.io/nom-du-repo</ic></li>
+  </ol>
+  <div class="note tip"><span class="ni">💡</span><p>Pour un site plus élaboré, utilise <strong>GitHub Actions</strong> pour déployer automatiquement un framework (Next.js, Astro, Hugo…) sur GitHub Pages à chaque push.</p></div>
+
+  <h3>Récapitulatif : les commandes à maîtriser</h3>
+  <table>
+    <thead><tr><th>Commande</th><th>Usage</th></tr></thead>
+    <tbody>
+      <tr><td><ic>git status</ic></td><td>État des fichiers</td></tr>
+      <tr><td><ic>git add . / git add -p</ic></td><td>Staging (tout / interactif)</td></tr>
+      <tr><td><ic>git commit -m</ic></td><td>Créer un commit</td></tr>
+      <tr><td><ic>git push / pull</ic></td><td>Sync avec le remote</td></tr>
+      <tr><td><ic>git switch -c / switch</ic></td><td>Créer / changer de branche</td></tr>
+      <tr><td><ic>git merge / rebase</ic></td><td>Intégrer une branche</td></tr>
+      <tr><td><ic>git stash / pop</ic></td><td>Mettre de côté / reprendre</td></tr>
+      <tr><td><ic>git log --oneline --graph</ic></td><td>Historique visuel</td></tr>
+      <tr><td><ic>git reflog</ic></td><td>Historique de toutes les actions</td></tr>
+      <tr><td><ic>git cherry-pick</ic></td><td>Transplanter un commit</td></tr>
+      <tr><td><ic>git bisect</ic></td><td>Trouver un commit buggé</td></tr>
+      <tr><td><ic>git tag -a</ic></td><td>Créer une version</td></tr>
+    </tbody>
+  </table>
+
+  <div class="exo">
+    <div class="exo-head"><span class="exo-badge">🛠 Exercice Final</span><h4>Projet complet de bout en bout</h4></div>
+    <ol>
+      <li><strong>Crée un repo</strong> <ic>portfolio-site</ic> avec README, .gitignore, licence MIT.</li>
+      <li><strong>Configure une Action CI</strong> qui vérifie que le HTML est valide (utilise <ic>validator/html5validator-action</ic>).</li>
+      <li><strong>Développe sur des branches</strong> : crée 3 branches (<ic>feature/header</ic>, <ic>feature/about</ic>, <ic>feature/contact</ic>), fais des commits sur chacune.</li>
+      <li><strong>Crée 3 PRs</strong>, merge-les une par une avec Squash &amp; merge.</li>
+      <li><strong>Utilise git stash</strong> au moins une fois pendant le développement.</li>
+      <li><strong>Crée un tag</strong> <ic>v1.0.0</ic> et une Release GitHub.</li>
+      <li><strong>Active GitHub Pages</strong> — ton site doit être accessible en ligne.</li>
+      <li>Bonus : inviter un ami à fork ton repo et à soumettre une PR.</li>
+    </ol>
+  </div>
+
+  <div class="note ok" style="margin-top:2rem"><span class="ni">🎉</span><p><strong>Félicitations !</strong> Tu maîtrises maintenant tout le workflow Git &amp; GitHub du débutant au niveau avancé. La prochaine étape : contribuer à de vrais projets open source. Consulte <ic>goodfirstissue.dev</ic> pour trouver des issues accessibles aux nouveaux contributeurs.</p></div>
+
+  <div class="ch-foot">
+    <span style="font-size:13px;color:var(--ts)">Cours complété 🚀</span>
+    <button class="done-btn" onclick="markDone(6, this)">✓ Cours terminé !</button>
+  </div>
+</article>
+
+</main>
+
+<script>
+const chapters=[
+  {label:"Les Fondations",sub:"Git, GitHub, installation"},
+  {label:"Premier Dépôt",sub:"add, commit, push"},
+  {label:"Les Branches",sub:"branch, merge, conflits"},
+  {label:"GitHub au Quotidien",sub:"README, Issues, PR"},
+  {label:"Collaboration",sub:"Fork, review, équipe"},
+  {label:"Workflow Pro",sub:"Rebase, Actions, tags"},
+  {label:"Maîtrise",sub:"stash, bisect, Pages"}
+];
+
+const done=new Array(7).fill(false);
+let current=0;
+
+function buildNav(){
+  const nav=document.getElementById('sb-nav');
+  nav.innerHTML=chapters.map((c,i)=>`
+    <button class="ch-btn${i===0?' active':''}" onclick="goTo(${i})" id="nb${i}">
+      <span class="ch-num">${i+1}</span>
+      <span class="ch-info">
+        <span class="ch-label">${c.label}</span>
+        <span class="ch-sub">${c.sub}</span>
+      </span>
+    </button>`).join('');
+}
+
+function goTo(i){
+  document.querySelectorAll('.ch').forEach((c,idx)=>{
+    c.classList.toggle('active',idx===i);
+  });
+  document.querySelectorAll('.ch-btn').forEach((b,idx)=>{
+    b.classList.toggle('active',idx===i);
+  });
+  current=i;
+  document.getElementById('cur-title').textContent=`Module ${i+1} — ${chapters[i].label}`;
+  document.getElementById('prev-btn').disabled=(i===0);
+  document.getElementById('next-btn').disabled=(i===chapters.length-1);
+  document.getElementById('next-btn').textContent=i===chapters.length-2?'Dernier module →':'Suivant →';
+  document.getElementById('main').scrollTo(0,0);
+  window.scrollTo(0,0);
+}
+
+function navigate(dir){goTo(Math.max(0,Math.min(chapters.length-1,current+dir)));}
+
+function markDone(i,btn){
+  if(done[i])return;
+  done[i]=true;
+  btn.textContent='✓ Complété !';
+  btn.classList.add('done');
+  document.getElementById('nb'+i).classList.add('done');
+  updateProgress();
+  if(i<chapters.length-1){
+    setTimeout(()=>goTo(i+1),600);
+  }
+}
+
+function updateProgress(){
+  const n=done.filter(Boolean).length;
+  document.getElementById('pb').style.width=(n/7*100)+'%';
+  document.getElementById('prog-txt').textContent=`${n} / 7 chapitres complétés`;
+}
+
+function cp(btn){
+  const code=btn.closest('.cb').querySelector('code').textContent;
+  navigator.clipboard.writeText(code).then(()=>{
+    const orig=btn.textContent;
+    btn.textContent='Copié !';
+    setTimeout(()=>btn.textContent=orig,1800);
+  });
+}
+
+buildNav();
+</script>
+</body>
+</html>

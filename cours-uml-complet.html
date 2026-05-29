@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UML — Du débutant à l'ingénieur</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #141720;
+    --surface2: #1c2030;
+    --border: #2a2f45;
+    --accent: #4f8fff;
+    --accent2: #ff6b4a;
+    --accent3: #5effa3;
+    --text: #dce3f5;
+    --text-muted: #7a84a8;
+    --lv1: #5effa3;
+    --lv2: #4f8fff;
+    --lv3: #c47aff;
+    --lv4: #ff6b4a;
+
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'Lora', serif;
+    --font-code: 'IBM Plex Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(79,143,255,0.13) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(94,255,163,0.07) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-label {
+    font-family: var(--font-code);
+    font-size: .75rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--accent3);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp .6s .2s forwards;
+  }
+  .hero h1 {
+    font-family: var(--font-head);
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -.02em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp .6s .35s forwards;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 560px;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp .6s .5s forwards;
+  }
+  .hero-badges {
+    display: flex;
+    gap: .75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp .6s .65s forwards;
+  }
+  .badge {
+    font-family: var(--font-code);
+    font-size: .7rem;
+    padding: .3rem .9rem;
+    border-radius: 999px;
+    border: 1px solid;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .badge-lv1 { color: var(--lv1); border-color: var(--lv1); background: rgba(94,255,163,.06); }
+  .badge-lv2 { color: var(--lv2); border-color: var(--lv2); background: rgba(79,143,255,.06); }
+  .badge-lv3 { color: var(--lv3); border-color: var(--lv3); background: rgba(196,122,255,.06); }
+  .badge-lv4 { color: var(--lv4); border-color: var(--lv4); background: rgba(255,107,74,.06); }
+
+  .scroll-cta {
+    font-family: var(--font-code);
+    font-size: .8rem;
+    color: var(--text-muted);
+    opacity: 0;
+    animation: fadeUp .6s .8s forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+  }
+  .scroll-arrow {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: pulse 2s infinite;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13,15,20,.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: .75rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-logo {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--accent);
+    white-space: nowrap;
+    margin-right: .5rem;
+  }
+  nav a {
+    font-family: var(--font-code);
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--text-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    padding: .3rem .6rem;
+    border-radius: 4px;
+    transition: color .2s, background .2s;
+  }
+  nav a:hover { color: var(--text); background: var(--surface2); }
+
+  /* ── LAYOUT ── */
+  main { max-width: 860px; margin: 0 auto; padding: 0 2rem 6rem; }
+
+  /* ── LEVEL SECTIONS ── */
+  .level-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 4rem 0 2rem;
+    border-top: 1px solid var(--border);
+    margin-top: 4rem;
+  }
+  .level-header:first-child { border-top: none; margin-top: 0; }
+  .level-num {
+    font-family: var(--font-head);
+    font-size: 4rem;
+    font-weight: 800;
+    opacity: .1;
+    line-height: 1;
+  }
+  .level-info h2 {
+    font-family: var(--font-head);
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .level-desc {
+    font-size: .9rem;
+    color: var(--text-muted);
+    margin-top: .3rem;
+  }
+
+  .lv1 .level-num, .lv1 .level-info h2 { color: var(--lv1); }
+  .lv2 .level-num, .lv2 .level-info h2 { color: var(--lv2); }
+  .lv3 .level-num, .lv3 .level-info h2 { color: var(--lv3); }
+  .lv4 .level-num, .lv4 .level-info h2 { color: var(--lv4); }
+
+  /* ── CHAPTERS ── */
+  .chapter {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+  }
+  .chapter-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 1.5rem;
+    cursor: pointer;
+    user-select: none;
+    gap: 1rem;
+    transition: background .2s;
+  }
+  .chapter-head:hover { background: var(--surface2); }
+  .chapter-title {
+    font-family: var(--font-head);
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+  .chapter-icon {
+    font-size: 1.2rem;
+  }
+  .chapter-toggle {
+    font-family: var(--font-code);
+    font-size: .8rem;
+    color: var(--text-muted);
+    transition: transform .3s;
+  }
+  .chapter.open .chapter-toggle { transform: rotate(180deg); }
+  .chapter-body {
+    display: none;
+    padding: 0 1.5rem 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .chapter.open .chapter-body { display: block; }
+
+  /* ── CONTENT ELEMENTS ── */
+  h3 {
+    font-family: var(--font-head);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 1.8rem 0 .7rem;
+    color: var(--text);
+  }
+  h4 {
+    font-family: var(--font-head);
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 1.3rem 0 .5rem;
+    color: var(--text-muted);
+  }
+  p { margin-bottom: .9rem; }
+  ul, ol { padding-left: 1.5rem; margin-bottom: .9rem; }
+  li { margin-bottom: .4rem; }
+  strong { color: #fff; font-weight: 600; }
+  em { font-style: italic; color: var(--text-muted); }
+
+  code {
+    font-family: var(--font-code);
+    font-size: .85em;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: .15em .4em;
+    border-radius: 4px;
+    color: var(--accent3);
+  }
+
+  pre {
+    background: #0a0c10;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.2rem;
+    overflow-x: auto;
+    margin: 1rem 0 1.2rem;
+    font-family: var(--font-code);
+    font-size: .82rem;
+    line-height: 1.7;
+    color: #c8d3f5;
+  }
+
+  /* ── DIAGRAM BOXES ── */
+  .diagram-box {
+    background: #0a0c10;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem 0 1.2rem;
+    font-family: var(--font-code);
+    font-size: .82rem;
+    line-height: 1.8;
+    color: #c8d3f5;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  /* ── CALLOUTS ── */
+  .callout {
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+    display: flex;
+    gap: .75rem;
+    font-size: .92rem;
+  }
+  .callout-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: .1rem; }
+  .callout.info { background: rgba(79,143,255,.08); border: 1px solid rgba(79,143,255,.25); }
+  .callout.tip { background: rgba(94,255,163,.07); border: 1px solid rgba(94,255,163,.2); }
+  .callout.warn { background: rgba(255,107,74,.07); border: 1px solid rgba(255,107,74,.2); }
+  .callout.def { background: rgba(196,122,255,.07); border: 1px solid rgba(196,122,255,.2); }
+  .callout.info .callout-icon { color: var(--accent); }
+  .callout.tip .callout-icon { color: var(--lv1); }
+  .callout.warn .callout-icon { color: var(--accent2); }
+  .callout.def .callout-icon { color: var(--lv3); }
+
+  /* ── LINKS ── */
+  .resources {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-top: 1.2rem;
+  }
+  .resources-title {
+    font-family: var(--font-code);
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--text-muted);
+    margin-bottom: .7rem;
+  }
+  .resource-list { list-style: none; padding: 0; margin: 0; }
+  .resource-list li { margin-bottom: .5rem; }
+  .resource-list a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: .88rem;
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    transition: color .2s;
+  }
+  .resource-list a:hover { color: var(--accent3); text-decoration: underline; }
+  .resource-list .tag {
+    font-family: var(--font-code);
+    font-size: .65rem;
+    padding: .1rem .45rem;
+    border-radius: 3px;
+    border: 1px solid;
+    flex-shrink: 0;
+  }
+  .tag-text { color: var(--text-muted); border-color: var(--text-muted); }
+  .tag-video { color: var(--accent2); border-color: var(--accent2); }
+  .tag-tool { color: var(--lv1); border-color: var(--lv1); }
+  .tag-practice { color: var(--lv3); border-color: var(--lv3); }
+
+  /* ── TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0 1.2rem;
+    font-size: .88rem;
+  }
+  th {
+    font-family: var(--font-head);
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    background: var(--surface2);
+    color: var(--text-muted);
+    padding: .6rem 1rem;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  td {
+    padding: .55rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,.02); }
+
+  /* ── PROGRESS TRACKER ── */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--lv1), var(--accent), var(--lv3), var(--lv4));
+    z-index: 200;
+    transition: width .1s;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    font-family: var(--font-code);
+    font-size: .75rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    margin-top: 4rem;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: .4; }
+    50% { opacity: 1; }
+  }
+
+  /* ── GLOSSARY TAG ── */
+  .glo {
+    border-bottom: 1px dashed var(--accent);
+    cursor: help;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: .75rem;
+    margin: 1rem 0;
+  }
+  .summary-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .75rem 1rem;
+    text-align: center;
+  }
+  .summary-card .s-num {
+    font-family: var(--font-head);
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .summary-card .s-label {
+    font-family: var(--font-code);
+    font-size: .7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+  }
+
+  /* ── PLANTUML snippet colors ── */
+  .kw  { color: #c47aff; }
+  .cl  { color: #5effa3; }
+  .rel { color: #ff9f6a; }
+  .str { color: #ffd580; }
+  .cmt { color: #4a5280; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+<section class="hero">
+  <p class="hero-label">Cours complet &nbsp;·&nbsp; Français &nbsp;·&nbsp; Junior → Ingénieur</p>
+  <h1>Maîtriser <span>UML</span></h1>
+  <p class="hero-sub">Le langage de modélisation unifié, de la première esquisse à l'architecture d'un système complexe.</p>
+  <div class="hero-badges">
+    <span class="badge badge-lv1">Niveau 1 — Fondations</span>
+    <span class="badge badge-lv2">Niveau 2 — Structurel</span>
+    <span class="badge badge-lv3">Niveau 3 — Comportemental</span>
+    <span class="badge badge-lv4">Niveau 4 — Architecture</span>
+  </div>
+  <div class="scroll-cta">
+    <span>Commencer</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ NAV ═══════════════════════════════ -->
+<nav>
+  <span class="nav-logo">UML ▸</span>
+  <a href="#intro">Intro</a>
+  <a href="#lv1">Fondations</a>
+  <a href="#lv2">Structurel</a>
+  <a href="#lv3">Comportemental</a>
+  <a href="#lv4">Architecture</a>
+  <a href="#outils">Outils</a>
+  <a href="#glossaire">Glossaire</a>
+</nav>
+
+<!-- ═══════════════════════════════ MAIN ═══════════════════════════════ -->
+<main>
+
+<!-- ────────────────── INTRODUCTION ────────────────── -->
+<section id="intro">
+  <div class="level-header" style="border-top:none;margin-top:2rem;">
+    <div class="level-info">
+      <h2 style="color:var(--text);">Pourquoi UML ?</h2>
+      <p class="level-desc">Le contexte avant le code</p>
+    </div>
+  </div>
+
+  <div class="chapter open">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">🗺️</span> UML en une page</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>Quand on développe seul un petit script, pas besoin de plan. Mais dès qu'on construit <strong>une application réelle</strong> — avec plusieurs modules, plusieurs développeurs, ou qui doit évoluer dans le temps — il faut <em>parler</em> de l'architecture avant d'écrire la première ligne de code.</p>
+      <p><strong>UML</strong> (<span class="glo" title="Unified Modeling Language">Unified Modeling Language</span>) est un <strong>langage visuel standardisé</strong> pour décrire des systèmes logiciels. Créé dans les années 1990 par Grady Booch, Ivar Jacobson et James Rumbaugh, il est normalisé par l'<span class="glo" title="Object Management Group">OMG</span> depuis 1997.</p>
+      <p>UML n'est pas un langage de programmation. C'est un <strong>langage de communication</strong> entre développeurs, architectes, chefs de projet et clients.</p>
+
+      <div class="summary-grid">
+        <div class="summary-card"><div class="s-num">14</div><div class="s-label">Types de diagrammes</div></div>
+        <div class="summary-card"><div class="s-num">2</div><div class="s-label">Familles (structure / comportement)</div></div>
+        <div class="summary-card"><div class="s-num">1997</div><div class="s-label">Norme OMG officielle</div></div>
+        <div class="summary-card"><div class="s-num">2.5</div><div class="s-label">Version actuelle d'UML</div></div>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-icon">💡</div>
+        <div><strong>Analogie clé :</strong> UML est aux logiciels ce que les plans d'architecte sont aux bâtiments. Un plan de façade, un plan de sol, un plan électrique — ce sont des <em>vues différentes</em> du même bâtiment. UML fonctionne pareil.</div>
+      </div>
+
+      <h3>Deux grandes familles</h3>
+      <table>
+        <thead><tr><th>Famille</th><th>Question posée</th><th>Diagrammes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Structure</strong></td><td>Comment est construit le système ?</td><td>Classes, Objets, Composants, Déploiement, Packages…</td></tr>
+          <tr><td><strong>Comportement</strong></td><td>Comment se comporte le système ?</td><td>Cas d'utilisation, Séquence, Activité, État, Communication…</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Quand utiliser UML ?</h3>
+      <ul>
+        <li>Avant de coder : <strong>conception</strong> (diagrammes de classes, cas d'utilisation)</li>
+        <li>Pendant le dev : <strong>communication</strong> en équipe, documentation technique</li>
+        <li>Après : <strong>rétro-ingénierie</strong> d'un système existant pour le comprendre</li>
+      </ul>
+
+      <div class="callout tip">
+        <div class="callout-icon">✅</div>
+        <div>On n'a pas besoin de maîtriser les 14 diagrammes. En pratique, <strong>5 ou 6 suffisent</strong> pour 90 % des projets. Ce cours vous apprendra lesquels et dans quel ordre.</div>
+      </div>
+
+      <div class="resources">
+        <div class="resources-title">📚 Pour aller plus loin — Introduction</div>
+        <ul class="resource-list">
+          <li><a href="https://www.uml.org/" target="_blank"><span class="tag tag-text">texte</span> uml.org — Le site officiel OMG (EN)</a></li>
+          <li><a href="https://fr.wikipedia.org/wiki/UML_(informatique)" target="_blank"><span class="tag tag-text">texte</span> Wikipedia FR — UML : histoire et panorama</a></li>
+          <li><a href="https://www.youtube.com/watch?v=WnMQ8HlmeXc" target="_blank"><span class="tag tag-video">vidéo</span> YouTube FR — Introduction à UML (IUT)</a></li>
+          <li><a href="https://www.lucidchart.com/blog/fr/types-de-diagrammes-UML" target="_blank"><span class="tag tag-text">texte</span> Lucidchart FR — Les 14 types de diagrammes UML</a></li>
+          <li><a href="https://laurent-audibert.developpez.com/Cours-UML/" target="_blank"><span class="tag tag-text">texte</span> Laurent Audibert — Cours UML 2 complet (FR, référence académique) 🏆</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ NIVEAU 1 — FONDATIONS ═══════════════ -->
+<section id="lv1">
+  <div class="level-header lv1">
+    <div class="level-num">01</div>
+    <div class="level-info">
+      <h2>Fondations</h2>
+      <p class="level-desc">Dev junior — Comprendre les bases, lire un diagramme, produire ses premiers schémas</p>
+    </div>
+    <span class="badge badge-lv1">Débutant</span>
+  </div>
+
+  <!-- CH 1.1 -->
+  <div class="chapter">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">🎯</span> 1.1 — Le diagramme de cas d'utilisation</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>Le <strong>diagramme de cas d'utilisation</strong> (<em>Use Case Diagram</em>) est souvent le <strong>premier diagramme</strong> qu'on trace pour un projet. Il répond à : <em>"Qui fait quoi avec le système ?"</em></p>
+
+      <h3>Éléments fondamentaux</h3>
+      <table>
+        <thead><tr><th>Symbole</th><th>Nom</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>🧍 Bonhomme</td><td><strong>Acteur</strong></td><td>Personne ou système externe qui interagit avec l'application</td></tr>
+          <tr><td>⭕ Ellipse</td><td><strong>Cas d'utilisation</strong></td><td>Une fonctionnalité du point de vue de l'utilisateur</td></tr>
+          <tr><td>□ Rectangle</td><td><strong>Frontière système</strong></td><td>Délimite ce qui est dans / hors du système</td></tr>
+          <tr><td>→ Association</td><td><strong>Lien acteur–cas</strong></td><td>L'acteur participe au cas d'utilisation</td></tr>
+          <tr><td>«include»</td><td><strong>Inclusion</strong></td><td>Le cas A <em>inclut toujours</em> le cas B</td></tr>
+          <tr><td>«extend»</td><td><strong>Extension</strong></td><td>Le cas B peut <em>étendre optionnellement</em> le cas A</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Exemple : Système de bibliothèque</h3>
+      <div class="diagram-box">┌─────────────────────────────────────────────────┐
+│               Système Bibliothèque               │
+│                                                  │
+│   🧍 Adhérent ──── (Rechercher un livre)         │
+│         │                                        │
+│         ├────────── (Emprunter un livre)          │
+│         │               │                        │
+│         │          «include»                     │
+│         │               ↓                        │
+│         │         (Vérifier dispo)               │
+│         │                                        │
+│         └────────── (Rendre un livre)             │
+│                                                  │
+│   🧍 Bibliothécaire ─ (Gérer le catalogue)       │
+│                    ── (Gérer les adhérents)      │
+└─────────────────────────────────────────────────┘</div>
+
+      <h3>Conseils de lecture</h3>
+      <ul>
+        <li>Chaque cas d'utilisation commence par un <strong>verbe à l'infinitif</strong> : "Rechercher", "Emprunter"…</li>
+        <li>Un acteur peut être un système externe (ex : service de paiement)</li>
+        <li><code>«include»</code> = obligatoire. <code>«extend»</code> = optionnel/conditionnel</li>
+        <li>Ne pas confondre avec un organigramme : on décrit des <em>besoins</em>, pas des étapes</li>
+      </ul>
+
+      <div class="callout warn">
+        <div class="callout-icon">⚠️</div>
+        <div>L'erreur classique du débutant : mettre des actions techniques ("accéder à la BDD", "valider le token") dans un diagramme de cas d'utilisation. Ces détails n'appartiennent pas ici — c'est le <em>quoi</em>, pas le <em>comment</em>.</div>
+      </div>
+
+      <div class="resources">
+        <div class="resources-title">📚 Ressources — Cas d'utilisation</div>
+        <ul class="resource-list">
+          <li><a href="https://laurent-audibert.developpez.com/Cours-UML/?page=diagramme-cas-utilisation" target="_blank"><span class="tag tag-text">texte</span> Laurent Audibert — Cours complet diagramme de cas d'utilisation (FR) 🏆</a></li>
+          <li><a href="https://www.youtube.com/watch?v=N_Izg341yqg" target="_blank"><span class="tag tag-video">vidéo</span> YouTube FR — Diagramme de cas d'utilisation UML expliqué (2025)</a></li>
+          <li><a href="https://app.diagrams.net/" target="_blank"><span class="tag tag-tool">outil</span> draw.io — Créer son premier diagramme (gratuit, en ligne)</a></li>
+          <li><a href="https://www.plantuml.com/plantuml/uml/" target="_blank"><span class="tag tag-practice">pratique</span> PlantUML online — Dessiner en écrivant du texte</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CH 1.2 -->
+  <div class="chapter">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">📊</span> 1.2 — Le diagramme de classes (introduction)</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>Le <strong>diagramme de classes</strong> est le pilier d'UML. Il modélise la <strong>structure statique</strong> du système : les entités du domaine, leurs attributs, méthodes et relations.</p>
+
+      <h3>Anatomie d'une classe</h3>
+      <div class="diagram-box">┌─────────────────────┐
+│      Voiture        │  ← Nom de la classe
+├─────────────────────┤
+│ - marque : String   │  ← Attributs
+│ - annee  : int      │     (- = privé)
+│ + couleur: String   │     (+ = public)
+├─────────────────────┤
+│ + demarrer() : void │  ← Méthodes
+│ + getMarque(): String│
+└─────────────────────┘</div>
+
+      <h3>Visibilité</h3>
+      <table>
+        <thead><tr><th>Symbole</th><th>Mot-clé</th><th>Accessible depuis…</th></tr></thead>
+        <tbody>
+          <tr><td><code>+</code></td><td>public</td><td>Partout</td></tr>
+          <tr><td><code>-</code></td><td>private</td><td>La classe seulement</td></tr>
+          <tr><td><code>#</code></td><td>protected</td><td>La classe et ses sous-classes</td></tr>
+          <tr><td><code>~</code></td><td>package</td><td>Le package/module</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Exemple concret — Librairie en ligne</h3>
+      <div class="diagram-box">┌──────────────┐         ┌──────────────┐
+│    Client     │         │   Commande   │
+├──────────────┤         ├──────────────┤
+│- nom: String │ 1   0..* │- date: Date  │
+│- email:String│─────────│- total: float│
+├──────────────┤         ├──────────────┤
+│+seConnecter()│         │+calculer()   │
+└──────────────┘         └──────┬───────┘
+                                │ contient 1..*
+                         ┌──────▼───────┐
+                         │    Livre     │
+                         ├──────────────┤
+                         │- titre:String│
+                         │- prix: float │
+                         ├──────────────┤
+                         │+getInfos()   │
+                         └──────────────┘</div>
+
+      <div class="callout def">
+        <div class="callout-icon">📖</div>
+        <div><strong>Multiplicités :</strong> <code>1</code> = exactement un, <code>0..*</code> = zéro ou plusieurs, <code>1..*</code> = un ou plusieurs, <code>0..1</code> = zéro ou un (optionnel).</div>
+      </div>
+
+      <div class="resources">
+        <div class="resources-title">📚 Ressources — Diagramme de classes (bases)</div>
+        <ul class="resource-list">
+          <li><a href="https://jmdoudoux.developpez.com/cours/developpons/java_new/chap-uml.php" target="_blank"><span class="tag tag-text">texte</span> JMDoudoux — UML et Java (très complet, FR)</a></li>
+          <li><a href="https://www.youtube.com/watch?v=3cmzqZzwNDM" target="_blank"><span class="tag tag-video">vidéo</span> YouTube FR — Diagramme de classes UML (Grafikart)</a></li>
+          <li><a href="https://plantuml.com/fr/class-diagram" target="_blank"><span class="tag tag-text">texte</span> PlantUML — Syntaxe diagramme de classes (FR)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CH 1.3 -->
+  <div class="chapter">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">🔧</span> 1.3 — Premiers outils : draw.io et PlantUML</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>Avant d'aller plus loin, voici les deux outils indispensables pour pratiquer UML, l'un graphique, l'autre textuel.</p>
+
+      <h3>draw.io (diagrams.net)</h3>
+      <p>Application web gratuite, sans inscription. Bibliothèque de formes UML complète. Idéal pour les débutants.</p>
+      <ul>
+        <li>Accès : <a href="https://app.diagrams.net/" style="color:var(--accent)" target="_blank">app.diagrams.net</a></li>
+        <li>Choisir <strong>UML</strong> dans les bibliothèques de formes</li>
+        <li>Export possible en PNG, SVG, PDF</li>
+        <li>Intégration Google Drive / GitHub</li>
+      </ul>
+
+      <h3>PlantUML — UML as Code</h3>
+      <p>PlantUML permet de générer des diagrammes <strong>à partir de texte</strong>. Très utilisé dans les équipes agiles pour versionner les diagrammes dans le code.</p>
+
+      <pre><span class="cmt">@startuml</span>
+<span class="kw">class</span> <span class="cl">Voiture</span> {
+  <span class="rel">-</span> marque : String
+  <span class="rel">-</span> annee  : int
+  <span class="rel">+</span> demarrer() : void
+}
+
+<span class="kw">class</span> <span class="cl">Conducteur</span> {
+  <span class="rel">-</span> nom : String
+  <span class="rel">+</span> conduire(v: Voiture)
+}
+
+<span class="cl">Conducteur</span> <span class="str">"1"</span> -- <span class="str">"0..*"</span> <span class="cl">Voiture</span> : conduit
+<span class="cmt">@enduml</span></pre>
+
+      <div class="callout tip">
+        <div class="callout-icon">✅</div>
+        <div>Testez immédiatement ce code sur <a href="https://www.plantuml.com/plantuml/uml/" target="_blank" style="color:var(--accent3)">plantuml.com/plantuml/uml/</a> — collez-le et voyez le diagramme généré en temps réel.</div>
+      </div>
+
+      <div class="resources">
+        <div class="resources-title">📚 Ressources — Outils</div>
+        <ul class="resource-list">
+          <li><a href="https://plantuml.com/fr/" target="_blank"><span class="tag tag-tool">outil</span> PlantUML — Documentation officielle (FR disponible)</a></li>
+          <li><a href="https://www.drawio.com/blog/uml-diagram-types" target="_blank"><span class="tag tag-text">texte</span> draw.io — Guide des types de diagrammes UML (EN)</a></li>
+          <li><a href="https://www.youtube.com/watch?v=yKqvE-7-5yQ" target="_blank"><span class="tag tag-video">vidéo</span> YouTube FR — PlantUML : Diagramme de séquence, partie 1 (série complète)</a></li>
+          <li><a href="https://real-world-plantuml.com/" target="_blank"><span class="tag tag-practice">pratique</span> Real World PlantUML — Exemples réels commentés (EN)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ NIVEAU 2 — STRUCTUREL ═══════════════ -->
+<section id="lv2">
+  <div class="level-header lv2">
+    <div class="level-num">02</div>
+    <div class="level-info">
+      <h2>Diagrammes structurels</h2>
+      <p class="level-desc">POO maîtrisée — Modéliser l'architecture statique d'une application</p>
+    </div>
+    <span class="badge badge-lv2">Intermédiaire</span>
+  </div>
+
+  <!-- CH 2.1 -->
+  <div class="chapter">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">🏗️</span> 2.1 — Diagramme de classes avancé</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>Maintenant que les bases sont posées, on entre dans les <strong>relations avancées</strong> entre classes : héritage, composition, agrégation, dépendance, réalisation.</p>
+
+      <h3>Les 5 types de relations</h3>
+      <table>
+        <thead><tr><th>Relation</th><th>Notation</th><th>Signification</th><th>Exemple</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Association</strong></td><td><code>──</code></td><td>Lien simple entre deux classes</td><td>Client passe Commande</td></tr>
+          <tr><td><strong>Agrégation</strong></td><td><code>◇──</code></td><td>"A contient B" mais B peut exister sans A</td><td>Équipe contient Joueur</td></tr>
+          <tr><td><strong>Composition</strong></td><td><code>◆──</code></td><td>"A contient B" et B n'existe que dans A</td><td>Maison contient Pièce</td></tr>
+          <tr><td><strong>Héritage</strong></td><td><code>──▷</code></td><td>B est une spécialisation de A</td><td>Chat hérite d'Animal</td></tr>
+          <tr><td><strong>Réalisation</strong></td><td><code>╌╌▷</code></td><td>B implémente l'interface A</td><td>Duck implements Flyable</td></tr>
+          <tr><td><strong>Dépendance</strong></td><td><code>╌╌▶</code></td><td>A utilise B ponctuellement</td><td>Commande utilise Taxe</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Composition vs Agrégation — La différence clé</h3>
+      <div class="callout def">
+        <div class="callout-icon">📖</div>
+        <div>
+          <strong>Composition (losange plein ◆) :</strong> cycle de vie partagé. Si la <em>Voiture</em> est détruite, le <em>Moteur</em> l'est aussi. Sans voiture, pas de moteur.<br><br>
+          <strong>Agrégation (losange vide ◇) :</strong> cycle de vie indépendant. Une <em>Équipe</em> peut être dissoute et les <em>Joueurs</em> existent toujours.
+        </div>
+      </div>
+
+      <h3>Héritage et interfaces — Exemple complet</h3>
+      <div class="diagram-box">         ┌──────────────┐
+         │   «interface»│
+         │   Payable    │
+         └──────┬───────┘
+                △ (réalisation)
+     ┌──────────┴──────────┐
+     │                     │
+┌────▼─────┐         ┌─────▼────┐
+│ Commande │         │ Abonnement│
+└──────────┘         └──────────┘
+
+        ┌───────────┐
+        │  Animal   │  ← classe abstraite
+        ├───────────┤
+        │# nom      │
+        │+ manger() │
+        └─────┬─────┘
+              △ (héritage)
+     ┌────────┴────────┐
+┌────▼────┐       ┌────▼────┐
+│  Chien  │       │  Chat   │
+│+aboyer()│       │+miauler()│
+└─────────┘       └─────────┘</div>
+
+      <h3>Classes abstraites et interfaces</h3>
+      <ul>
+        <li><strong>Classe abstraite</strong> : nom en <em>italique</em>, ne peut pas être instanciée directement, peut avoir des méthodes implémentées</li>
+        <li><strong>Interface</strong> : stéréotype <code>«interface»</code>, que des méthodes abstraites (en Java/C#), implémentée via réalisation</li>
+      </ul>
+
+      <h3>PlantUML — Relations avancées</h3>
+      <pre><span class="cmt">@startuml</span>
+<span class="kw">abstract class</span> <span class="cl">Animal</span> {
+  # nom : String
+  + {<span class="kw">abstract</span>} faireDuBruit()
+}
+
+<span class="kw">interface</span> <span class="cl">Domestique</span> {
+  + accepteMailleresse() : bool
+}
+
+<span class="kw">class</span> <span class="cl">Chien</span> <span class="kw">extends</span> <span class="cl">Animal</span> <span class="kw">implements</span> <span class="cl">Domestique</span> {
+  + faireDuBruit() : <span class="str">"Wouf"</span>
+  + accepteMailleresse() : <span class="str">true</span>
+}
+
+<span class="cl">Animal</span> <span class="str">"1"</span> o-- <span class="str">"0..*"</span> <span class="cl">Jouet</span> : possède (agrégation)
+<span class="cl">Chien</span>  <span class="str">"1"</span> *-- <span class="str">"1"</span>   <span class="cl">Coeur</span> : a (composition)
+<span class="cmt">@enduml</span></pre>
+
+      <div class="resources">
+        <div class="resources-title">📚 Ressources — Classes avancées</div>
+        <ul class="resource-list">
+          <li><a href="https://laurent-audibert.developpez.com/Cours-UML/?page=diagramme-classes" target="_blank"><span class="tag tag-text">texte</span> Laurent Audibert — Diagramme de classes complet avec OCL (FR) 🏆</a></li>
+          <li><a href="https://www.youtube.com/watch?v=UI6lqHOVHic" target="_blank"><span class="tag tag-video">vidéo</span> YouTube FR — Agrégation vs Composition (explication claire)</a></li>
+          <li><a href="https://www.youtube.com/watch?v=QLPRsWCQ5BE" target="_blank"><span class="tag tag-video">vidéo</span> Lucidchart — Tutoriel diagramme de classes UML (FR, 2023)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CH 2.2 -->
+  <div class="chapter">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">📦</span> 2.2 — Diagramme de packages</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>Le <strong>diagramme de packages</strong> organise les classes en <strong>groupes logiques</strong> et montre les dépendances entre ces groupes. Indispensable pour comprendre l'architecture en couches d'une application.</p>
+
+      <h3>Exemple : Architecture MVC</h3>
+      <div class="diagram-box">┌─────────────────────────────────────────┐
+│  Application Web                        │
+│                                         │
+│  ┌──────────────┐                       │
+│  │ «package»    │                       │
+│  │  Vue         │                       │
+│  │  (HTML/CSS)  │                       │
+│  └──────┬───────┘                       │
+│         │ dépend de                     │
+│  ┌──────▼───────┐                       │
+│  │ «package»    │                       │
+│  │  Contrôleur  │                       │
+│  │  (Logique)   │                       │
+│  └──────┬───────┘                       │
+│         │ dépend de                     │
+│  ┌──────▼───────┐   ┌──────────────┐   │
+│  │ «package»    │   │ «package»    │   │
+│  │  Modèle      │   │  Services    │   │
+│  │  (Entités)   │   │  (Métier)    │   │
+│  └──────────────┘   └──────────────┘   │
+└─────────────────────────────────────────┘</div>
+
+      <h3>Règle des dépendances</h3>
+      <p>Une dépendance (<code>╌╌▶</code>) entre packages signifie : "ce package utilise des éléments de cet autre package". On cherche à <strong>minimiser les dépendances cycliques</strong> (A dépend de B qui dépend de A = mauvais signe).</p>
+
+      <div class="callout tip">
+        <div class="callout-icon">✅</div>
+        <div><strong>Bonne pratique :</strong> Les dépendances doivent aller dans un sens. Dans une architecture en couches : <em>Présentation → Métier → Données</em>. Jamais l'inverse.</div>
+      </div>
+
+      <div class="resources">
+        <div class="resources-title">📚 Ressources — Packages</div>
+        <ul class="resource-list">
+          <li><a href="https://plantuml.com/en/package-diagram" target="_blank"><span class="tag tag-tool">outil</span> PlantUML — Diagrammes de packages (EN)</a></li>
+          <li><a href="https://laurent-audibert.developpez.com/Cours-UML/?page=diagramme-classes" target="_blank"><span class="tag tag-text">texte</span> Laurent Audibert — Packages et organisation en couches (FR)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CH 2.3 -->
+  <div class="chapter">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">🖥️</span> 2.3 — Diagrammes de composants & déploiement</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>Ces deux diagrammes s'adressent à l'architecture physique et technique du système. On sort du domaine métier pour entrer dans l'infrastructure.</p>
+
+      <h3>Diagramme de composants</h3>
+      <p>Modélise les <strong>composants logiciels</strong> (modules, bibliothèques, services) et leurs interfaces. Un composant expose des <em>interfaces fournies</em> (lollipop ○─) et requiert des <em>interfaces requises</em> (socket ─◑).</p>
+
+      <h4>Exemple : Application e-commerce</h4>
+      <div class="diagram-box">  [Frontend React] ─────► [API REST]
+                                    │
+                        ┌───────────┼──────────┐
+                        ▼           ▼          ▼
+               [Auth Service] [Cart Service] [Product Service]
+                        │           │          │
+                        └───────────┴──────────┘
+                                    │
+                           [Base de données PostgreSQL]
+                                    │
+                           [Cache Redis]</div>
+
+      <h3>Diagramme de déploiement</h3>
+      <p>Montre la <strong>topologie physique</strong> : sur quelles machines (nœuds) tournent les composants. Essentiel pour documenter une infrastructure cloud ou microservices.</p>
+
+      <div class="diagram-box">┌────────────────────┐    ┌────────────────────┐
+│  «device»          │    │  «device»          │
+│  Navigateur Client │    │  CDN (CloudFront)  │
+│  ┌──────────────┐  │    │  [Assets statiques]│
+│  │ Frontend SPA │  │    └────────────────────┘
+│  └──────┬───────┘  │
+└─────────│──────────┘
+          │ HTTPS
+┌─────────▼──────────────────────────────────┐
+│  «node» Serveur Cloud (AWS EC2)             │
+│  ┌──────────────┐  ┌──────────────────────┐│
+│  │ API Node.js  │  │  Nginx (reverse proxy)││
+│  └──────┬───────┘  └──────────────────────┘│
+└─────────│───────────────────────────────────┘
+          │
+┌─────────▼──────────┐
+│  «node» DB Server  │
+│  [PostgreSQL 15]   │
+└────────────────────┘</div>
+
+      <div class="resources">
+        <div class="resources-title">📚 Ressources — Composants & Déploiement</div>
+        <ul class="resource-list">
+          <li><a href="https://www.youtube.com/watch?v=OkC7HKtiZC0" target="_blank"><span class="tag tag-video">vidéo</span> YouTube FR — Diagramme de déploiement UML</a></li>
+          <li><a href="https://plantuml.com/fr/component-diagram" target="_blank"><span class="tag tag-tool">outil</span> PlantUML — Diagrammes de composants (FR)</a></li>
+          <li><a href="https://plantuml.com/fr/deployment-diagram" target="_blank"><span class="tag tag-tool">outil</span> PlantUML — Diagrammes de déploiement (FR)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- CH 2.4 -->
+  <div class="chapter">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">🗂️</span> 2.4 — Diagramme d'objets (et les diagrammes rares)</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>UML définit 14 types de diagrammes. Ce cours couvre ceux utilisés dans 95 % des projets réels. Voici un panorama des diagrammes moins courants, utiles à connaître de nom.</p>
+
+      <h3>Diagramme d'objets</h3>
+      <p>C'est une <strong>photo instantanée</strong> du diagramme de classes : au lieu de montrer des classes abstraites, on montre des <em>instances concrètes</em> à un moment précis. Très utile pour valider ou expliquer un exemple.</p>
+
+      <div class="diagram-box">Classes (abstrait)        Objets (concret, à t=0)
+
+┌───────────┐            :Client              :Commande
+│  Client   │    →     nom = "Alice"   ────  date = "2024-01-15"
+│  Commande │          email = "a@…"         total = 42.0
+└───────────┘</div>
+
+      <div class="callout tip">
+        <div class="callout-icon">✅</div>
+        <div>Utilisez le diagramme d'objets quand votre diagramme de classes est complexe et qu'un exemple concret aiderait à le comprendre.</div>
+      </div>
+
+      <h3>Les autres diagrammes UML — À connaître</h3>
+      <table>
+        <thead><tr><th>Diagramme</th><th>Usage</th><th>Fréquence en pratique</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Diagramme de timing</strong></td><td>Montre les changements d'état en fonction du temps (systèmes temps-réel, embarqués)</td><td>Rare — surtout systèmes embarqués</td></tr>
+          <tr><td><strong>Diagramme d'interaction overview</strong></td><td>Vue d'ensemble de plusieurs diagrammes de séquence liés (comme un diagramme d'activité avec des séquences imbriquées)</td><td>Très rare</td></tr>
+          <tr><td><strong>Diagramme de structure composite</strong></td><td>Intérieur d'une classe complexe avec ses parties et connecteurs</td><td>Rare — architectures MBSE</td></tr>
+          <tr><td><strong>Diagramme de profil</strong></td><td>Extension du méta-modèle UML pour un domaine spécifique</td><td>Très rare — experts UML</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout info">
+        <div class="callout-icon">💡</div>
+        <div>Ne vous sentez pas obligé de maîtriser ces diagrammes. Les 8 couverts dans ce cours (cas d'utilisation, classes, packages, composants, déploiement, séquence, activité, états) représentent la quasi-totalité des usages professionnels.</div>
+      </div>
+
+      <div class="resources">
+        <div class="resources-title">📚 Ressources — Vue complète des 14 diagrammes</div>
+        <ul class="resource-list">
+          <li><a href="https://www.lucidchart.com/blog/fr/types-de-diagrammes-UML" target="_blank"><span class="tag tag-text">texte</span> Lucidchart FR — Les 14 types de diagrammes UML</a></li>
+          <li><a href="https://www.uml-diagrams.org/" target="_blank"><span class="tag tag-text">texte</span> uml-diagrams.org — Référence complète tous diagrammes (EN)</a></li>
+          <li><a href="https://plantuml.com/fr/object-diagram" target="_blank"><span class="tag tag-tool">outil</span> PlantUML — Diagramme d'objets (FR)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ NIVEAU 3 — COMPORTEMENTAL ═══════════════ -->
+<section id="lv3">
+  <div class="level-header lv3">
+    <div class="level-num">03</div>
+    <div class="level-info">
+      <h2>Diagrammes comportementaux</h2>
+      <p class="level-desc">Comment le système agit — interactions, flux, états</p>
+    </div>
+    <span class="badge badge-lv3">Avancé</span>
+  </div>
+
+  <!-- CH 3.1 -->
+  <div class="chapter">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">🔄</span> 3.1 — Diagramme de séquence</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>Le <strong>diagramme de séquence</strong> montre comment les objets <strong>interagissent dans le temps</strong> pour réaliser un cas d'utilisation. C'est le diagramme le plus utilisé après le diagramme de classes.</p>
+
+      <h3>Éléments</h3>
+      <table>
+        <thead><tr><th>Élément</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Participant/Acteur</strong></td><td>Colonne verticale représentant un objet ou un acteur</td></tr>
+          <tr><td><strong>Ligne de vie</strong></td><td>Ligne pointillée verticale sous chaque participant</td></tr>
+          <tr><td><strong>Message synchrone</strong></td><td>Flèche pleine → : l'appelant attend la réponse</td></tr>
+          <tr><td><strong>Message asynchrone</strong></td><td>Flèche ouverte →> : l'appelant n'attend pas</td></tr>
+          <tr><td><strong>Réponse</strong></td><td>Flèche pointillée ‹-- : valeur de retour</td></tr>
+          <tr><td><strong>Activation</strong></td><td>Rectangle sur la ligne de vie : durée d'exécution</td></tr>
+          <tr><td><strong>Fragment</strong></td><td>Bloc conditionnel : alt, opt, loop, par…</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Exemple : Connexion à une application</h3>
+      <div class="diagram-box">Navigateur    Contrôleur    Service Auth    Base de données
+    │               │                │                  │
+    │─ POST /login─►│                │                  │
+    │               │─validateInput()│                  │
+    │               │───────────────►│                  │
+    │               │                │──findUser(email)─►│
+    │               │                │◄─────── User ─────│
+    │               │                │                  │
+    │       ┌───────────────────┐    │                  │
+    │       │ alt [mdp correct] │    │                  │
+    │       │                   │─generateToken()       │
+    │       │◄── 200 + token ───│                  │
+    │       ├───────────────────┤                  │
+    │       │ [mdp incorrect]   │                  │
+    │       │◄─── 401 Error ────│                  │
+    │       └───────────────────┘                  │</div>
+
+      <h3>Fragments combinés</h3>
+      <ul>
+        <li><code>alt</code> : branchement conditionnel (if/else)</li>
+        <li><code>opt</code> : séquence optionnelle (if sans else)</li>
+        <li><code>loop</code> : répétition</li>
+        <li><code>par</code> : exécution parallèle</li>
+        <li><code>ref</code> : référence vers un autre diagramme</li>
+      </ul>
+
+      <h3>PlantUML — Diagramme de séquence</h3>
+      <pre><span class="cmt">@startuml</span>
+<span class="kw">actor</span> Utilisateur
+<span class="kw">participant</span> <span class="cl">"Contrôleur"</span> <span class="kw">as</span> C
+<span class="kw">participant</span> <span class="cl">"Auth Service"</span> <span class="kw">as</span> A
+<span class="kw">database</span>   <span class="cl">"Base de données"</span> <span class="kw">as</span> DB
+
+Utilisateur -> C : POST /login(email, mdp)
+C -> A : valider(email, mdp)
+A -> DB : findUser(email)
+DB --> A : User
+
+<span class="kw">alt</span> mdp correct
+  A --> C : token JWT
+  C --> Utilisateur : <span class="str">200 OK + token</span>
+<span class="kw">else</span> mdp incorrect
+  A --> C : <span class="kw">null</span>
+  C --> Utilisateur : <span class="str">401 Unauthorized</span>
+<span class="kw">end</span>
+<span class="cmt">@enduml</span></pre>
+
+      <div class="resources">
+        <div class="resources-title">📚 Ressources — Séquence</div>
+        <ul class="resource-list">
+          <li><a href="https://plantuml.com/fr/sequence-diagram" target="_blank"><span class="tag tag-tool">outil</span> PlantUML — Diagramme de séquence complet (FR)</a></li>
+          <li><a href="https://www.youtube.com/watch?v=pCK6prSq8aw" target="_blank"><span class="tag tag-video">vidéo</span> YouTube FR — Diagramme de séquence UML</a></li>
+          <li><a href="https://www.visual-paradigm.com/guide/uml-unified-modeling-language/what-is-sequence-diagram/" target="_blank"><span class="tag tag-text">texte</span> Visual Paradigm — Guide séquence (EN)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CH 3.2 -->
+  <div class="chapter">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">⚡</span> 3.2 — Diagramme d'activité</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>Le <strong>diagramme d'activité</strong> modélise un <strong>flux de travail</strong> ou un algorithme. C'est l'équivalent UML de l'organigramme, mais bien plus expressif grâce aux swimlanes (couloirs).</p>
+
+      <h3>Notation de base</h3>
+      <table>
+        <thead><tr><th>Symbole</th><th>Signification</th></tr></thead>
+        <tbody>
+          <tr><td>● (disque plein)</td><td>Début (état initial)</td></tr>
+          <tr><td>⊙ (disque dans cercle)</td><td>Fin (état final)</td></tr>
+          <tr><td>□ (rectangle arrondi)</td><td>Action / activité</td></tr>
+          <tr><td>◇ (losange)</td><td>Décision (condition)</td></tr>
+          <tr><td>─── (barre épaisse)</td><td>Fork/Join — parallélisme</td></tr>
+          <tr><td>│ Swimlane │</td><td>Couloir = responsabilité d'un acteur</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Exemple : Processus de commande e-commerce</h3>
+      <div class="diagram-box">║    Client     ║  Système de paiement  ║  Entrepôt    ║
+║               ║                       ║              ║
+║       ●       ║                       ║              ║
+║       ↓       ║                       ║              ║
+║ [Ajouter panier]                      ║              ║
+║       ↓       ║                       ║              ║
+║ [Valider commande]                    ║              ║
+║       ↓       ║                       ║              ║
+║──────────────►║ [Traiter paiement]    ║              ║
+║               ║         ↓             ║              ║
+║               ║    ◇ Paiement OK ?    ║              ║
+║               ║   /           \       ║              ║
+║               ║ [Oui]        [Non]    ║              ║
+║               ║   ↓           ↓       ║              ║
+║◄──────────────║ Confirmé   Refusé    ║              ║
+║               ║   ↓                   ║              ║
+║               ║───────────────────────►[Préparer]   ║
+║               ║                       ║ [Expédier]  ║
+║               ║                       ║     ↓        ║
+║               ║                       ║    ⊙         ║</div>
+
+      <div class="callout info">
+        <div class="callout-icon">💡</div>
+        <div><strong>Fork/Join :</strong> Une barre horizontale épaisse avec plusieurs sorties = <em>fork</em> (lancement parallèle). La barre qui rassemble les branches parallèles = <em>join</em> (synchronisation). Exemple : envoyer un email ET notifier par SMS en parallèle.</div>
+      </div>
+
+      <div class="resources">
+        <div class="resources-title">📚 Ressources — Activité</div>
+        <ul class="resource-list">
+          <li><a href="https://plantuml.com/fr/activity-diagram-beta" target="_blank"><span class="tag tag-tool">outil</span> PlantUML — Diagramme d'activité (FR)</a></li>
+          <li><a href="https://www.youtube.com/watch?v=mdY__9DXfJU" target="_blank"><span class="tag tag-video">vidéo</span> YouTube FR — Diagramme d'activité UML : cours et exercice corrigé</a></li>
+          <li><a href="https://laurent-audibert.developpez.com/Cours-UML/?page=diagramme-activites" target="_blank"><span class="tag tag-text">texte</span> Laurent Audibert — Diagramme d'activités (FR) 🏆</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CH 3.3 -->
+  <div class="chapter">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">🔀</span> 3.3 — Diagramme d'états-transitions</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>Le <strong>diagramme d'états</strong> (<em>State Machine Diagram</em>) modélise le <strong>cycle de vie d'un objet</strong>. Pour chaque état, on définit les événements qui déclenchent des transitions.</p>
+
+      <h3>Éléments</h3>
+      <ul>
+        <li><strong>État</strong> : rectangle arrondi — situation dans laquelle se trouve l'objet</li>
+        <li><strong>Transition</strong> : flèche entre états avec syntaxe <code>événement [condition] / action</code></li>
+        <li><strong>État initial</strong> : disque plein ●</li>
+        <li><strong>État final</strong> : double cercle ⊙</li>
+        <li><strong>Actions internes</strong> : <code>entry/</code>, <code>exit/</code>, <code>do/</code> dans un état</li>
+      </ul>
+
+      <h3>Exemple : Cycle de vie d'une commande</h3>
+      <div class="diagram-box">              ●
+              ↓
+       ┌──────────────┐
+       │   En attente │
+       │ do/envoyer   │
+       │    email     │
+       └──────┬───────┘
+              │ paiementReçu
+              ▼
+       ┌──────────────┐
+       │  En cours de │◄──────────────────┐
+       │  préparation │                   │
+       └──────┬───────┘          retourDemandé
+              │ expédié          │
+              ▼                  │
+       ┌──────────────┐   ┌──────┴───────┐
+       │   Expédiée   │   │  En retour   │
+       └──────┬───────┘   └──────────────┘
+              │ livré
+              ▼
+       ┌──────────────┐
+       │    Livrée    │
+       └──────────────┘
+              │ annulé [délai < 24h]
+              ▼
+       ┌──────────────┐
+       │   Annulée    │
+       └──────┬───────┘
+              ↓
+              ⊙</div>
+
+      <div class="callout tip">
+        <div class="callout-icon">✅</div>
+        <div>Ce diagramme est précieux pour modéliser : des workflows (tickets, commandes), des protocoles réseau, des automates finis, ou des objets complexes comme des lecteurs média (play/pause/stop).</div>
+      </div>
+
+      <div class="resources">
+        <div class="resources-title">📚 Ressources — États-transitions</div>
+        <ul class="resource-list">
+          <li><a href="https://plantuml.com/fr/state-diagram" target="_blank"><span class="tag tag-tool">outil</span> PlantUML — Diagramme d'états (FR)</a></li>
+          <li><a href="https://www.youtube.com/watch?v=fTmADIEvT0w" target="_blank"><span class="tag tag-video">vidéo</span> YouTube FR — Diagramme d'états-transitions UML : cours et exercice corrigé</a></li>
+          <li><a href="https://laurent-audibert.developpez.com/Cours-UML/?page=diagramme-etats-transitions" target="_blank"><span class="tag tag-text">texte</span> Laurent Audibert — Diagramme d'états-transitions (FR) 🏆</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CH 3.4 -->
+  <div class="chapter">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">💬</span> 3.4 — Diagramme de communication</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>Le <strong>diagramme de communication</strong> (anciennement diagramme de collaboration) est une variante du diagramme de séquence : il montre les mêmes interactions mais en mettant l'accent sur <strong>la structure des objets</strong> plutôt que l'axe temporel.</p>
+
+      <h3>Différence avec le diagramme de séquence</h3>
+      <table>
+        <thead><tr><th></th><th>Séquence</th><th>Communication</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Axe</strong></td><td>Temporel (vertical)</td><td>Structural (spatial)</td></tr>
+          <tr><td><strong>Point fort</strong></td><td>Ordre des messages</td><td>Relations entre objets</td></tr>
+          <tr><td><strong>Usage</strong></td><td>Flux d'un scénario</td><td>Qui parle à qui</td></tr>
+        </tbody>
+      </table>
+
+      <p>Les messages sont numérotés (<code>1:</code>, <code>1.1:</code>, <code>1.2:</code>…) pour indiquer l'ordre. Ce diagramme est moins courant mais utile pour montrer le réseau d'interactions dans un système dense.</p>
+
+      <div class="resources">
+        <div class="resources-title">📚 Ressources</div>
+        <ul class="resource-list">
+          <li><a href="https://plantuml.com/fr/sequence-diagram" target="_blank"><span class="tag tag-tool">outil</span> PlantUML — Séquence (base du diagramme de communication)</a></li>
+          <li><a href="https://www.uml-diagrams.org/communication-diagrams.html" target="_blank"><span class="tag tag-text">texte</span> uml-diagrams.org — Communication Diagrams (EN)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ NIVEAU 4 — ARCHITECTURE ═══════════════ -->
+<section id="lv4">
+  <div class="level-header lv4">
+    <div class="level-num">04</div>
+    <div class="level-info">
+      <h2>Architecture & ingénierie</h2>
+      <p class="level-desc">Modélisation avancée, patterns, approche 4+1, microservices</p>
+    </div>
+    <span class="badge badge-lv4">Ingénieur</span>
+  </div>
+
+  <!-- CH 4.1 -->
+  <div class="chapter">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">🧱</span> 4.1 — Modèle 4+1 vues</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>Le <strong>modèle 4+1 vues</strong> de Philippe Kruchten (1995) est un cadre architectural fondamental qui organise la description d'un système selon <strong>5 perspectives complémentaires</strong>.</p>
+
+      <h3>Les 5 vues</h3>
+      <table>
+        <thead><tr><th>Vue</th><th>Diagrammes UML</th><th>Audience</th><th>Question posée</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Logique</strong></td><td>Classes, Objets, Séquence</td><td>Développeurs</td><td>Quelles sont les abstractions ?</td></tr>
+          <tr><td><strong>Process</strong></td><td>Activité, Séquence, États</td><td>Intégrateurs</td><td>Comment les processus communiquent ?</td></tr>
+          <tr><td><strong>Développement</strong></td><td>Packages, Composants</td><td>Dev / Archi.</td><td>Comment est organisé le code ?</td></tr>
+          <tr><td><strong>Physique</strong></td><td>Déploiement</td><td>DevOps / SRE</td><td>Comment est déployé le système ?</td></tr>
+          <tr><td><strong>+1 Scénarios</strong></td><td>Cas d'utilisation</td><td>Tous</td><td>Quels sont les cas principaux ?</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout info">
+        <div class="callout-icon">💡</div>
+        <div>La vue "+1" (scénarios) sert à <strong>valider</strong> les quatre autres vues. Si un cas d'utilisation ne peut pas être réalisé avec les éléments des 4 vues, il manque quelque chose dans l'architecture.</div>
+      </div>
+
+      <div class="resources">
+        <div class="resources-title">📚 Ressources — Modèle 4+1</div>
+        <ul class="resource-list">
+          <li><a href="https://fr.wikipedia.org/wiki/Mod%C3%A8le_des_vues_4%2B1" target="_blank"><span class="tag tag-text">texte</span> Wikipedia FR — Modèle 4+1 vues</a></li>
+          <li><a href="https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf" target="_blank"><span class="tag tag-text">texte</span> Kruchten — Article original 4+1 (EN, PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CH 4.2 -->
+  <div class="chapter">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">🧩</span> 4.2 — Patterns de conception en UML</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>Les <strong>design patterns</strong> (patrons de conception) sont des solutions éprouvées à des problèmes récurrents. UML est le langage standard pour les documenter et les communiquer.</p>
+
+      <h3>Les 3 familles (GoF)</h3>
+      <table>
+        <thead><tr><th>Famille</th><th>Exemples de patterns</th><th>Problème résolu</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Création</strong></td><td>Singleton, Factory, Builder, Prototype</td><td>Comment créer les objets</td></tr>
+          <tr><td><strong>Structure</strong></td><td>Adapter, Decorator, Facade, Composite</td><td>Comment composer les objets</td></tr>
+          <tr><td><strong>Comportement</strong></td><td>Observer, Strategy, Command, Iterator</td><td>Comment les objets communiquent</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Exemple : Pattern Observer en UML</h3>
+      <div class="diagram-box">       ┌────────────────────────┐
+       │     «interface»        │
+       │       Observable       │
+       ├────────────────────────┤
+       │+ register(o: Observer) │
+       │+ remove(o: Observer)   │
+       │+ notify()              │
+       └───────────┬────────────┘
+                   △
+       ┌───────────┴────────────┐
+       │    StockMarket         │
+       ├────────────────────────┤
+       │- price : float         │
+       │- observers : List      │
+       ├────────────────────────┤
+       │+ setPrice(p: float)    │
+       │+ notify()              │
+       └───────────┬────────────┘
+                   │ notifie 0..*
+       ┌───────────▼────────────┐
+       │     «interface»        │
+       │       Observer         │
+       ├────────────────────────┤
+       │+ update(price: float)  │
+       └───────────┬────────────┘
+                   △
+          ┌────────┴────────┐
+          │                 │
+    ┌─────▼─────┐     ┌─────▼──────┐
+    │ Dashboard │     │ AlertSystem│
+    │+update()  │     │+update()   │
+    └───────────┘     └────────────┘</div>
+
+      <div class="callout tip">
+        <div class="callout-icon">✅</div>
+        <div>Avant de coder un pattern, tracez-en le diagramme de classes UML. Cela force à comprendre exactement quelles classes sont impliquées et leurs rôles. C'est aussi la meilleure façon de documenter l'intention du pattern pour vos collègues.</div>
+      </div>
+
+      <div class="resources">
+        <div class="resources-title">📚 Ressources — Design Patterns</div>
+        <ul class="resource-list">
+          <li><a href="https://refactoring.guru/fr/design-patterns" target="_blank"><span class="tag tag-text">texte</span> Refactoring.guru — Tous les patterns avec UML (FR !) 🏆</a></li>
+          <li><a href="https://www.youtube.com/watch?v=atFLkqYefLQ" target="_blank"><span class="tag tag-video">vidéo</span> YouTube FR — Design Patterns GOF : série complète (introduction + tous patterns)</a></li>
+          <li><a href="https://sourcemaking.com/design_patterns" target="_blank"><span class="tag tag-text">texte</span> SourceMaking — Design Patterns avec diagrammes (EN)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CH 4.3 -->
+  <div class="chapter">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">🌐</span> 4.3 — UML et microservices</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>UML reste pertinent dans les architectures modernes. Pour les <strong>microservices</strong>, certains diagrammes deviennent critiques pour documenter un système distribué complexe.</p>
+
+      <h3>Cartographie des diagrammes utiles</h3>
+      <table>
+        <thead><tr><th>Besoin</th><th>Diagramme UML</th></tr></thead>
+        <tbody>
+          <tr><td>Vue d'ensemble des services</td><td>Diagramme de composants</td></tr>
+          <tr><td>Infrastructure cloud</td><td>Diagramme de déploiement</td></tr>
+          <tr><td>Flux inter-services (API calls)</td><td>Diagramme de séquence</td></tr>
+          <tr><td>Contrats d'API (domaines)</td><td>Diagramme de classes</td></tr>
+          <tr><td>Orchestration de saga</td><td>Diagramme d'activité</td></tr>
+          <tr><td>Machine à états (ex: Saga pattern)</td><td>Diagramme d'états</td></tr>
+        </tbody>
+      </table>
+
+      <h3>C4 Model — Complément moderne à UML</h3>
+      <p>Le <strong>C4 Model</strong> de Simon Brown est complémentaire à UML pour les architectures modernes. Il propose 4 niveaux de zoom :</p>
+      <ul>
+        <li><strong>C1 — Context</strong> : le système dans son environnement (acteurs, systèmes externes)</li>
+        <li><strong>C2 — Container</strong> : les gros blocs techniques (apps, BDD, services)</li>
+        <li><strong>C3 — Component</strong> : l'intérieur d'un container</li>
+        <li><strong>C4 — Code</strong> : diagramme de classes UML</li>
+      </ul>
+
+      <div class="callout info">
+        <div class="callout-icon">💡</div>
+        <div>C4 et UML sont complémentaires : C4 pour la vue macro (stratégique), UML pour la vue micro (technique). Les diagrammes C1/C2/C3 n'ont pas d'équivalent direct en UML standard.</div>
+      </div>
+
+      <div class="resources">
+        <div class="resources-title">📚 Ressources — Architecture moderne</div>
+        <ul class="resource-list">
+          <li><a href="https://c4model.com/" target="_blank"><span class="tag tag-text">texte</span> c4model.com — Le C4 Model (EN, très accessible)</a></li>
+          <li><a href="https://www.youtube.com/watch?v=x2-rSnhpw0g" target="_blank"><span class="tag tag-video">vidéo</span> YouTube — Simon Brown : The C4 model for software architecture</a></li>
+          <li><a href="https://microservices.io/patterns/index.html" target="_blank"><span class="tag tag-text">texte</span> microservices.io — Patterns microservices avec diagrammes (EN)</a></li>
+          <li><a href="https://structurizr.com/" target="_blank"><span class="tag tag-tool">outil</span> Structurizr — Architecture as Code (C4 + UML)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CH 4.4 -->
+  <div class="chapter">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">🔁</span> 4.4 — UML dans un processus Agile</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <p>UML peut sembler en contradiction avec l'agilité ("pas de documentation inutile"). En réalité, <strong>UML léger</strong> est parfaitement compatible avec Scrum et Kanban — à condition de l'utiliser de façon pragmatique.</p>
+
+      <h3>Principe du juste-assez (JITD)</h3>
+      <p><em>Just-In-Time Design</em> : ne dessiner un diagramme que quand il apporte une valeur claire, et le garder à jour uniquement s'il reste utile.</p>
+
+      <h3>Quand dessiner un diagramme en sprint ?</h3>
+      <ul>
+        <li><strong>Sprint Planning</strong> : diagramme de séquence pour les US complexes avec beaucoup d'acteurs</li>
+        <li><strong>Refinement</strong> : diagramme de classes pour valider un modèle de données</li>
+        <li><strong>Architecture Decision Records (ADR)</strong> : diagramme de composants pour documenter un choix d'architecture</li>
+        <li><strong>Onboarding</strong> : diagramme de déploiement pour qu'un nouveau dev comprenne l'infra</li>
+      </ul>
+
+      <h3>UML as Code — La bonne pratique</h3>
+      <p>Stocker les diagrammes <strong>dans le dépôt Git</strong> sous forme de fichiers PlantUML ou Mermaid. Ils évoluent avec le code, sont revus en PR, et toujours synchronisés.</p>
+
+      <pre><span class="cmt"># Dans votre repo Git :</span>
+docs/
+  architecture/
+    overview.puml
+    auth-sequence.puml
+    domain-classes.puml
+  adr/
+    001-choix-postgresql.md</pre>
+
+      <div class="resources">
+        <div class="resources-title">📚 Ressources — Agile & UML</div>
+        <ul class="resource-list">
+          <li><a href="https://mermaid.js.org/" target="_blank"><span class="tag tag-tool">outil</span> Mermaid.js — Diagrammes en Markdown (alternative légère à PlantUML)</a></li>
+          <li><a href="https://www.agilealliance.org/glossary/simple-design/" target="_blank"><span class="tag tag-text">texte</span> Agile Alliance — Simple Design & documentation (EN)</a></li>
+          <li><a href="https://fosse.fr/architecture/adr-architecture-decision-records.html" target="_blank"><span class="tag tag-text">texte</span> fosse.fr — Architecture Decision Records : guide complet (FR)</a></li>
+          <li><a href="https://www.infoq.com/fr/articles/architecture-decision-records/" target="_blank"><span class="tag tag-text">texte</span> InfoQ FR — ADR : définition et bonnes pratiques</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ OUTILS ═══════════════ -->
+<section id="outils">
+  <div class="level-header" style="margin-top:4rem; border-top: 1px solid var(--border);">
+    <div class="level-info">
+      <h2 style="color:var(--text);">Boîte à outils</h2>
+      <p class="level-desc">Les meilleurs outils pour pratiquer UML</p>
+    </div>
+  </div>
+
+  <div class="chapter open">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">🛠️</span> Comparatif des outils</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <table>
+        <thead><tr><th>Outil</th><th>Type</th><th>Avantage</th><th>Idéal pour</th><th>Lien</th></tr></thead>
+        <tbody>
+          <tr><td><strong>draw.io</strong></td><td>Graphique</td><td>Gratuit, simple</td><td>Débutants</td><td><a href="https://app.diagrams.net" style="color:var(--accent)" target="_blank">diagrams.net</a></td></tr>
+          <tr><td><strong>PlantUML</strong></td><td>Textuel</td><td>Versionnable, tous types</td><td>Dev teams</td><td><a href="https://plantuml.com/fr" style="color:var(--accent)" target="_blank">plantuml.com</a></td></tr>
+          <tr><td><strong>Mermaid</strong></td><td>Textuel</td><td>Intégré Markdown/GitHub</td><td>Docs, READMEs</td><td><a href="https://mermaid.js.org" style="color:var(--accent)" target="_blank">mermaid.js.org</a></td></tr>
+          <tr><td><strong>Lucidchart</strong></td><td>Graphique</td><td>Collaboration temps réel</td><td>Équipes, présentations</td><td><a href="https://lucidchart.com" style="color:var(--accent)" target="_blank">lucidchart.com</a></td></tr>
+          <tr><td><strong>StarUML</strong></td><td>Desktop</td><td>Rétro-ingénierie, OCL</td><td>Projets complexes</td><td><a href="https://staruml.io" style="color:var(--accent)" target="_blank">staruml.io</a></td></tr>
+          <tr><td><strong>Visual Paradigm</strong></td><td>Desktop/Web</td><td>Très complet, MBSE</td><td>Ingénieurs, entreprises</td><td><a href="https://www.visual-paradigm.com" style="color:var(--accent)" target="_blank">visual-paradigm.com</a></td></tr>
+          <tr><td><strong>Structurizr</strong></td><td>Web/Code</td><td>C4 + UML, as-code</td><td>Architecture microservices</td><td><a href="https://structurizr.com" style="color:var(--accent)" target="_blank">structurizr.com</a></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Plugins IDE</h3>
+      <ul>
+        <li><strong>VS Code</strong> : extension <em>PlantUML</em> (jebbs.plantuml) + <em>Markdown Preview Mermaid</em></li>
+        <li><strong>IntelliJ IDEA</strong> : plugin <em>PlantUML Integration</em></li>
+        <li><strong>Eclipse</strong> : plugin <em>Papyrus</em> (UML 2 complet)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ GLOSSAIRE ═══════════════ -->
+<section id="glossaire">
+  <div class="level-header" style="margin-top:3rem; border-top: 1px solid var(--border);">
+    <div class="level-info">
+      <h2 style="color:var(--text);">Glossaire UML</h2>
+      <p class="level-desc">Les termes essentiels</p>
+    </div>
+  </div>
+
+  <div class="chapter open">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">📖</span> Termes & définitions</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+      <table>
+        <thead><tr><th>Terme</th><th>Définition</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Acteur</strong></td><td>Entité externe (humain ou système) interagissant avec le système</td></tr>
+          <tr><td><strong>Agrégation</strong></td><td>Relation "tout/partie" avec cycle de vie indépendant</td></tr>
+          <tr><td><strong>Association</strong></td><td>Lien structurel entre deux classeurs</td></tr>
+          <tr><td><strong>Attribut</strong></td><td>Propriété d'une classe caractérisant ses instances</td></tr>
+          <tr><td><strong>Classeur</strong></td><td>Terme générique pour classe, interface, composant…</td></tr>
+          <tr><td><strong>Composition</strong></td><td>Relation "tout/partie" avec cycle de vie partagé</td></tr>
+          <tr><td><strong>Dépendance</strong></td><td>Relation de couplage faible et ponctuel entre classeurs</td></tr>
+          <tr><td><strong>Diagramme</strong></td><td>Vue graphique d'un modèle UML</td></tr>
+          <tr><td><strong>Fragment combiné</strong></td><td>Élément de diagramme de séquence (alt, opt, loop…)</td></tr>
+          <tr><td><strong>Généralisation</strong></td><td>Relation d'héritage entre une classe mère et ses filles</td></tr>
+          <tr><td><strong>Interface</strong></td><td>Contrat spécifiant des comportements sans implémentation</td></tr>
+          <tr><td><strong>Ligne de vie</strong></td><td>Élément d'un diagramme de séquence représentant un participant</td></tr>
+          <tr><td><strong>Message</strong></td><td>Communication entre objets dans un diagramme de séquence</td></tr>
+          <tr><td><strong>Modèle</strong></td><td>Abstraction d'un système capturant les aspects importants</td></tr>
+          <tr><td><strong>Multiplicité</strong></td><td>Nombre d'instances participant à une association (0..*, 1, 1..*)</td></tr>
+          <tr><td><strong>Nœud</strong></td><td>Ressource physique dans un diagramme de déploiement</td></tr>
+          <tr><td><strong>OMG</strong></td><td>Object Management Group — organisme qui standardise UML</td></tr>
+          <tr><td><strong>Package</strong></td><td>Mécanisme de regroupement d'éléments UML</td></tr>
+          <tr><td><strong>Réalisation</strong></td><td>Relation entre une classe et une interface qu'elle implémente</td></tr>
+          <tr><td><strong>Stéréotype</strong></td><td>Extension du méta-modèle UML : <code>«interface»</code>, <code>«include»</code>…</td></tr>
+          <tr><td><strong>Swimlane</strong></td><td>Couloir dans un diagramme d'activité représentant un acteur</td></tr>
+          <tr><td><strong>Transition</strong></td><td>Passage d'un état à un autre déclenché par un événement</td></tr>
+          <tr><td><strong>Visibilité</strong></td><td>Niveau d'accès d'un attribut ou méthode (+, -, #, ~)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PARCOURS RECOMMANDÉ ═══════════════ -->
+<section>
+  <div class="level-header" style="margin-top:3rem; border-top: 1px solid var(--border);">
+    <div class="level-info">
+      <h2 style="color:var(--text);">Parcours recommandé</h2>
+      <p class="level-desc">Quelle ordre suivre selon votre objectif</p>
+    </div>
+  </div>
+
+  <div class="chapter open">
+    <div class="chapter-head" onclick="toggle(this)">
+      <div class="chapter-title"><span class="chapter-icon">🗺️</span> Chemins d'apprentissage</div>
+      <div class="chapter-toggle">▼</div>
+    </div>
+    <div class="chapter-body">
+
+      <h3 style="color:var(--lv1)">🟢 Dev junior — Bases en 2 semaines</h3>
+      <ol>
+        <li>Lire "UML en une page" (ce cours)</li>
+        <li>Cas d'utilisation → exercice sur un projet perso</li>
+        <li>Diagramme de classes (intro) → modéliser une entité connue (ex : réseau social)</li>
+        <li>Prendre en main draw.io ou PlantUML</li>
+        <li><strong>Objectif :</strong> Lire et produire un diagramme de classes et un cas d'utilisation</li>
+      </ol>
+
+      <h3 style="color:var(--lv2)">🔵 Dev intermédiaire — Approfondissement en 1 mois</h3>
+      <ol>
+        <li>Classes avancées + relations complètes</li>
+        <li>Packages + architecture en couches</li>
+        <li>Séquence sur les US complexes de votre projet actuel</li>
+        <li>Diagramme d'activité pour un workflow métier</li>
+        <li><strong>Objectif :</strong> Documenter un module applicatif complet en UML</li>
+      </ol>
+
+      <h3 style="color:var(--lv3)">🟣 Développeur confirmé — 2 mois</h3>
+      <ol>
+        <li>États-transitions sur un objet de votre domaine</li>
+        <li>Composants + Déploiement sur votre architecture actuelle</li>
+        <li>Modéliser un design pattern existant dans votre base de code</li>
+        <li>Pratiquer PlantUML-as-code dans votre repo Git</li>
+        <li><strong>Objectif :</strong> Avoir un dossier <code>docs/architecture/</code> versionné dans Git</li>
+      </ol>
+
+      <h3 style="color:var(--lv4)">🔴 Ingénieur / Architecte — Continu</h3>
+      <ol>
+        <li>Appliquer le modèle 4+1 vues sur un projet entier</li>
+        <li>Étudier le C4 Model et Structurizr</li>
+        <li>Patterns GoF : modéliser les 23 patterns en UML</li>
+        <li>Lire "Patterns of Enterprise Application Architecture" (Fowler)</li>
+        <li><strong>Objectif :</strong> Produire un dossier d'architecture complet pour une mise en production</li>
+      </ol>
+
+      <div class="resources">
+        <div class="resources-title">📚 Livres de référence</div>
+        <ul class="resource-list">
+          <li><a href="https://www.amazon.fr/UML-2-0-Martin-Fowler/dp/2744017132" target="_blank"><span class="tag tag-text">livre</span> UML 2.0 — Martin Fowler (FR, la référence concise) 🏆</a></li>
+          <li><a href="https://www.amazon.fr/UML-2-5-par-pratique-exercices/dp/2212675658" target="_blank"><span class="tag tag-text">livre</span> UML 2.5 par la pratique — Pascal Roques (FR) 🏆</a></li>
+          <li><a href="https://refactoring.guru/fr/design-patterns/book" target="_blank"><span class="tag tag-text">livre</span> Dive into Design Patterns — refactoring.guru (FR dispo)</a></li>
+          <li><a href="https://www.youtube.com/playlist?list=PLRR7wjtXb1cBQCE8ddM0B1D9DFj-WL3BX" target="_blank"><span class="tag tag-video">vidéo</span> YouTube FR — Cours UML complet (playlist, tous diagrammes)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>Cours UML — Français · Niveaux Junior → Ingénieur</p>
+  <p style="margin-top:.5rem; font-size:.7rem;">Liens vérifiés · Contenu non affilié · Sources académiques et communautaires</p>
+</footer>
+
+<script>
+  // Toggle chapters
+  function toggle(head) {
+    const chapter = head.closest('.chapter');
+    chapter.classList.toggle('open');
+  }
+
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight);
+    document.getElementById('progress').style.width = (scrolled * 100) + '%';
+  });
+
+  // Open first chapter of each level automatically
+  document.querySelectorAll('.chapter').forEach((ch, i) => {
+    if (i === 0) ch.classList.add('open');
+  });
+</script>
+</body>
+</html>

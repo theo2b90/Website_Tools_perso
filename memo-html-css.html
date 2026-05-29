@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mémo HTML & CSS</title>
+<style>
+  :root {
+    --bg: #f9f8f6;
+    --surface: #ffffff;
+    --surface2: #f2f0ec;
+    --border: #e0ddd7;
+    --text: #1c1b18;
+    --muted: #6b6860;
+    --accent: #3d4fff;
+    --accent-light: #eef0ff;
+    --code-bg: #1e1e2e;
+    --code-text: #cdd6f4;
+    --prop: #cba6f7;
+    --val: #a6e3a1;
+    --tag-col: #89b4fa;
+    --cm: #6c7086;
+    --at: #fab387;
+    --radius: 10px;
+    --font-mono: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    --font-sans: 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+  /* ── HEADER ── */
+  header {
+    border-bottom: 2px solid var(--text);
+    padding-bottom: 1.5rem;
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  header h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
+  header h1 span { color: var(--accent); }
+  header .meta { font-size: 12px; color: var(--muted); text-align: right; line-height: 1.8; }
+
+  /* ── SECTIONS ── */
+  .chapter { margin-bottom: 3.5rem; }
+  .chapter-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 0.6rem;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chapter-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── GRID ── */
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.25rem;
+  }
+  .card-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-title svg { width: 14px; height: 14px; opacity: 0.7; flex-shrink: 0; }
+
+  /* ── CONTEXT NOTE ── */
+  .note {
+    font-size: 13px;
+    color: var(--muted);
+    background: var(--surface2);
+    border-left: 3px solid var(--accent);
+    padding: 0.6rem 0.9rem;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  .note strong { color: var(--text); font-weight: 600; }
+
+  /* ── CODE BLOCK ── */
+  pre {
+    background: var(--code-bg);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.75;
+    overflow-x: auto;
+    margin-top: 8px;
+    color: var(--code-text);
+  }
+  .prop { color: var(--prop); }
+  .val  { color: var(--val); }
+  .at   { color: var(--at); }
+  .cm   { color: var(--cm); font-style: italic; }
+  .tg   { color: var(--tag-col); }
+
+  /* ── PILL TAGS ── */
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .tag {
+    font-size: 11.5px;
+    font-family: var(--font-mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 2px 7px;
+    color: var(--text);
+  }
+  .tag.hl { background: var(--accent-light); color: var(--accent); border-color: #c5cbff; }
+
+  /* ── KV TABLE ── */
+  .kv { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 4px 0; border-bottom: 1px solid var(--border); }
+  .kv:last-child { border-bottom: none; }
+  .kv .k { color: var(--muted); font-size: 12.5px; }
+  .kv .v { font-family: var(--font-mono); font-size: 12px; color: var(--text); text-align: right; }
+
+  /* ── SPECIFICITY VISUAL ── */
+  .specificity { display: flex; gap: 8px; margin-top: 8px; align-items: center; }
+  .spec-box {
+    flex: 1;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .spec-box span { display: block; font-size: 18px; font-weight: 700; line-height: 1.2; }
+  .spec-id { background: #fff0f0; border: 1px solid #fca5a5; color: #dc2626; }
+  .spec-cl { background: #fffbe6; border: 1px solid #fcd34d; color: #b45309; }
+  .spec-el { background: #f0f9ff; border: 1px solid #7dd3fc; color: #0369a1; }
+  .spec-arrow { color: var(--muted); font-size: 16px; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    margin-top: 4rem;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  @media print {
+    body { background: white; }
+    .page { padding: 1.5rem; }
+    pre { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div>
+      <h1>Mémo <span>HTML</span> &amp; <span>CSS</span></h1>
+      <div style="font-size:13px; color:var(--muted); margin-top:4px;">Référence condensée — du squelette jusqu'au CSS moderne</div>
+    </div>
+    <div class="meta">
+      Version 2024–2025<br>
+      À garder sous la main
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════ STRUCTURE HTML -->
+  <div class="chapter">
+    <div class="chapter-title">01 — Structure HTML</div>
+
+    <div class="note">
+      HTML décrit le <strong>sens et la structure</strong> du contenu. Le navigateur construit un arbre DOM à partir de ce balisage — c'est ce que JS et CSS manipulent. Depuis HTML5, on privilégie les <strong>balises sémantiques</strong> (qui disent <em>ce qu'est</em> le contenu) plutôt que des <code>&lt;div&gt;</code> partout, pour l'accessibilité et le SEO.
+    </div>
+
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-title">Squelette minimal</div>
+        <pre><span class="tg">&lt;!DOCTYPE html&gt;</span>
+<span class="tg">&lt;html</span> <span class="prop">lang</span>=<span class="val">"fr"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;head&gt;</span>
+    <span class="tg">&lt;meta</span> <span class="prop">charset</span>=<span class="val">"UTF-8"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;meta</span> <span class="prop">name</span>=<span class="val">"viewport"</span>
+          <span class="prop">content</span>=<span class="val">"width=device-width, initial-scale=1"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;title&gt;</span>Titre de la page<span class="tg">&lt;/title&gt;</span>
+    <span class="tg">&lt;link</span> <span class="prop">rel</span>=<span class="val">"stylesheet"</span> <span class="prop">href</span>=<span class="val">"style.css"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;/head&gt;</span>
+  <span class="tg">&lt;body&gt;</span>
+    <span class="cm">&lt;!-- contenu ici --&gt;</span>
+    <span class="tg">&lt;script</span> <span class="prop">src</span>=<span class="val">"app.js"</span><span class="tg">&gt;&lt;/script&gt;</span> <span class="cm">&lt;!-- en bas --&gt;</span>
+  <span class="tg">&lt;/body&gt;</span>
+<span class="tg">&lt;/html&gt;</span></pre>
+        <p style="font-size:12px; color:var(--muted); margin-top:8px">
+          Le <code>&lt;script&gt;</code> en bas de <code>&lt;body&gt;</code> garantit que le DOM est prêt avant l'exécution. Sinon, utiliser l'attribut <code>defer</code>.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Balises sémantiques HTML5</div>
+        <p style="font-size:12px; color:var(--muted); margin-bottom:10px">Ces balises remplacent les <code>&lt;div class="header"&gt;</code> : elles communiquent leur rôle aux navigateurs et aux lecteurs d'écran.</p>
+        <div class="tags">
+          <span class="tag">&lt;header&gt;</span>
+          <span class="tag">&lt;nav&gt;</span>
+          <span class="tag">&lt;main&gt;</span>
+          <span class="tag">&lt;footer&gt;</span>
+          <span class="tag">&lt;section&gt;</span>
+          <span class="tag">&lt;article&gt;</span>
+          <span class="tag">&lt;aside&gt;</span>
+          <span class="tag">&lt;figure&gt;</span>
+          <span class="tag">&lt;figcaption&gt;</span>
+          <span class="tag">&lt;blockquote&gt;</span>
+          <span class="tag">&lt;details&gt;</span>
+          <span class="tag">&lt;summary&gt;</span>
+          <span class="tag">&lt;dialog&gt;</span>
+          <span class="tag">&lt;time&gt;</span>
+          <span class="tag">&lt;mark&gt;</span>
+          <span class="tag">&lt;strong&gt;</span>
+          <span class="tag">&lt;em&gt;</span>
+        </div>
+        <div style="margin-top:12px; font-size:12px; color:var(--muted)">
+          <strong style="color:var(--text)">Règle :</strong> <code>&lt;h1&gt;</code> unique par page, <code>&lt;main&gt;</code> unique, hiérarchie h1→h2→h3 sans sauter de niveau.
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Liens &amp; médias</div>
+        <pre><span class="cm">&lt;!-- Lien interne / ancre / externe --&gt;</span>
+<span class="tg">&lt;a</span> <span class="prop">href</span>=<span class="val">"page.html"</span><span class="tg">&gt;</span>Interne<span class="tg">&lt;/a&gt;</span>
+<span class="tg">&lt;a</span> <span class="prop">href</span>=<span class="val">"#section-id"</span><span class="tg">&gt;</span>Ancre<span class="tg">&lt;/a&gt;</span>
+<span class="tg">&lt;a</span> <span class="prop">href</span>=<span class="val">"https://…"</span> <span class="prop">target</span>=<span class="val">"_blank"</span>
+   <span class="prop">rel</span>=<span class="val">"noopener noreferrer"</span><span class="tg">&gt;</span>Ext.<span class="tg">&lt;/a&gt;</span>
+
+<span class="cm">&lt;!-- Image (avec dimensions = évite layout shift) --&gt;</span>
+<span class="tg">&lt;img</span> <span class="prop">src</span>=<span class="val">"photo.webp"</span> <span class="prop">alt</span>=<span class="val">"Description précise"</span>
+     <span class="prop">width</span>=<span class="val">"800"</span> <span class="prop">height</span>=<span class="val">"450"</span> <span class="prop">loading</span>=<span class="val">"lazy"</span><span class="tg">&gt;</span>
+
+<span class="cm">&lt;!-- Vidéo --&gt;</span>
+<span class="tg">&lt;video</span> <span class="prop">src</span>=<span class="val">"v.mp4"</span> <span class="prop">controls</span> <span class="prop">muted</span> <span class="prop">loop</span><span class="tg">&gt;&lt;/video&gt;</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Formulaires</div>
+        <p style="font-size:12px; color:var(--muted); margin-bottom:8px">Toujours lier <code>&lt;label&gt;</code> et <code>&lt;input&gt;</code> via <code>for</code>/<code>id</code> — obligatoire pour l'accessibilité.</p>
+        <pre><span class="tg">&lt;form</span> <span class="prop">action</span>=<span class="val">"/"</span> <span class="prop">method</span>=<span class="val">"post"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;label</span> <span class="prop">for</span>=<span class="val">"email"</span><span class="tg">&gt;</span>Email<span class="tg">&lt;/label&gt;</span>
+  <span class="tg">&lt;input</span> <span class="prop">type</span>=<span class="val">"email"</span> <span class="prop">id</span>=<span class="val">"email"</span>
+         <span class="prop">name</span>=<span class="val">"email"</span> <span class="prop">required</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;select</span> <span class="prop">name</span>=<span class="val">"choix"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;option</span> <span class="prop">value</span>=<span class="val">"a"</span><span class="tg">&gt;</span>Option A<span class="tg">&lt;/option&gt;</span>
+  <span class="tg">&lt;/select&gt;</span>
+  <span class="tg">&lt;textarea</span> <span class="prop">rows</span>=<span class="val">"4"</span> <span class="prop">name</span>=<span class="val">"msg"</span><span class="tg">&gt;&lt;/textarea&gt;</span>
+  <span class="tg">&lt;button</span> <span class="prop">type</span>=<span class="val">"submit"</span><span class="tg">&gt;</span>Envoyer<span class="tg">&lt;/button&gt;</span>
+<span class="tg">&lt;/form&gt;</span></pre>
+        <div class="tags" style="margin-top:8px">
+          <span class="tag hl">required</span>
+          <span class="tag hl">minlength maxlength</span>
+          <span class="tag hl">pattern="regex"</span>
+          <span class="tag hl">disabled</span>
+          <span class="tag hl">readonly</span>
+          <span class="tag hl">placeholder</span>
+          <span class="tag hl">autocomplete</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ CSS FONDAMENTAUX -->
+  <div class="chapter">
+    <div class="chapter-title">02 — CSS Fondamentaux</div>
+
+    <div class="note">
+      CSS s'applique selon deux mécanismes clés : la <strong>cascade</strong> (ordre + origine des règles) et la <strong>spécificité</strong> (poids du sélecteur). Quand deux règles s'affrontent, la plus spécifique l'emporte. En cas d'égalité, la dernière déclarée gagne.
+    </div>
+
+    <div class="grid3" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-title">Sélecteurs</div>
+        <div class="kv"><span class="k">Élément</span><span class="v">p { }</span></div>
+        <div class="kv"><span class="k">Classe</span><span class="v">.card { }</span></div>
+        <div class="kv"><span class="k">ID</span><span class="v">#hero { }</span></div>
+        <div class="kv"><span class="k">Combinaison</span><span class="v">div.card { }</span></div>
+        <div class="kv"><span class="k">Enfant direct</span><span class="v">ul > li { }</span></div>
+        <div class="kv"><span class="k">Descendant</span><span class="v">nav a { }</span></div>
+        <div class="kv"><span class="k">Voisin immédiat</span><span class="v">h2 + p { }</span></div>
+        <div class="kv"><span class="k">Tous voisins</span><span class="v">h2 ~ p { }</span></div>
+        <div class="kv"><span class="k">Attribut</span><span class="v">[type="email"] { }</span></div>
+        <div class="kv"><span class="k">Universel</span><span class="v">* { }</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Pseudo-classes</div>
+        <div class="kv"><span class="k">:hover</span><span class="v">au survol</span></div>
+        <div class="kv"><span class="k">:focus</span><span class="v">focus clavier/souris</span></div>
+        <div class="kv"><span class="k">:active</span><span class="v">clic en cours</span></div>
+        <div class="kv"><span class="k">:visited</span><span class="v">lien visité</span></div>
+        <div class="kv"><span class="k">:disabled</span><span class="v">champ désactivé</span></div>
+        <div class="kv"><span class="k">:checked</span><span class="v">input coché</span></div>
+        <div class="kv"><span class="k">:nth-child(n)</span><span class="v">nième enfant</span></div>
+        <div class="kv"><span class="k">:first-child</span><span class="v">premier enfant</span></div>
+        <div class="kv"><span class="k">:last-child</span><span class="v">dernier enfant</span></div>
+        <div class="kv"><span class="k">:not(.x)</span><span class="v">sauf ceux qui…</span></div>
+        <div class="kv"><span class="k">:is(h1,h2,h3)</span><span class="v">groupe moderne</span></div>
+        <div class="kv"><span class="k">:has(img)</span><span class="v">parent selector ✦</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Pseudo-éléments</div>
+        <div class="kv"><span class="k">::before</span><span class="v">avant le contenu</span></div>
+        <div class="kv"><span class="k">::after</span><span class="v">après le contenu</span></div>
+        <div class="kv"><span class="k">::placeholder</span><span class="v">texte hint d'input</span></div>
+        <div class="kv"><span class="k">::selection</span><span class="v">texte sélectionné</span></div>
+        <div class="kv"><span class="k">::first-line</span><span class="v">première ligne</span></div>
+        <div style="margin-top:12px; font-size:12px; color:var(--muted)">
+          <strong style="color:var(--text)">Spécificité (score) :</strong>
+        </div>
+        <div class="specificity">
+          <div class="spec-box spec-id"><span>1</span>ID</div>
+          <div class="spec-arrow">></div>
+          <div class="spec-box spec-cl"><span>1</span>class/attr</div>
+          <div class="spec-arrow">></div>
+          <div class="spec-box spec-el"><span>1</span>tag</div>
+        </div>
+        <p style="font-size:11px; color:var(--muted); margin-top:6px">Ex : <code>#hero .btn a</code> = score 1-1-1. <code>!important</code> = score infini (à éviter).</p>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Box model</div>
+        <p style="font-size:12px; color:var(--muted); margin-bottom:8px">
+          Chaque élément est une boîte : contenu → padding → border → margin. Avec <code>border-box</code>, la <code>width</code> inclut padding et border — comportement attendu dans 99% des cas.
+        </p>
+        <pre><span class="prop">box-sizing</span>: <span class="val">border-box</span>; <span class="cm">/* toujours */</span>
+<span class="prop">width</span>: <span class="val">300px</span>;
+<span class="prop">height</span>: <span class="val">auto</span>;          <span class="cm">/* s'adapte au contenu */</span>
+<span class="prop">padding</span>: <span class="val">16px 24px</span>;   <span class="cm">/* vertical horizontal */</span>
+<span class="prop">border</span>: <span class="val">1px solid #ccc</span>;
+<span class="prop">margin</span>: <span class="val">0 auto</span>;       <span class="cm">/* centrage horizontal */</span>
+<span class="prop">overflow</span>: <span class="val">hidden | scroll | auto</span>;
+<span class="prop">min-width</span>: <span class="val">0</span>;         <span class="cm">/* ⚠ fix overflow flex */</span>
+<span class="prop">max-width</span>: <span class="val">1200px</span>;
+<span class="prop">aspect-ratio</span>: <span class="val">16 / 9</span>;</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Display &amp; position</div>
+        <div class="kv"><span class="k">display: block</span><span class="v">prend toute la largeur</span></div>
+        <div class="kv"><span class="k">display: inline</span><span class="v">coule dans le texte</span></div>
+        <div class="kv"><span class="k">display: inline-block</span><span class="v">inline + dimensions</span></div>
+        <div class="kv"><span class="k">display: flex</span><span class="v">flexbox (1D)</span></div>
+        <div class="kv"><span class="k">display: grid</span><span class="v">grille (2D)</span></div>
+        <div class="kv"><span class="k">display: none</span><span class="v">invisible + absent du flux</span></div>
+        <div style="margin-top:10px; margin-bottom:6px; font-size:11.5px; font-weight:600; color:var(--muted)">POSITION</div>
+        <div class="kv"><span class="k">static</span><span class="v">défaut, suit le flux</span></div>
+        <div class="kv"><span class="k">relative</span><span class="v">décalé par rapport à soi</span></div>
+        <div class="kv"><span class="k">absolute</span><span class="v">parent relative le plus proche</span></div>
+        <div class="kv"><span class="k">fixed</span><span class="v">relatif à la fenêtre</span></div>
+        <div class="kv"><span class="k">sticky</span><span class="v">colle au scroll jusqu'à threshold</span></div>
+        <p style="font-size:12px; color:var(--muted); margin-top:8px">Pour absolute/fixed : utiliser <code>top right bottom left</code> ou le raccourci <code>inset: 0</code>. Le <code>z-index</code> ne fonctionne qu'avec <code>position ≠ static</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ FLEXBOX -->
+  <div class="chapter">
+    <div class="chapter-title">03 — Flexbox (1D)</div>
+
+    <div class="note">
+      Flexbox est idéal pour aligner des éléments sur <strong>un axe</strong> (ligne ou colonne). L'axe principal (<em>main axis</em>) est défini par <code>flex-direction</code>. L'axe secondaire (<em>cross axis</em>) lui est perpendiculaire. <code>justify-content</code> agit sur le main axis, <code>align-items</code> sur le cross axis.
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Conteneur (parent)</div>
+        <pre><span class="prop">display</span>: <span class="val">flex</span>;
+
+<span class="cm">/* direction de l'axe principal */</span>
+<span class="prop">flex-direction</span>: <span class="val">row | column | row-reverse | column-reverse</span>;
+<span class="prop">flex-wrap</span>: <span class="val">nowrap | wrap | wrap-reverse</span>;
+<span class="cm">/* shorthand des deux : */</span>
+<span class="prop">flex-flow</span>: <span class="val">row wrap</span>;
+
+<span class="cm">/* répartition sur l'axe principal */</span>
+<span class="prop">justify-content</span>: <span class="val">flex-start | flex-end | center
+  | space-between | space-around | space-evenly</span>;
+
+<span class="cm">/* alignement sur l'axe secondaire */</span>
+<span class="prop">align-items</span>: <span class="val">stretch | center | flex-start | flex-end | baseline</span>;
+
+<span class="cm">/* si wrap : alignement des lignes */</span>
+<span class="prop">align-content</span>: <span class="val">flex-start | center | space-between…</span>;
+
+<span class="prop">gap</span>: <span class="val">16px</span>;         <span class="cm">/* espacement entre enfants */</span>
+<span class="prop">gap</span>: <span class="val">16px 24px</span>;   <span class="cm">/* row-gap column-gap */</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Enfants (items)</div>
+        <pre><span class="cm">/* flex: grow shrink basis */</span>
+<span class="prop">flex</span>: <span class="val">1</span>;          <span class="cm">/* = 1 1 0 : grandit, rétrécit */</span>
+<span class="prop">flex</span>: <span class="val">0 0 200px</span>;  <span class="cm">/* taille fixe, ne bouge pas */</span>
+<span class="prop">flex-grow</span>: <span class="val">1</span>;    <span class="cm">/* absorbe l'espace libre */</span>
+<span class="prop">flex-shrink</span>: <span class="val">0</span>; <span class="cm">/* refuse de rapetisser */</span>
+<span class="prop">flex-basis</span>: <span class="val">auto | 200px | 30%</span>;
+
+<span class="cm">/* override de align-items pour cet enfant */</span>
+<span class="prop">align-self</span>: <span class="val">center | flex-start | stretch…</span>;
+
+<span class="prop">order</span>: <span class="val">0</span>;         <span class="cm">/* défaut 0, peut être négatif */</span>
+<span class="prop">min-width</span>: <span class="val">0</span>;     <span class="cm">/* ⚠ fix overflow texte long */</span></pre>
+
+        <div style="margin-top:10px; background:var(--surface2); border-radius:6px; padding:8px 10px; font-size:12px; color:var(--muted)">
+          <strong style="color:var(--text)">Centrage parfait :</strong><br>
+          <code>display: flex; justify-content: center; align-items: center;</code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ GRID -->
+  <div class="chapter">
+    <div class="chapter-title">04 — CSS Grid (2D)</div>
+
+    <div class="note">
+      Grid est fait pour les <strong>mises en page à deux dimensions</strong> (lignes + colonnes). L'unité <code>fr</code> (<em>fraction</em>) représente une part de l'espace disponible. <code>auto-fit</code> + <code>minmax()</code> donne des grilles responsive sans media queries.
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Conteneur grid</div>
+        <pre><span class="prop">display</span>: <span class="val">grid</span>;
+
+<span class="cm">/* colonnes */</span>
+<span class="prop">grid-template-columns</span>: <span class="val">1fr 2fr 1fr</span>;
+<span class="prop">grid-template-columns</span>: <span class="val">repeat(3, 1fr)</span>;
+<span class="prop">grid-template-columns</span>: <span class="val">repeat(auto-fit, minmax(200px, 1fr))</span>;
+<span class="prop">grid-template-columns</span>: <span class="val">200px 1fr auto</span>;
+
+<span class="cm">/* lignes */</span>
+<span class="prop">grid-template-rows</span>: <span class="val">auto 1fr auto</span>;
+
+<span class="cm">/* zones nommées */</span>
+<span class="prop">grid-template-areas</span>:
+  <span class="val">"header header header"</span>
+  <span class="val">"sidebar main  main  "</span>
+  <span class="val">"footer footer footer"</span>;
+
+<span class="prop">gap</span>: <span class="val">24px</span>;
+<span class="prop">align-items</span>: <span class="val">start | center | stretch</span>;
+<span class="prop">justify-items</span>: <span class="val">start | center | stretch</span>;
+<span class="prop">place-items</span>: <span class="val">center</span>; <span class="cm">/* shorthand */</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Placement d'éléments</div>
+        <pre><span class="cm">/* par numéros de lignes */</span>
+<span class="prop">grid-column</span>: <span class="val">1 / 3</span>;    <span class="cm">/* de la ligne 1 à 3 */</span>
+<span class="prop">grid-column</span>: <span class="val">1 / -1</span>;   <span class="cm">/* toute la largeur */</span>
+<span class="prop">grid-column</span>: <span class="val">span 2</span>;   <span class="cm">/* occupe 2 colonnes */</span>
+<span class="prop">grid-row</span>: <span class="val">2 / 4</span>;
+<span class="prop">grid-row</span>: <span class="val">span 3</span>;
+
+<span class="cm">/* par zone nommée */</span>
+<span class="prop">grid-area</span>: <span class="val">header</span>;
+<span class="prop">grid-area</span>: <span class="val">sidebar</span>;
+
+<span class="cm">/* alignement de cet élément dans sa cellule */</span>
+<span class="prop">justify-self</span>: <span class="val">start | center | end | stretch</span>;
+<span class="prop">align-self</span>: <span class="val">start | center | end | stretch</span>;
+<span class="prop">place-self</span>: <span class="val">center</span>;</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ TYPOGRAPHIE & COULEURS -->
+  <div class="chapter">
+    <div class="chapter-title">05 — Typographie &amp; Couleurs</div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Texte</div>
+        <pre><span class="prop">font-family</span>: <span class="val">'Inter', system-ui, sans-serif</span>;
+<span class="prop">font-size</span>: <span class="val">1rem</span>;     <span class="cm">/* 1rem = 16px par défaut */</span>
+<span class="prop">font-weight</span>: <span class="val">400 | 500 | 600 | 700</span>;
+<span class="prop">font-style</span>: <span class="val">italic | normal</span>;
+<span class="prop">line-height</span>: <span class="val">1.6</span>;    <span class="cm">/* sans unité = recommandé */</span>
+<span class="prop">letter-spacing</span>: <span class="val">0.05em</span>;
+<span class="prop">text-align</span>: <span class="val">left | center | right | justify</span>;
+<span class="prop">text-transform</span>: <span class="val">uppercase | capitalize | none</span>;
+<span class="prop">text-decoration</span>: <span class="val">underline | none</span>;
+<span class="prop">white-space</span>: <span class="val">nowrap | pre-wrap | normal</span>;
+
+<span class="cm">/* troncature sur une ligne */</span>
+<span class="prop">overflow</span>: <span class="val">hidden</span>;
+<span class="prop">text-overflow</span>: <span class="val">ellipsis</span>;
+<span class="prop">white-space</span>: <span class="val">nowrap</span>;
+
+<span class="cm">/* police web (Google Fonts etc.) */</span>
+<span class="tg">@import</span> <span class="val">url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap')</span>;</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Couleurs &amp; arrière-plan</div>
+        <p style="font-size:12px; color:var(--muted); margin-bottom:8px">
+          Les formats modernes <code>oklch()</code> et <code>color-mix()</code> offrent une perception uniforme des couleurs. <code>hsl()</code> reste très lisible pour les ajustements manuels.
+        </p>
+        <pre><span class="prop">color</span>: <span class="val">#3A3A3A</span>;
+<span class="prop">color</span>: <span class="val">rgb(58 58 58)</span>;
+<span class="prop">color</span>: <span class="val">hsl(0 0% 23%)</span>;
+<span class="prop">color</span>: <span class="val">oklch(40% 0 0)</span>;         <span class="cm">/* moderne ✦ */</span>
+<span class="prop">color</span>: <span class="val">color-mix(in oklch, red 30%, blue)</span>;
+
+<span class="prop">background-color</span>: <span class="val">rgba(0 0 0 / .5)</span>;
+<span class="prop">background-image</span>: <span class="val">url("img.webp")</span>;
+<span class="prop">background</span>: <span class="val">linear-gradient(135deg, #a, #b)</span>;
+<span class="prop">background-size</span>: <span class="val">cover | contain | 100% auto</span>;
+<span class="prop">background-position</span>: <span class="val">center | top left</span>;
+<span class="prop">background-repeat</span>: <span class="val">no-repeat | repeat-x</span>;
+
+<span class="prop">border-radius</span>: <span class="val">8px | 50% | 999px</span>;
+<span class="prop">box-shadow</span>: <span class="val">0 4px 20px rgba(0 0 0 / .15)</span>;
+<span class="prop">outline</span>: <span class="val">2px solid blue</span>; <span class="cm">/* ne change pas le layout */</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ RESPONSIVE -->
+  <div class="chapter">
+    <div class="chapter-title">06 — Responsive &amp; Variables CSS</div>
+
+    <div class="note">
+      Approche <strong>mobile-first</strong> : écrire le CSS de base pour mobile, puis ajouter des <code>min-width</code> breakpoints pour les écrans plus larges. Les fonctions <code>clamp()</code>, <code>min()</code>, <code>max()</code> permettent des mises en page fluides sans media queries.
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Media queries</div>
+        <pre><span class="cm">/* mobile-first : styles de base pour mobile */</span>
+.container { <span class="prop">padding</span>: <span class="val">1rem</span>; }
+
+<span class="tg">@media</span> (<span class="prop">min-width</span>: <span class="val">640px</span>)  { <span class="cm">/* ≥ sm  */</span> }
+<span class="tg">@media</span> (<span class="prop">min-width</span>: <span class="val">768px</span>)  { <span class="cm">/* ≥ md  */</span> }
+<span class="tg">@media</span> (<span class="prop">min-width</span>: <span class="val">1024px</span>) { <span class="cm">/* ≥ lg  */</span> }
+<span class="tg">@media</span> (<span class="prop">min-width</span>: <span class="val">1280px</span>) { <span class="cm">/* ≥ xl  */</span> }
+
+<span class="cm">/* préférences système */</span>
+<span class="tg">@media</span> (<span class="prop">prefers-color-scheme</span>: <span class="val">dark</span>) { }
+<span class="tg">@media</span> (<span class="prop">prefers-reduced-motion</span>: <span class="val">reduce</span>) {
+  * { <span class="prop">animation-duration</span>: <span class="val">0.01ms !important</span>; }
+}
+
+<span class="cm">/* unités fluides — sans media query */</span>
+<span class="prop">font-size</span>: <span class="val">clamp(1rem, 2.5vw, 1.5rem)</span>;
+<span class="prop">width</span>: <span class="val">min(90%, 1200px)</span>;
+<span class="prop">padding</span>: <span class="val">max(1rem, 5vw)</span>;</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Variables CSS (custom properties)</div>
+        <p style="font-size:12px; color:var(--muted); margin-bottom:8px">
+          Les variables CSS sont <strong>dynamiques</strong> : elles se recalculent en temps réel et peuvent être modifiées par JS ou héritées dans le DOM. Contrairement aux variables Sass, elles fonctionnent nativement dans le navigateur.
+        </p>
+        <pre><span class="cm">/* déclaration sur :root = globale */</span>
+<span class="prop">:root</span> {
+  <span class="prop">--color-primary</span>: <span class="val">#5B4EF5</span>;
+  <span class="prop">--color-text</span>: <span class="val">hsl(220 10% 15%)</span>;
+  <span class="prop">--spacing-sm</span>: <span class="val">0.5rem</span>;
+  <span class="prop">--spacing-md</span>: <span class="val">1rem</span>;
+  <span class="prop">--radius</span>: <span class="val">8px</span>;
+  <span class="prop">--shadow</span>: <span class="val">0 2px 12px rgba(0 0 0 / .1)</span>;
+}
+
+<span class="prop">.btn</span> {
+  <span class="prop">background</span>: <span class="val">var(--color-primary)</span>;
+  <span class="prop">padding</span>: <span class="val">var(--spacing-sm) var(--spacing-md)</span>;
+  <span class="prop">border-radius</span>: <span class="val">var(--radius)</span>;
+}
+
+<span class="cm">/* override local (dark mode) */</span>
+<span class="prop">.dark</span> { <span class="prop">--color-primary</span>: <span class="val">#8B7FF9</span>; }
+
+<span class="cm">/* avec valeur de fallback */</span>
+<span class="prop">color</span>: <span class="val">var(--color-brand, #000)</span>;</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ ANIMATIONS -->
+  <div class="chapter">
+    <div class="chapter-title">07 — Transitions &amp; Animations</div>
+
+    <div class="note">
+      Préférer animer <strong>transform</strong> et <strong>opacity</strong> : ils ne déclenchent pas de recalcul de layout (<em>reflow</em>), contrairement à <code>width</code>, <code>height</code>, <code>top</code>, <code>margin</code>… Les animations sur ces propriétés sont accélérées par le GPU.
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Transitions</div>
+        <pre><span class="cm">/* syntaxe complète */</span>
+<span class="prop">transition</span>: <span class="val">property duration timing-function delay</span>;
+
+<span class="prop">transition</span>: <span class="val">all 0.2s ease</span>;
+<span class="prop">transition</span>: <span class="val">opacity 0.3s ease,
+             transform 0.3s cubic-bezier(.4, 0, .2, 1)</span>;
+<span class="prop">transition</span>: <span class="val">color 0.15s, background 0.15s</span>;
+
+<span class="cm">/* timings */</span>
+<span class="val">ease | linear | ease-in | ease-out | ease-in-out</span>
+<span class="val">cubic-bezier(x1, y1, x2, y2)</span>
+<span class="val">steps(4, end)</span>
+
+<span class="cm">/* transform : toujours préféré */</span>
+<span class="prop">transform</span>: <span class="val">translateX(10px)</span>;
+<span class="prop">transform</span>: <span class="val">translateY(-50%) scale(1.05)</span>;
+<span class="prop">transform</span>: <span class="val">rotate(45deg) skewX(10deg)</span>;
+<span class="prop">transform-origin</span>: <span class="val">center | top left | 50% 50%</span>;
+<span class="prop">will-change</span>: <span class="val">transform</span>; <span class="cm">/* hint GPU, à ne pas abuser */</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Keyframes &amp; animations</div>
+        <pre><span class="tg">@keyframes</span> fadeInUp {
+  <span class="val">from</span> {
+    <span class="prop">opacity</span>: <span class="val">0</span>;
+    <span class="prop">transform</span>: <span class="val">translateY(16px)</span>;
+  }
+  <span class="val">to</span> {
+    <span class="prop">opacity</span>: <span class="val">1</span>;
+    <span class="prop">transform</span>: <span class="val">translateY(0)</span>;
+  }
+}
+
+<span class="prop">.card</span> {
+  <span class="prop">animation</span>: <span class="val">fadeInUp 0.4s ease forwards</span>;
+  <span class="cm">/* name duration timing fill-mode */</span>
+}
+
+<span class="prop">animation-delay</span>: <span class="val">0.1s</span>;
+<span class="prop">animation-iteration-count</span>: <span class="val">infinite | 3</span>;
+<span class="prop">animation-direction</span>: <span class="val">normal | alternate | reverse</span>;
+<span class="prop">animation-fill-mode</span>: <span class="val">forwards | backwards | both</span>;
+<span class="prop">animation-play-state</span>: <span class="val">paused | running</span>;</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ ASTUCES -->
+  <div class="chapter">
+    <div class="chapter-title">08 — Pièges, Patterns &amp; CSS Moderne</div>
+
+    <div class="grid3">
+      <div class="card">
+        <div class="card-title">Pièges fréquents</div>
+        <div class="kv"><span class="k">Margin collapse</span><span class="v">marges verticales de blocs adjacents fusionnent</span></div>
+        <div class="kv"><span class="k">height: 100%</span><span class="v">le parent doit lui-même avoir une hauteur définie</span></div>
+        <div class="kv"><span class="k">z-index sans effet</span><span class="v">position doit être ≠ static</span></div>
+        <div class="kv"><span class="k">overflow flex</span><span class="v">ajouter min-width: 0 sur l'enfant</span></div>
+        <div class="kv"><span class="k">img en bas</span><span class="v">display: block supprime l'espace inline</span></div>
+        <div class="kv"><span class="k">outline: none</span><span class="v">toujours prévoir un :focus-visible de remplacement</span></div>
+        <div class="kv"><span class="k">Unité vw</span><span class="v">inclut la scrollbar sur Windows</span></div>
+        <div class="kv"><span class="k">translate(-50%, -50%)</span><span class="v">centrage classique : position absolute + top/left: 50%</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Patterns utiles</div>
+        <pre><span class="cm">/* centrage universel */</span>
+<span class="prop">display</span>: <span class="val">grid</span>;
+<span class="prop">place-items</span>: <span class="val">center</span>;
+
+<span class="cm">/* overlay (couvre le parent relatif) */</span>
+<span class="prop">position</span>: <span class="val">absolute</span>;
+<span class="prop">inset</span>: <span class="val">0</span>; <span class="cm">/* = top:0 right:0 bottom:0 left:0 */</span>
+
+<span class="cm">/* texte sr-only (accessible, invisible) */</span>
+<span class="prop">position</span>: <span class="val">absolute</span>;
+<span class="prop">width</span>: <span class="val">1px</span>; <span class="prop">height</span>: <span class="val">1px</span>;
+<span class="prop">overflow</span>: <span class="val">hidden</span>;
+<span class="prop">clip</span>: <span class="val">rect(0,0,0,0)</span>;
+
+<span class="cm">/* reset CSS minimal */</span>
+* { <span class="prop">box-sizing</span>: <span class="val">border-box</span>; <span class="prop">margin</span>: <span class="val">0</span>; <span class="prop">padding</span>: <span class="val">0</span>; }
+img { <span class="prop">max-width</span>: <span class="val">100%</span>; <span class="prop">display</span>: <span class="val">block</span>; }
+
+<span class="cm">/* sticky footer */</span>
+<span class="prop">body</span> { <span class="prop">display</span>: <span class="val">flex</span>; <span class="prop">flex-direction</span>: <span class="val">column</span>; <span class="prop">min-height</span>: <span class="val">100vh</span>; }
+<span class="prop">main</span> { <span class="prop">flex</span>: <span class="val">1</span>; }</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">CSS moderne (2023–2025) ✦</div>
+        <div class="kv"><span class="k">:has()</span><span class="v">parent selector — style un parent selon ses enfants</span></div>
+        <div class="kv"><span class="k">:is() / :where()</span><span class="v">regrouper des sélecteurs (where = spécificité 0)</span></div>
+        <div class="kv"><span class="k">@layer</span><span class="v">contrôle fin de la cascade par couches</span></div>
+        <div class="kv"><span class="k">@container</span><span class="v">media query basée sur le conteneur parent</span></div>
+        <div class="kv"><span class="k">oklch()</span><span class="v">espace de couleur perceptuellement uniforme</span></div>
+        <div class="kv"><span class="k">color-mix()</span><span class="v">mélange deux couleurs nativement</span></div>
+        <div class="kv"><span class="k">text-wrap: balance</span><span class="v">titres multilignes équilibrés</span></div>
+        <div class="kv"><span class="k">animation-timeline</span><span class="v">scroll-driven animations</span></div>
+        <div class="kv"><span class="k">@starting-style</span><span class="v">animation d'entrée depuis display: none</span></div>
+        <div class="kv"><span class="k">:popover / popover=""</span><span class="v">popovers natifs HTML sans JS</span></div>
+        <div class="kv"><span class="k">field-sizing: content</span><span class="v">textarea qui s'auto-redimensionne</span></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>Mémo HTML &amp; CSS — référence personnelle</span>
+    <span>✦ = fonctionnalité récente, vérifier le support navigateur sur caniuse.com</span>
+  </footer>
+
+</div>
+</body>
+</html>
