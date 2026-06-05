@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jonas Schmedtmann — Complete JavaScript Course Index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #181820;
+    --border: #2a2a38;
+    --accent: #f7c948;
+    --accent2: #ff6b35;
+    --accent3: #4ecdc4;
+    --text: #e8e8f0;
+    --text-muted: #888896;
+    --text-dim: #55556a;
+    --s1: #ff6b6b; --s1bg: #ff6b6b18;
+    --s2: #f7c948; --s2bg: #f7c94818;
+    --s3: #4ecdc4; --s3bg: #4ecdc418;
+    --s4: #a8dadc; --s4bg: #a8dadc18;
+    --s5: #ff6b35; --s5bg: #ff6b3518;
+    --s6: #c77dff; --s6bg: #c77dff18;
+    --s7: #74b9ff; --s7bg: #74b9ff18;
+    --s8: #55efc4; --s8bg: #55efc418;
+    --s9: #fd79a8; --s9bg: #fd79a818;
+    --s10: #fdcb6e; --s10bg: #fdcb6e18;
+    --s11: #e17055; --s11bg: #e1705518;
+    --s12: #00b894; --s12bg: #00b89418;
+    --s13: #6c5ce7; --s13bg: #6c5ce718;
+    --s14: #fab1a0; --s14bg: #fab1a018;
+    --s15: #81ecec; --s15bg: #81ecec18;
+    --s16: #dfe6e9; --s16bg: #dfe6e918;
+    --s17: #b2bec3; --s17bg: #b2bec318;
+    --s18: #636e72; --s18bg: #63707818;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    padding: 60px 40px 40px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, #0a0a0f 0%, #111118 60%, #18181f 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, #f7c94812 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    color: var(--text-muted);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    max-width: 600px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .stat-lab {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  /* ─── LAYOUT ─── */
+  .wrapper {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: calc(100vh - 200px);
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--surface);
+  }
+  .sidebar-title {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 0 20px 12px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 20px;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 11.5px;
+    transition: all 0.15s;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+  }
+  .nav-item:hover {
+    color: var(--text);
+    background: var(--surface2);
+  }
+  .nav-item.active {
+    color: var(--text);
+    border-left-color: var(--accent);
+    background: var(--surface2);
+  }
+  .nav-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .nav-num {
+    font-size: 9px;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+
+  /* ─── SEARCH BAR ─── */
+  .search-wrap {
+    padding: 0 20px 16px;
+  }
+  .search-box {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 12px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-box:focus { border-color: var(--accent); }
+  .search-box::placeholder { color: var(--text-dim); }
+
+  /* ─── CONTENT ─── */
+  .content {
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* ─── SECTION BLOCK ─── */
+  .section-block {
+    border-bottom: 1px solid var(--border);
+    padding: 36px 40px 32px;
+    transition: background 0.2s;
+  }
+  .section-block:last-child { border-bottom: none; }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .section-badge {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    padding: 4px 10px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .section-title-wrap { flex: 1; }
+  .section-num {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .section-project {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    margin-top: 5px;
+    color: var(--text-muted);
+  }
+  .section-project span {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-right: 5px;
+  }
+
+  /* ─── VIDEO TABLE ─── */
+  .video-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .video-row {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    align-items: start;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    transition: background 0.1s;
+  }
+  .video-row:hover { background: var(--surface2); }
+  .video-num {
+    font-size: 10px;
+    color: var(--text-dim);
+    padding-top: 2px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .video-title {
+    font-size: 12.5px;
+    color: var(--text);
+    font-weight: 400;
+  }
+  .video-title.challenge {
+    color: var(--accent2);
+    font-style: italic;
+  }
+  .video-title.project {
+    color: var(--accent3);
+  }
+  .video-tags {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .tag {
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    border: 1px solid;
+    white-space: nowrap;
+    text-transform: lowercase;
+    font-family: 'DM Mono', monospace;
+  }
+  .tag-concept { color: #74b9ff; border-color: #74b9ff40; background: #74b9ff0a; }
+  .tag-method  { color: #55efc4; border-color: #55efc440; background: #55efc40a; }
+  .tag-syntax  { color: #fdcb6e; border-color: #fdcb6e40; background: #fdcb6e0a; }
+  .tag-obj     { color: #fd79a8; border-color: #fd79a840; background: #fd79a80a; }
+  .tag-dom     { color: #a29bfe; border-color: #a29bfe40; background: #a29bfe0a; }
+  .tag-async   { color: #00cec9; border-color: #00cec940; background: #00cec90a; }
+  .tag-oop     { color: #e17055; border-color: #e1705540; background: #e170550a; }
+  .tag-module  { color: #81ecec; border-color: #81ecec40; background: #81ecec0a; }
+  .tag-tools   { color: #fab1a0; border-color: #fab1a040; background: #fab1a00a; }
+
+  /* ─── TOPIC INDEX (keywords grid) ─── */
+  .topic-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 20px;
+    padding: 16px;
+    background: var(--surface2);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .pill {
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    transition: all 0.15s;
+    cursor: default;
+    white-space: nowrap;
+  }
+  .pill:hover { color: var(--text); border-color: var(--text-dim); }
+
+  /* ─── SEPARATOR / dividers ─── */
+  .sep-label {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 8px 0 6px;
+    border-top: 1px solid var(--border);
+    margin-top: 16px;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 780px) {
+    .wrapper { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; }
+    .section-block { padding: 24px 20px; }
+    .hero { padding: 36px 20px 28px; }
+    .video-row { grid-template-columns: 28px 1fr; }
+    .video-tags { display: none; }
+  }
+
+  /* ─── SCROLL TARGET HIGHLIGHT ─── */
+  .section-block:target {
+    background: #f7c9480a;
+    outline: 1px solid #f7c94828;
+    outline-offset: -1px;
+  }
+
+  /* ─── FILTER HIDDEN ─── */
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero">
+  <div class="hero-label">📘 Référence complète</div>
+  <h1>The Complete<br><span>JavaScript Course</span></h1>
+  <p class="hero-sub">Jonas Schmedtmann · Udemy · Tous les concepts, méthodes, fonctions natives, vocabulaire et vidéos indexés section par section.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-val">18</span><span class="stat-lab">Sections</span></div>
+    <div class="stat"><span class="stat-val">320+</span><span class="stat-lab">Vidéos</span></div>
+    <div class="stat"><span class="stat-val">68h+</span><span class="stat-lab">Contenu</span></div>
+    <div class="stat"><span class="stat-val">5</span><span class="stat-lab">Projets réels</span></div>
+  </div>
+</header>
+
+<div class="wrapper">
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<nav class="sidebar">
+  <div class="search-wrap">
+    <input class="search-box" id="searchBox" type="text" placeholder="Rechercher un concept...">
+  </div>
+  <div class="sidebar-title">Sections du cours</div>
+  <a class="nav-item" href="#s1" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s1)"></span>JS Fundamentals I<span class="nav-num">S2</span></a>
+  <a class="nav-item" href="#s2" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s2)"></span>JS Fundamentals II<span class="nav-num">S3</span></a>
+  <a class="nav-item" href="#s3" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s3)"></span>Developer Skills<span class="nav-num">S4</span></a>
+  <a class="nav-item" href="#s4" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s4)"></span>HTML & CSS Crash<span class="nav-num">S5</span></a>
+  <a class="nav-item" href="#s5" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s5)"></span>DOM & Events I<span class="nav-num">S7</span></a>
+  <a class="nav-item" href="#s6" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s6)"></span>Behind the Scenes<span class="nav-num">S8</span></a>
+  <a class="nav-item" href="#s7" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s7)"></span>Data Structures<span class="nav-num">S9</span></a>
+  <a class="nav-item" href="#s8" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s8)"></span>Closer Look: Functions<span class="nav-num">S10</span></a>
+  <a class="nav-item" href="#s9" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s9)"></span>Working With Arrays<span class="nav-num">S11</span></a>
+  <a class="nav-item" href="#s10" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s10)"></span>Numbers, Dates, Timers<span class="nav-num">S12</span></a>
+  <a class="nav-item" href="#s11" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s11)"></span>Advanced DOM<span class="nav-num">S13</span></a>
+  <a class="nav-item" href="#s12" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s12)"></span>OOP with JS<span class="nav-num">S14</span></a>
+  <a class="nav-item" href="#s13" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s13)"></span>Mapty App<span class="nav-num">S15</span></a>
+  <a class="nav-item" href="#s14" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s14)"></span>Async JavaScript<span class="nav-num">S16</span></a>
+  <a class="nav-item" href="#s15" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s15)"></span>Modules & Tooling<span class="nav-num">S17</span></a>
+  <a class="nav-item" href="#s16" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s16)"></span>Forkify App<span class="nav-num">S18</span></a>
+  <a class="nav-item" href="#s17" onclick="setActive(this)"><span class="nav-dot" style="background:var(--s17)"></span>Git & Deployment<span class="nav-num">S19</span></a>
+</nav>
+
+<!-- ═══════════ MAIN CONTENT ═══════════ -->
+<main class="content" id="mainContent">
+
+
+<!-- ════════════════════════════════════
+     SECTION 2 — JS Fundamentals Part 1
+════════════════════════════════════ -->
+<section class="section-block" id="s1">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s1);background:var(--s1bg)">S2</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 2</div>
+      <div class="section-title">JavaScript Fundamentals — Part 1</div>
+      <div class="section-project">Les bases absolues du langage. Variables, types, opérateurs, contrôle de flux.</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">Hello World — Linking a JavaScript File</span><div class="video-tags"><span class="tag tag-syntax">console.log()</span><span class="tag tag-syntax">&lt;script&gt;</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">Values and Variables</span><div class="video-tags"><span class="tag tag-concept">valeur</span><span class="tag tag-concept">variable</span><span class="tag tag-syntax">camelCase</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">Data Types</span><div class="video-tags"><span class="tag tag-concept">number</span><span class="tag tag-concept">string</span><span class="tag tag-concept">boolean</span><span class="tag tag-concept">undefined</span><span class="tag tag-concept">null</span><span class="tag tag-concept">symbol</span><span class="tag tag-concept">BigInt</span><span class="tag tag-concept">dynamic typing</span><span class="tag tag-method">typeof</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">let, const and var</span><div class="video-tags"><span class="tag tag-syntax">let</span><span class="tag tag-syntax">const</span><span class="tag tag-syntax">var</span><span class="tag tag-concept">mutation</span><span class="tag tag-concept">block scope</span></div></div>
+    <div class="video-row"><span class="video-num">5</span><span class="video-title">Basic Operators</span><div class="video-tags"><span class="tag tag-syntax">+ - * / **</span><span class="tag tag-syntax">= += -=</span><span class="tag tag-syntax">++ --</span><span class="tag tag-concept">opérateur arithmétique</span><span class="tag tag-concept">opérateur d'affectation</span></div></div>
+    <div class="video-row"><span class="video-num">6</span><span class="video-title">Operator Precedence</span><div class="video-tags"><span class="tag tag-concept">précédence</span><span class="tag tag-concept">associativité</span></div></div>
+    <div class="video-row"><span class="video-num">7</span><span class="video-title challenge">Coding Challenge #1</span><div class="video-tags"><span class="tag tag-concept">BMI</span></div></div>
+    <div class="video-row"><span class="video-num">8</span><span class="video-title">Strings and Template Literals</span><div class="video-tags"><span class="tag tag-syntax">``</span><span class="tag tag-syntax">${}</span><span class="tag tag-concept">template literal</span><span class="tag tag-concept">concaténation</span><span class="tag tag-concept">multi-ligne</span></div></div>
+    <div class="video-row"><span class="video-num">9</span><span class="video-title">Taking Decisions: if / else Statements</span><div class="video-tags"><span class="tag tag-syntax">if</span><span class="tag tag-syntax">else</span><span class="tag tag-syntax">else if</span><span class="tag tag-concept">control flow</span><span class="tag tag-concept">branche</span></div></div>
+    <div class="video-row"><span class="video-num">10</span><span class="video-title challenge">Coding Challenge #2</span></div>
+    <div class="video-row"><span class="video-num">11</span><span class="video-title">Type Conversion and Coercion</span><div class="video-tags"><span class="tag tag-method">Number()</span><span class="tag tag-method">String()</span><span class="tag tag-method">Boolean()</span><span class="tag tag-concept">coercition implicite</span><span class="tag tag-concept">conversion explicite</span></div></div>
+    <div class="video-row"><span class="video-num">12</span><span class="video-title">Truthy and Falsy Values</span><div class="video-tags"><span class="tag tag-concept">falsy</span><span class="tag tag-concept">truthy</span><span class="tag tag-concept">0, '', null, undefined, NaN</span></div></div>
+    <div class="video-row"><span class="video-num">13</span><span class="video-title">Equality Operators: == vs. ===</span><div class="video-tags"><span class="tag tag-syntax">===</span><span class="tag tag-syntax">==</span><span class="tag tag-syntax">!==</span><span class="tag tag-concept">strict equality</span><span class="tag tag-concept">loose equality</span></div></div>
+    <div class="video-row"><span class="video-num">14</span><span class="video-title">Boolean Logic</span><div class="video-tags"><span class="tag tag-syntax">&&</span><span class="tag tag-syntax">||</span><span class="tag tag-syntax">!</span><span class="tag tag-concept">AND OR NOT</span><span class="tag tag-concept">table de vérité</span></div></div>
+    <div class="video-row"><span class="video-num">15</span><span class="video-title">Logical Operators</span><div class="video-tags"><span class="tag tag-syntax">&&</span><span class="tag tag-syntax">||</span><span class="tag tag-syntax">!</span></div></div>
+    <div class="video-row"><span class="video-num">16</span><span class="video-title challenge">Coding Challenge #3</span></div>
+    <div class="video-row"><span class="video-num">17</span><span class="video-title">The switch Statement</span><div class="video-tags"><span class="tag tag-syntax">switch</span><span class="tag tag-syntax">case</span><span class="tag tag-syntax">break</span><span class="tag tag-syntax">default</span></div></div>
+    <div class="video-row"><span class="video-num">18</span><span class="video-title">Statements and Expressions</span><div class="video-tags"><span class="tag tag-concept">expression</span><span class="tag tag-concept">statement</span><span class="tag tag-concept">différence fondamentale</span></div></div>
+    <div class="video-row"><span class="video-num">19</span><span class="video-title">The Conditional (Ternary) Operator</span><div class="video-tags"><span class="tag tag-syntax">condition ? a : b</span><span class="tag tag-concept">opérateur ternaire</span></div></div>
+    <div class="video-row"><span class="video-num">20</span><span class="video-title challenge">Coding Challenge #4</span></div>
+    <div class="video-row"><span class="video-num">21</span><span class="video-title">JavaScript Releases: ES5, ES6+ and ESNext</span><div class="video-tags"><span class="tag tag-concept">ES2015</span><span class="tag tag-concept">ECMAScript</span><span class="tag tag-concept">backward compatibility</span></div></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">console.log()</span><span class="pill">typeof</span><span class="pill">Number()</span><span class="pill">String()</span><span class="pill">Boolean()</span><span class="pill">parseInt()</span><span class="pill">NaN</span><span class="pill">Infinity</span><span class="pill">let</span><span class="pill">const</span><span class="pill">var</span><span class="pill">template literal</span><span class="pill">if/else</span><span class="pill">switch</span><span class="pill">ternaire ?:</span><span class="pill">&&</span><span class="pill">||</span><span class="pill">!</span><span class="pill">===</span><span class="pill">==</span><span class="pill">truthy</span><span class="pill">falsy</span><span class="pill">coercition</span><span class="pill">type dynamique</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 3 — JS Fundamentals Part 2
+════════════════════════════════════ -->
+<section class="section-block" id="s2">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s2);background:var(--s2bg)">S3</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 3</div>
+      <div class="section-title">JavaScript Fundamentals — Part 2</div>
+      <div class="section-project">Fonctions, tableaux, objets, boucles. La boîte à outils de base.</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">Activating Strict Mode</span><div class="video-tags"><span class="tag tag-syntax">'use strict'</span><span class="tag tag-concept">mode strict</span><span class="tag tag-concept">silent errors</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">Functions</span><div class="video-tags"><span class="tag tag-syntax">function</span><span class="tag tag-syntax">return</span><span class="tag tag-concept">paramètre</span><span class="tag tag-concept">argument</span><span class="tag tag-concept">valeur de retour</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">Function Declarations vs. Expressions</span><div class="video-tags"><span class="tag tag-concept">function declaration</span><span class="tag tag-concept">function expression</span><span class="tag tag-concept">hoisting</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">Arrow Functions</span><div class="video-tags"><span class="tag tag-syntax">=></span><span class="tag tag-concept">arrow function</span><span class="tag tag-concept">this lexical</span><span class="tag tag-concept">syntaxe concise</span></div></div>
+    <div class="video-row"><span class="video-num">5</span><span class="video-title">Functions Calling Other Functions</span><div class="video-tags"><span class="tag tag-concept">composition</span><span class="tag tag-concept">DRY principle</span></div></div>
+    <div class="video-row"><span class="video-num">6</span><span class="video-title">Reviewing Functions</span><div class="video-tags"><span class="tag tag-concept">résumé fonctions</span></div></div>
+    <div class="video-row"><span class="video-num">7</span><span class="video-title challenge">Coding Challenge #1</span></div>
+    <div class="video-row"><span class="video-num">8</span><span class="video-title">Introduction to Arrays</span><div class="video-tags"><span class="tag tag-syntax">[]</span><span class="tag tag-concept">array</span><span class="tag tag-concept">index</span><span class="tag tag-concept">.length</span><span class="tag tag-method">push()</span><span class="tag tag-method">pop()</span><span class="tag tag-method">unshift()</span><span class="tag tag-method">shift()</span></div></div>
+    <div class="video-row"><span class="video-num">9</span><span class="video-title">Basic Array Operations (Methods)</span><div class="video-tags"><span class="tag tag-method">push()</span><span class="tag tag-method">pop()</span><span class="tag tag-method">unshift()</span><span class="tag tag-method">shift()</span><span class="tag tag-method">indexOf()</span><span class="tag tag-method">includes()</span></div></div>
+    <div class="video-row"><span class="video-num">10</span><span class="video-title challenge">Coding Challenge #2</span></div>
+    <div class="video-row"><span class="video-num">11</span><span class="video-title">Introduction to Objects</span><div class="video-tags"><span class="tag tag-syntax">{}</span><span class="tag tag-concept">object literal</span><span class="tag tag-concept">propriété</span><span class="tag tag-concept">valeur</span></div></div>
+    <div class="video-row"><span class="video-num">12</span><span class="video-title">Dot vs. Bracket Notation</span><div class="video-tags"><span class="tag tag-syntax">obj.prop</span><span class="tag tag-syntax">obj['prop']</span><span class="tag tag-concept">accès dynamique</span></div></div>
+    <div class="video-row"><span class="video-num">13</span><span class="video-title">Object Methods</span><div class="video-tags"><span class="tag tag-concept">méthode</span><span class="tag tag-syntax">this</span><span class="tag tag-concept">fonction dans un objet</span></div></div>
+    <div class="video-row"><span class="video-num">14</span><span class="video-title challenge">Coding Challenge #3</span></div>
+    <div class="video-row"><span class="video-num">15</span><span class="video-title">Iteration: The for Loop</span><div class="video-tags"><span class="tag tag-syntax">for (let i=0; ...)</span><span class="tag tag-concept">boucle for</span><span class="tag tag-concept">compteur</span><span class="tag tag-concept">itération</span></div></div>
+    <div class="video-row"><span class="video-num">16</span><span class="video-title">Looping Arrays, Breaking and Continuing</span><div class="video-tags"><span class="tag tag-syntax">break</span><span class="tag tag-syntax">continue</span><span class="tag tag-concept">parcourir un tableau</span></div></div>
+    <div class="video-row"><span class="video-num">17</span><span class="video-title">Looping Backwards and Nested Loops</span><div class="video-tags"><span class="tag tag-concept">boucle inverse</span><span class="tag tag-concept">boucles imbriquées</span></div></div>
+    <div class="video-row"><span class="video-num">18</span><span class="video-title">The while Loop</span><div class="video-tags"><span class="tag tag-syntax">while</span><span class="tag tag-syntax">do...while</span><span class="tag tag-concept">boucle while</span></div></div>
+    <div class="video-row"><span class="video-num">19</span><span class="video-title challenge">Coding Challenge #4</span></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">'use strict'</span><span class="pill">function declaration</span><span class="pill">function expression</span><span class="pill">arrow function =></span><span class="pill">return</span><span class="pill">paramètre</span><span class="pill">argument</span><span class="pill">[]  tableau</span><span class="pill">.length</span><span class="pill">push()</span><span class="pill">pop()</span><span class="pill">unshift()</span><span class="pill">shift()</span><span class="pill">indexOf()</span><span class="pill">includes()</span><span class="pill">objet {}</span><span class="pill">this</span><span class="pill">méthode</span><span class="pill">for loop</span><span class="pill">while loop</span><span class="pill">break</span><span class="pill">continue</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 4 — Developer Skills
+════════════════════════════════════ -->
+<section class="section-block" id="s3">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s3);background:var(--s3bg)">S4</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 4</div>
+      <div class="section-title">Developer Skills & Editor Setup</div>
+      <div class="section-project">Workflow, debugging, résolution de problèmes, VSCode.</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">Setting up Prettier and VS Code</span><div class="video-tags"><span class="tag tag-tools">Prettier</span><span class="tag tag-tools">VSCode</span><span class="tag tag-tools">extensions</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">Installing Node.js and Setting Up a Dev Environment</span><div class="video-tags"><span class="tag tag-tools">Node.js</span><span class="tag tag-tools">live-server</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">Learning How to Code</span><div class="video-tags"><span class="tag tag-concept">méthode d'apprentissage</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">How to Think Like a Developer: Become a Problem Solver</span><div class="video-tags"><span class="tag tag-concept">problem solving</span><span class="tag tag-concept">décomposition</span><span class="tag tag-concept">pseudo-code</span></div></div>
+    <div class="video-row"><span class="video-num">5</span><span class="video-title">Using Google, StackOverflow and MDN</span><div class="video-tags"><span class="tag tag-tools">MDN</span><span class="tag tag-tools">StackOverflow</span><span class="tag tag-concept">documentation</span></div></div>
+    <div class="video-row"><span class="video-num">6</span><span class="video-title">Debugging (Fixing Errors)</span><div class="video-tags"><span class="tag tag-tools">debugger</span><span class="tag tag-concept">bug</span><span class="tag tag-concept">erreur de syntaxe</span><span class="tag tag-concept">erreur logique</span></div></div>
+    <div class="video-row"><span class="video-num">7</span><span class="video-title">Debugging with the Console and Breakpoints</span><div class="video-tags"><span class="tag tag-tools">Chrome DevTools</span><span class="tag tag-tools">breakpoint</span><span class="tag tag-method">console.warn()</span><span class="tag tag-method">console.error()</span><span class="tag tag-method">console.table()</span></div></div>
+    <div class="video-row"><span class="video-num">8</span><span class="video-title challenge">Coding Challenge — Solving a Problem</span></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">VSCode</span><span class="pill">Prettier</span><span class="pill">Node.js</span><span class="pill">live-server</span><span class="pill">debugger</span><span class="pill">breakpoint</span><span class="pill">console.warn()</span><span class="pill">console.error()</span><span class="pill">console.table()</span><span class="pill">MDN</span><span class="pill">pseudo-code</span><span class="pill">problem solving</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 5 — HTML & CSS Crash Course
+════════════════════════════════════ -->
+<section class="section-block" id="s4">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s4);background:var(--s4bg)">S5</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 5</div>
+      <div class="section-title">HTML & CSS Crash Course</div>
+      <div class="section-project">Bases HTML/CSS nécessaires pour comprendre le DOM.</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">Basic HTML Structure and Elements</span><div class="video-tags"><span class="tag tag-dom">HTML</span><span class="tag tag-concept">doctype</span><span class="tag tag-concept">balises</span><span class="tag tag-concept">attributs</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">Attributes, Classes and IDs</span><div class="video-tags"><span class="tag tag-dom">class</span><span class="tag tag-dom">id</span><span class="tag tag-dom">href</span><span class="tag tag-dom">src</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">Basic Styling with CSS</span><div class="video-tags"><span class="tag tag-dom">sélecteurs CSS</span><span class="tag tag-concept">cascade</span><span class="tag tag-concept">spécificité</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">Introduction to the CSS Box Model</span><div class="video-tags"><span class="tag tag-concept">box model</span><span class="tag tag-concept">margin</span><span class="tag tag-concept">padding</span><span class="tag tag-concept">border</span></div></div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 7 — DOM and Events I
+════════════════════════════════════ -->
+<section class="section-block" id="s5">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s5);background:var(--s5bg)">S7</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 7</div>
+      <div class="section-title">JavaScript in the Browser: DOM & Events Fundamentals</div>
+      <div class="section-project"><span style="color:var(--accent3);background:var(--s3bg);border:1px solid var(--s3)">🎮 Projets</span> Guess My Number · Modal Window · Pig Game</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">What's the DOM and DOM Manipulation</span><div class="video-tags"><span class="tag tag-dom">DOM</span><span class="tag tag-concept">arbre DOM</span><span class="tag tag-concept">document object</span><span class="tag tag-dom">window</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">Selecting and Manipulating Elements</span><div class="video-tags"><span class="tag tag-method">document.querySelector()</span><span class="tag tag-method">document.getElementById()</span><span class="tag tag-dom">.textContent</span><span class="tag tag-dom">.innerHTML</span><span class="tag tag-dom">.style</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">Handling Click Events</span><div class="video-tags"><span class="tag tag-method">addEventListener()</span><span class="tag tag-concept">event listener</span><span class="tag tag-concept">callback</span><span class="tag tag-dom">'click'</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">Manipulating CSS Styles</span><div class="video-tags"><span class="tag tag-dom">.style.property</span><span class="tag tag-dom">.classList</span><span class="tag tag-dom">.classList.add()</span><span class="tag tag-dom">.classList.remove()</span><span class="tag tag-dom">.classList.toggle()</span></div></div>
+    <div class="video-row"><span class="video-num">5</span><span class="video-title project">Project: Guess My Number!</span><div class="video-tags"><span class="tag tag-dom">DOM manipulation</span><span class="tag tag-concept">state</span></div></div>
+    <div class="video-row"><span class="video-num">6</span><span class="video-title">Handling Keypress Events</span><div class="video-tags"><span class="tag tag-dom">'keydown'</span><span class="tag tag-dom">'keyup'</span><span class="tag tag-dom">'keypress'</span><span class="tag tag-dom">e.key</span><span class="tag tag-dom">e.code</span><span class="tag tag-concept">keyboard event</span></div></div>
+    <div class="video-row"><span class="video-num">7</span><span class="video-title project">Project: Modal Window</span><div class="video-tags"><span class="tag tag-dom">.classList.contains()</span><span class="tag tag-concept">overlay</span></div></div>
+    <div class="video-row"><span class="video-num">8</span><span class="video-title project">Project: Pig Game (Planning)</span><div class="video-tags"><span class="tag tag-concept">flowchart</span><span class="tag tag-concept">architecture</span></div></div>
+    <div class="video-row"><span class="video-num">9</span><span class="video-title project">Project: Pig Game (Implementation)</span><div class="video-tags"><span class="tag tag-dom">DOM</span><span class="tag tag-concept">état global</span><span class="tag tag-method">Math.random()</span><span class="tag tag-method">Math.trunc()</span></div></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">document</span><span class="pill">window</span><span class="pill">querySelector()</span><span class="pill">querySelectorAll()</span><span class="pill">getElementById()</span><span class="pill">getElementsByClassName()</span><span class="pill">getElementsByTagName()</span><span class="pill">textContent</span><span class="pill">innerHTML</span><span class="pill">value</span><span class="pill">style.property</span><span class="pill">classList</span><span class="pill">classList.add()</span><span class="pill">classList.remove()</span><span class="pill">classList.toggle()</span><span class="pill">classList.contains()</span><span class="pill">addEventListener()</span><span class="pill">removeEventListener()</span><span class="pill">click event</span><span class="pill">keydown event</span><span class="pill">e.key</span><span class="pill">e.code</span><span class="pill">Math.random()</span><span class="pill">Math.trunc()</span><span class="pill">Math.floor()</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 8 — Behind the Scenes
+════════════════════════════════════ -->
+<section class="section-block" id="s6">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s6);background:var(--s6bg)">S8</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 8</div>
+      <div class="section-title">How JavaScript Works Behind the Scenes</div>
+      <div class="section-project">Moteur JS, call stack, scope, hoisting, this, closures (intro).</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">A High-Level Overview of JavaScript</span><div class="video-tags"><span class="tag tag-concept">interprété vs compilé</span><span class="tag tag-concept">single-threaded</span><span class="tag tag-concept">garbage collection</span><span class="tag tag-concept">prototype-based</span><span class="tag tag-concept">first-class functions</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">The JavaScript Engine and Runtime</span><div class="video-tags"><span class="tag tag-concept">moteur JS</span><span class="tag tag-concept">V8</span><span class="tag tag-concept">heap</span><span class="tag tag-concept">call stack</span><span class="tag tag-concept">compilation JIT</span><span class="tag tag-concept">runtime</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">Execution Contexts and The Call Stack</span><div class="video-tags"><span class="tag tag-concept">execution context</span><span class="tag tag-concept">global context</span><span class="tag tag-concept">call stack</span><span class="tag tag-concept">LIFO</span><span class="tag tag-concept">stack frame</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">Scope and The Scope Chain</span><div class="video-tags"><span class="tag tag-concept">scope</span><span class="tag tag-concept">global scope</span><span class="tag tag-concept">function scope</span><span class="tag tag-concept">block scope</span><span class="tag tag-concept">scope chain</span><span class="tag tag-concept">lexical scoping</span></div></div>
+    <div class="video-row"><span class="video-num">5</span><span class="video-title">Scoping in Practice</span><div class="video-tags"><span class="tag tag-concept">var vs let vs const (scope)</span><span class="tag tag-concept">nested functions</span></div></div>
+    <div class="video-row"><span class="video-num">6</span><span class="video-title">Variable Environment: Hoisting and The TDZ</span><div class="video-tags"><span class="tag tag-concept">hoisting</span><span class="tag tag-concept">TDZ — Temporal Dead Zone</span><span class="tag tag-concept">création de variable</span><span class="tag tag-concept">undefined</span></div></div>
+    <div class="video-row"><span class="video-num">7</span><span class="video-title">Hoisting and TDZ in Practice</span><div class="video-tags"><span class="tag tag-concept">var hoisting</span><span class="tag tag-concept">function hoisting</span><span class="tag tag-concept">const/let TDZ</span></div></div>
+    <div class="video-row"><span class="video-num">8</span><span class="video-title">The this Keyword</span><div class="video-tags"><span class="tag tag-syntax">this</span><span class="tag tag-concept">contexte d'appel</span><span class="tag tag-concept">window (global this)</span><span class="tag tag-concept">méthode this</span></div></div>
+    <div class="video-row"><span class="video-num">9</span><span class="video-title">The this Keyword in Practice</span><div class="video-tags"><span class="tag tag-concept">this en arrow function</span><span class="tag tag-concept">this en regular function</span></div></div>
+    <div class="video-row"><span class="video-num">10</span><span class="video-title">Regular Functions vs. Arrow Functions</span><div class="video-tags"><span class="tag tag-concept">this lexical</span><span class="tag tag-concept">arguments object</span><span class="tag tag-concept">piège var dans méthode</span></div></div>
+    <div class="video-row"><span class="video-num">11</span><span class="video-title">Primitives vs. Objects (Primitive vs. Reference Types)</span><div class="video-tags"><span class="tag tag-concept">stack</span><span class="tag tag-concept">heap</span><span class="tag tag-concept">référence</span><span class="tag tag-concept">copie vs référence</span><span class="tag tag-concept">immutabilité primitive</span></div></div>
+    <div class="video-row"><span class="video-num">12</span><span class="video-title">Primitives vs. Objects in Practice</span><div class="video-tags"><span class="tag tag-method">Object.assign()</span><span class="tag tag-concept">shallow copy</span><span class="tag tag-concept">deep clone</span></div></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">moteur V8</span><span class="pill">call stack</span><span class="pill">heap</span><span class="pill">execution context</span><span class="pill">scope chain</span><span class="pill">hoisting</span><span class="pill">TDZ</span><span class="pill">this</span><span class="pill">window</span><span class="pill">global scope</span><span class="pill">block scope</span><span class="pill">function scope</span><span class="pill">arguments object</span><span class="pill">Object.assign()</span><span class="pill">référence vs valeur</span><span class="pill">shallow copy</span><span class="pill">garbage collection</span><span class="pill">JIT compilation</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 9 — Data Structures & Modern Operators
+════════════════════════════════════ -->
+<section class="section-block" id="s7">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s7);background:var(--s7bg)">S9</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 9</div>
+      <div class="section-title">Data Structures, Modern Operators & Strings</div>
+      <div class="section-project">ES6+ : destructuring, spread, rest, optional chaining, Maps, Sets, Strings.</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">Destructuring Arrays</span><div class="video-tags"><span class="tag tag-syntax">const [a, b] = arr</span><span class="tag tag-concept">destructuring tableau</span><span class="tag tag-concept">valeur par défaut</span><span class="tag tag-concept">swap variables</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">Destructuring Objects</span><div class="video-tags"><span class="tag tag-syntax">const {a, b} = obj</span><span class="tag tag-concept">renommage</span><span class="tag tag-concept">valeur par défaut</span><span class="tag tag-concept">nested destructuring</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">The Spread Operator</span><div class="video-tags"><span class="tag tag-syntax">...</span><span class="tag tag-concept">spread array</span><span class="tag tag-concept">spread objet</span><span class="tag tag-concept">copie shallow</span><span class="tag tag-concept">itérable</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">Rest Pattern and Parameters</span><div class="video-tags"><span class="tag tag-syntax">...rest</span><span class="tag tag-concept">paramètres rest</span><span class="tag tag-concept">collect elements</span></div></div>
+    <div class="video-row"><span class="video-num">5</span><span class="video-title">Short Circuiting (&& and ||)</span><div class="video-tags"><span class="tag tag-syntax">||</span><span class="tag tag-syntax">&&</span><span class="tag tag-concept">short-circuit evaluation</span><span class="tag tag-concept">valeur par défaut</span></div></div>
+    <div class="video-row"><span class="video-num">6</span><span class="video-title">The Nullish Coalescing Operator (??)</span><div class="video-tags"><span class="tag tag-syntax">??</span><span class="tag tag-concept">nullish</span><span class="tag tag-concept">null vs undefined vs 0</span></div></div>
+    <div class="video-row"><span class="video-num">7</span><span class="video-title">Logical Assignment Operators</span><div class="video-tags"><span class="tag tag-syntax">||=</span><span class="tag tag-syntax">&&=</span><span class="tag tag-syntax">??=</span></div></div>
+    <div class="video-row"><span class="video-num">8</span><span class="video-title challenge">Coding Challenge #1</span></div>
+    <div class="video-row"><span class="video-num">9</span><span class="video-title">Looping Arrays: The for-of Loop</span><div class="video-tags"><span class="tag tag-syntax">for (const x of arr)</span><span class="tag tag-method">.entries()</span><span class="tag tag-concept">for-of</span></div></div>
+    <div class="video-row"><span class="video-num">10</span><span class="video-title">Enhanced Object Literals</span><div class="video-tags"><span class="tag tag-syntax">shorthand property</span><span class="tag tag-syntax">computed property names []</span><span class="tag tag-concept">méthode sans function</span></div></div>
+    <div class="video-row"><span class="video-num">11</span><span class="video-title">Optional Chaining (?.)</span><div class="video-tags"><span class="tag tag-syntax">?.</span><span class="tag tag-concept">optional chaining</span><span class="tag tag-concept">nullish safe access</span></div></div>
+    <div class="video-row"><span class="video-num">12</span><span class="video-title">Looping Objects: Object Keys, Values, and Entries</span><div class="video-tags"><span class="tag tag-method">Object.keys()</span><span class="tag tag-method">Object.values()</span><span class="tag tag-method">Object.entries()</span></div></div>
+    <div class="video-row"><span class="video-num">13</span><span class="video-title challenge">Coding Challenge #2</span></div>
+    <div class="video-row"><span class="video-num">14</span><span class="video-title">Sets</span><div class="video-tags"><span class="tag tag-obj">new Set()</span><span class="tag tag-method">.has()</span><span class="tag tag-method">.add()</span><span class="tag tag-method">.delete()</span><span class="tag tag-method">.size</span><span class="tag tag-concept">valeurs uniques</span></div></div>
+    <div class="video-row"><span class="video-num">15</span><span class="video-title">Maps: Fundamentals</span><div class="video-tags"><span class="tag tag-obj">new Map()</span><span class="tag tag-method">.set()</span><span class="tag tag-method">.get()</span><span class="tag tag-method">.has()</span><span class="tag tag-method">.delete()</span><span class="tag tag-method">.size</span><span class="tag tag-method">.clear()</span></div></div>
+    <div class="video-row"><span class="video-num">16</span><span class="video-title">Maps: Iteration</span><div class="video-tags"><span class="tag tag-method">.entries()</span><span class="tag tag-method">.keys()</span><span class="tag tag-method">.values()</span><span class="tag tag-concept">for-of sur Map</span></div></div>
+    <div class="video-row"><span class="video-num">17</span><span class="video-title">Summary: Which Data Structure to Use?</span><div class="video-tags"><span class="tag tag-concept">Array vs Set vs Map vs Object</span></div></div>
+    <div class="video-row"><span class="video-num">18</span><span class="video-title challenge">Coding Challenge #3</span></div>
+    <div class="video-row"><span class="video-num">19</span><span class="video-title">Working with Strings — Part 1</span><div class="video-tags"><span class="tag tag-method">.indexOf()</span><span class="tag tag-method">.lastIndexOf()</span><span class="tag tag-method">.slice()</span><span class="tag tag-method">.at()</span><span class="tag tag-method">.length</span></div></div>
+    <div class="video-row"><span class="video-num">20</span><span class="video-title">Working with Strings — Part 2</span><div class="video-tags"><span class="tag tag-method">.toLowerCase()</span><span class="tag tag-method">.toUpperCase()</span><span class="tag tag-method">.trim()</span><span class="tag tag-method">.trimStart()</span><span class="tag tag-method">.trimEnd()</span><span class="tag tag-method">.replace()</span><span class="tag tag-method">.replaceAll()</span><span class="tag tag-method">.includes()</span><span class="tag tag-method">.startsWith()</span><span class="tag tag-method">.endsWith()</span></div></div>
+    <div class="video-row"><span class="video-num">21</span><span class="video-title">Working with Strings — Part 3</span><div class="video-tags"><span class="tag tag-method">.split()</span><span class="tag tag-method">.join()</span><span class="tag tag-method">.padStart()</span><span class="tag tag-method">.padEnd()</span><span class="tag tag-method">.repeat()</span></div></div>
+    <div class="video-row"><span class="video-num">22</span><span class="video-title challenge">Coding Challenge #4</span></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">destructuring [ ]</span><span class="pill">destructuring { }</span><span class="pill">spread ...</span><span class="pill">rest ...</span><span class="pill">??</span><span class="pill">?.</span><span class="pill">||=  &&=  ??=</span><span class="pill">for-of</span><span class="pill">Set</span><span class="pill">Map</span><span class="pill">Object.keys()</span><span class="pill">Object.values()</span><span class="pill">Object.entries()</span><span class="pill">short-circuit</span><span class="pill">.slice()</span><span class="pill">.split()</span><span class="pill">.join()</span><span class="pill">.trim()</span><span class="pill">.replace()</span><span class="pill">.includes()</span><span class="pill">.startsWith()</span><span class="pill">.padStart()</span><span class="pill">.repeat()</span><span class="pill">.at()</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 10 — Closer Look at Functions
+════════════════════════════════════ -->
+<section class="section-block" id="s8">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s8);background:var(--s8bg)">S10</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 10</div>
+      <div class="section-title">A Closer Look at Functions</div>
+      <div class="section-project">Higher-order functions, closures, bind/call/apply, IIFE.</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">Default Parameters</span><div class="video-tags"><span class="tag tag-syntax">function foo(x = 5)</span><span class="tag tag-concept">paramètre par défaut</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">How Passing Arguments Works: Value vs. Reference</span><div class="video-tags"><span class="tag tag-concept">pass by value</span><span class="tag tag-concept">pass by reference (simulation)</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">First-Class and Higher-Order Functions</span><div class="video-tags"><span class="tag tag-concept">first-class function</span><span class="tag tag-concept">higher-order function</span><span class="tag tag-concept">callback</span><span class="tag tag-concept">fonctions comme valeurs</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">Functions Accepting Callback Functions</span><div class="video-tags"><span class="tag tag-concept">callback</span><span class="tag tag-concept">abstraction</span><span class="tag tag-method">.forEach()</span></div></div>
+    <div class="video-row"><span class="video-num">5</span><span class="video-title">Functions Returning Functions</span><div class="video-tags"><span class="tag tag-concept">currying</span><span class="tag tag-concept">factory function</span><span class="tag tag-concept">closure (preview)</span></div></div>
+    <div class="video-row"><span class="video-num">6</span><span class="video-title">The call and apply Methods</span><div class="video-tags"><span class="tag tag-method">.call()</span><span class="tag tag-method">.apply()</span><span class="tag tag-concept">binding explicite de this</span></div></div>
+    <div class="video-row"><span class="video-num">7</span><span class="video-title">The bind Method</span><div class="video-tags"><span class="tag tag-method">.bind()</span><span class="tag tag-concept">partial application</span><span class="tag tag-concept">this fixé</span></div></div>
+    <div class="video-row"><span class="video-num">8</span><span class="video-title challenge">Coding Challenge #1</span></div>
+    <div class="video-row"><span class="video-num">9</span><span class="video-title">Immediately Invoked Function Expressions (IIFE)</span><div class="video-tags"><span class="tag tag-syntax">(function(){...})()</span><span class="tag tag-concept">IIFE</span><span class="tag tag-concept">scope isolation</span><span class="tag tag-concept">encapsulation</span></div></div>
+    <div class="video-row"><span class="video-num">10</span><span class="video-title">Closures</span><div class="video-tags"><span class="tag tag-concept">closure</span><span class="tag tag-concept">variable environment</span><span class="tag tag-concept">backpack</span><span class="tag tag-concept">remembered scope</span></div></div>
+    <div class="video-row"><span class="video-num">11</span><span class="video-title">More Closure Examples</span><div class="video-tags"><span class="tag tag-concept">closure en pratique</span><span class="tag tag-concept">timer + closure</span></div></div>
+    <div class="video-row"><span class="video-num">12</span><span class="video-title challenge">Coding Challenge #2</span></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">default parameters</span><span class="pill">first-class function</span><span class="pill">higher-order function</span><span class="pill">callback</span><span class="pill">.call()</span><span class="pill">.apply()</span><span class="pill">.bind()</span><span class="pill">IIFE</span><span class="pill">closure</span><span class="pill">currying</span><span class="pill">partial application</span><span class="pill">factory function</span><span class="pill">arguments object</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 11 — Working With Arrays
+════════════════════════════════════ -->
+<section class="section-block" id="s9">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s9);background:var(--s9bg)">S11</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 11</div>
+      <div class="section-title">Working With Arrays</div>
+      <div class="section-project"><span style="color:var(--accent3);background:var(--s3bg);border:1px solid var(--s3)">🏦 Projet</span> Bankist App</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">Simple Array Methods</span><div class="video-tags"><span class="tag tag-method">.slice()</span><span class="tag tag-method">.splice()</span><span class="tag tag-method">.reverse()</span><span class="tag tag-method">.concat()</span><span class="tag tag-method">.join()</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">The new at() Method</span><div class="video-tags"><span class="tag tag-method">.at()</span><span class="tag tag-concept">index négatif</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">Looping Arrays: forEach</span><div class="video-tags"><span class="tag tag-method">.forEach()</span><span class="tag tag-concept">callback(element, index, array)</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">forEach With Maps and Sets</span><div class="video-tags"><span class="tag tag-method">Map.forEach()</span><span class="tag tag-method">Set.forEach()</span></div></div>
+    <div class="video-row"><span class="video-num">5</span><span class="video-title project">Project: Bankist App</span><div class="video-tags"><span class="tag tag-concept">architecture</span><span class="tag tag-concept">données bancaires</span></div></div>
+    <div class="video-row"><span class="video-num">6</span><span class="video-title">The map Method</span><div class="video-tags"><span class="tag tag-method">.map()</span><span class="tag tag-concept">transformation</span><span class="tag tag-concept">nouveau tableau</span></div></div>
+    <div class="video-row"><span class="video-num">7</span><span class="video-title">Computing Usernames</span><div class="video-tags"><span class="tag tag-method">.map()</span><span class="tag tag-method">.split()</span><span class="tag tag-concept">chaîne de méthodes</span></div></div>
+    <div class="video-row"><span class="video-num">8</span><span class="video-title">The filter Method</span><div class="video-tags"><span class="tag tag-method">.filter()</span><span class="tag tag-concept">prédicat</span><span class="tag tag-concept">sous-tableau</span></div></div>
+    <div class="video-row"><span class="video-num">9</span><span class="video-title">The reduce Method</span><div class="video-tags"><span class="tag tag-method">.reduce()</span><span class="tag tag-concept">accumulator</span><span class="tag tag-concept">valeur initiale</span><span class="tag tag-concept">fold</span></div></div>
+    <div class="video-row"><span class="video-num">10</span><span class="video-title challenge">Coding Challenge #1</span></div>
+    <div class="video-row"><span class="video-num">11</span><span class="video-title">The Magic of Chaining Methods</span><div class="video-tags"><span class="tag tag-concept">method chaining</span><span class="tag tag-concept">pipeline</span></div></div>
+    <div class="video-row"><span class="video-num">12</span><span class="video-title challenge">Coding Challenge #2</span></div>
+    <div class="video-row"><span class="video-num">13</span><span class="video-title">The find Method</span><div class="video-tags"><span class="tag tag-method">.find()</span><span class="tag tag-concept">premier élément correspondant</span></div></div>
+    <div class="video-row"><span class="video-num">14</span><span class="video-title">The findIndex Method</span><div class="video-tags"><span class="tag tag-method">.findIndex()</span></div></div>
+    <div class="video-row"><span class="video-num">15</span><span class="video-title">some and every</span><div class="video-tags"><span class="tag tag-method">.some()</span><span class="tag tag-method">.every()</span><span class="tag tag-concept">test de condition</span></div></div>
+    <div class="video-row"><span class="video-num">16</span><span class="video-title">flat and flatMap</span><div class="video-tags"><span class="tag tag-method">.flat()</span><span class="tag tag-method">.flatMap()</span><span class="tag tag-concept">aplatir</span><span class="tag tag-concept">profondeur</span></div></div>
+    <div class="video-row"><span class="video-num">17</span><span class="video-title">Sorting Arrays</span><div class="video-tags"><span class="tag tag-method">.sort()</span><span class="tag tag-concept">comparateur</span><span class="tag tag-concept">tri ascendant/descendant</span><span class="tag tag-concept">mutation du tableau</span></div></div>
+    <div class="video-row"><span class="video-num">18</span><span class="video-title">More Ways of Creating and Filling Arrays</span><div class="video-tags"><span class="tag tag-method">Array.from()</span><span class="tag tag-method">new Array()</span><span class="tag tag-method">.fill()</span><span class="tag tag-method">Array.of()</span><span class="tag tag-concept">tableau vide</span></div></div>
+    <div class="video-row"><span class="video-num">19</span><span class="video-title">Summary: Which Array Method to Use?</span><div class="video-tags"><span class="tag tag-concept">cheatsheet méthodes tableau</span></div></div>
+    <div class="video-row"><span class="video-num">20</span><span class="video-title challenge">Coding Challenge #3</span></div>
+    <div class="video-row"><span class="video-num">21</span><span class="video-title challenge">Coding Challenge #4</span></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">.map()</span><span class="pill">.filter()</span><span class="pill">.reduce()</span><span class="pill">.find()</span><span class="pill">.findIndex()</span><span class="pill">.some()</span><span class="pill">.every()</span><span class="pill">.flat()</span><span class="pill">.flatMap()</span><span class="pill">.sort()</span><span class="pill">.forEach()</span><span class="pill">.slice()</span><span class="pill">.splice()</span><span class="pill">.reverse()</span><span class="pill">.concat()</span><span class="pill">.fill()</span><span class="pill">Array.from()</span><span class="pill">Array.of()</span><span class="pill">.at()</span><span class="pill">method chaining</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 12 — Numbers, Dates, Timers
+════════════════════════════════════ -->
+<section class="section-block" id="s10">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s10);background:var(--s10bg)">S12</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 12</div>
+      <div class="section-title">Numbers, Dates, Intl and Timers</div>
+      <div class="section-project"><span style="color:var(--accent3);background:var(--s3bg);border:1px solid var(--s3)">🏦 Projet</span> Bankist App (suite)</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">Converting and Checking Numbers</span><div class="video-tags"><span class="tag tag-method">Number()</span><span class="tag tag-method">parseInt()</span><span class="tag tag-method">parseFloat()</span><span class="tag tag-method">Number.isNaN()</span><span class="tag tag-method">Number.isFinite()</span><span class="tag tag-method">Number.isInteger()</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">Math and Rounding</span><div class="video-tags"><span class="tag tag-method">Math.sqrt()</span><span class="tag tag-method">Math.abs()</span><span class="tag tag-method">Math.max()</span><span class="tag tag-method">Math.min()</span><span class="tag tag-method">Math.PI</span><span class="tag tag-method">Math.random()</span><span class="tag tag-method">Math.trunc()</span><span class="tag tag-method">Math.floor()</span><span class="tag tag-method">Math.ceil()</span><span class="tag tag-method">Math.round()</span><span class="tag tag-method">.toFixed()</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">The Remainder Operator</span><div class="video-tags"><span class="tag tag-syntax">%</span><span class="tag tag-concept">modulo</span><span class="tag tag-concept">pair/impair</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">Numeric Separators</span><div class="video-tags"><span class="tag tag-syntax">1_000_000</span><span class="tag tag-concept">lisibilité</span></div></div>
+    <div class="video-row"><span class="video-num">5</span><span class="video-title">Working with BigInt</span><div class="video-tags"><span class="tag tag-syntax">123n</span><span class="tag tag-concept">BigInt</span><span class="tag tag-concept">grands entiers</span></div></div>
+    <div class="video-row"><span class="video-num">6</span><span class="video-title">Creating Dates</span><div class="video-tags"><span class="tag tag-obj">new Date()</span><span class="tag tag-method">Date.now()</span><span class="tag tag-concept">timestamp</span></div></div>
+    <div class="video-row"><span class="video-num">7</span><span class="video-title">Adding Dates to Bankist</span><div class="video-tags"><span class="tag tag-method">.getFullYear()</span><span class="tag tag-method">.getMonth()</span><span class="tag tag-method">.getDate()</span><span class="tag tag-method">.getHours()</span><span class="tag tag-method">.getMinutes()</span><span class="tag tag-method">.setFullYear()</span></div></div>
+    <div class="video-row"><span class="video-num">8</span><span class="video-title">Operations with Dates</span><div class="video-tags"><span class="tag tag-concept">différence de dates</span><span class="tag tag-concept">timestamp arithmétique</span></div></div>
+    <div class="video-row"><span class="video-num">9</span><span class="video-title">Internationalizing Dates (Intl)</span><div class="video-tags"><span class="tag tag-obj">Intl.DateTimeFormat</span><span class="tag tag-method">.format()</span><span class="tag tag-concept">locale</span><span class="tag tag-concept">internationalisation</span></div></div>
+    <div class="video-row"><span class="video-num">10</span><span class="video-title">Internationalizing Numbers (Intl)</span><div class="video-tags"><span class="tag tag-obj">Intl.NumberFormat</span><span class="tag tag-method">.format()</span><span class="tag tag-concept">currency</span><span class="tag tag-concept">unit</span></div></div>
+    <div class="video-row"><span class="video-num">11</span><span class="video-title">Timers: setTimeout and setInterval</span><div class="video-tags"><span class="tag tag-method">setTimeout()</span><span class="tag tag-method">setInterval()</span><span class="tag tag-method">clearTimeout()</span><span class="tag tag-method">clearInterval()</span><span class="tag tag-concept">asynchrone de base</span></div></div>
+    <div class="video-row"><span class="video-num">12</span><span class="video-title">Implementing a Countdown Timer</span><div class="video-tags"><span class="tag tag-method">setInterval()</span><span class="tag tag-concept">minuteur</span></div></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">Number()</span><span class="pill">parseInt()</span><span class="pill">parseFloat()</span><span class="pill">isNaN()</span><span class="pill">isFinite()</span><span class="pill">Math.sqrt()</span><span class="pill">Math.abs()</span><span class="pill">Math.floor()</span><span class="pill">Math.ceil()</span><span class="pill">Math.round()</span><span class="pill">Math.trunc()</span><span class="pill">Math.max()</span><span class="pill">Math.min()</span><span class="pill">Math.PI</span><span class="pill">.toFixed()</span><span class="pill">BigInt</span><span class="pill">new Date()</span><span class="pill">Date.now()</span><span class="pill">.getFullYear()</span><span class="pill">.getMonth()</span><span class="pill">.getDate()</span><span class="pill">Intl.DateTimeFormat</span><span class="pill">Intl.NumberFormat</span><span class="pill">setTimeout()</span><span class="pill">setInterval()</span><span class="pill">clearTimeout()</span><span class="pill">clearInterval()</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 13 — Advanced DOM and Events
+════════════════════════════════════ -->
+<section class="section-block" id="s11">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s11);background:var(--s11bg)">S13</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 13</div>
+      <div class="section-title">Advanced DOM and Events</div>
+      <div class="section-project"><span style="color:var(--accent3);background:var(--s3bg);border:1px solid var(--s3)">🏦 Projet</span> Bankist Website (landing page)</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">How the DOM Really Works</span><div class="video-tags"><span class="tag tag-dom">Node</span><span class="tag tag-dom">Element</span><span class="tag tag-dom">HTMLElement</span><span class="tag tag-concept">héritage DOM</span><span class="tag tag-dom">prototype chain DOM</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">Selecting, Creating, and Deleting Elements</span><div class="video-tags"><span class="tag tag-method">document.querySelector()</span><span class="tag tag-method">document.querySelectorAll()</span><span class="tag tag-method">document.getElementById()</span><span class="tag tag-method">document.createElement()</span><span class="tag tag-method">.prepend()</span><span class="tag tag-method">.append()</span><span class="tag tag-method">.before()</span><span class="tag tag-method">.after()</span><span class="tag tag-method">.remove()</span><span class="tag tag-method">.insertAdjacentHTML()</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">Styles, Attributes and Classes</span><div class="video-tags"><span class="tag tag-dom">.style</span><span class="tag tag-method">getComputedStyle()</span><span class="tag tag-dom">CSS custom properties</span><span class="tag tag-method">.setAttribute()</span><span class="tag tag-method">.getAttribute()</span><span class="tag tag-dom">.dataset</span><span class="tag tag-dom">.className</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">Implementing Smooth Scrolling</span><div class="video-tags"><span class="tag tag-method">.scrollIntoView()</span><span class="tag tag-method">window.scrollTo()</span><span class="tag tag-dom">.getBoundingClientRect()</span><span class="tag tag-dom">window.pageXOffset</span></div></div>
+    <div class="video-row"><span class="video-num">5</span><span class="video-title">Types of Events and Event Handlers</span><div class="video-tags"><span class="tag tag-method">addEventListener()</span><span class="tag tag-method">removeEventListener()</span><span class="tag tag-dom">mouseenter</span><span class="tag tag-dom">mouseleave</span><span class="tag tag-dom">mouseover</span><span class="tag tag-dom">scroll</span><span class="tag tag-dom">load</span><span class="tag tag-dom">DOMContentLoaded</span></div></div>
+    <div class="video-row"><span class="video-num">6</span><span class="video-title">Event Propagation: Bubbling and Capturing</span><div class="video-tags"><span class="tag tag-concept">bubbling</span><span class="tag tag-concept">capturing</span><span class="tag tag-concept">propagation</span><span class="tag tag-dom">e.target</span><span class="tag tag-dom">e.currentTarget</span></div></div>
+    <div class="video-row"><span class="video-num">7</span><span class="video-title">Event Propagation in Practice</span><div class="video-tags"><span class="tag tag-method">e.stopPropagation()</span><span class="tag tag-concept">true = capturing phase</span></div></div>
+    <div class="video-row"><span class="video-num">8</span><span class="video-title">Event Delegation: Implementing Page Navigation</span><div class="video-tags"><span class="tag tag-concept">event delegation</span><span class="tag tag-concept">performance DOM</span><span class="tag tag-dom">e.target.closest()</span></div></div>
+    <div class="video-row"><span class="video-num">9</span><span class="video-title">DOM Traversing</span><div class="video-tags"><span class="tag tag-dom">.parentElement</span><span class="tag tag-dom">.parentNode</span><span class="tag tag-dom">.childNodes</span><span class="tag tag-dom">.children</span><span class="tag tag-dom">.firstElementChild</span><span class="tag tag-dom">.lastElementChild</span><span class="tag tag-dom">.previousElementSibling</span><span class="tag tag-dom">.nextElementSibling</span><span class="tag tag-method">.closest()</span></div></div>
+    <div class="video-row"><span class="video-num">10</span><span class="video-title">Building a Tabbed Component</span><div class="video-tags"><span class="tag tag-concept">event delegation</span><span class="tag tag-dom">data-* attributes</span></div></div>
+    <div class="video-row"><span class="video-num">11</span><span class="video-title">Passing Arguments to Event Handlers</span><div class="video-tags"><span class="tag tag-method">.bind()</span><span class="tag tag-concept">this dans handler</span></div></div>
+    <div class="video-row"><span class="video-num">12</span><span class="video-title">Implementing a Sticky Navigation: The Scroll Event</span><div class="video-tags"><span class="tag tag-dom">scroll event</span><span class="tag tag-dom">window.scrollY</span></div></div>
+    <div class="video-row"><span class="video-num">13</span><span class="video-title">A Better Way: The Intersection Observer API</span><div class="video-tags"><span class="tag tag-obj">IntersectionObserver</span><span class="tag tag-concept">threshold</span><span class="tag tag-concept">rootMargin</span><span class="tag tag-concept">isIntersecting</span><span class="tag tag-concept">performance</span></div></div>
+    <div class="video-row"><span class="video-num">14</span><span class="video-title">Revealing Elements on Scroll</span><div class="video-tags"><span class="tag tag-concept">lazy reveal</span><span class="tag tag-concept">IntersectionObserver</span></div></div>
+    <div class="video-row"><span class="video-num">15</span><span class="video-title">Lazy Loading Images</span><div class="video-tags"><span class="tag tag-dom">data-src</span><span class="tag tag-dom">load event</span><span class="tag tag-concept">lazy loading</span><span class="tag tag-concept">performance image</span></div></div>
+    <div class="video-row"><span class="video-num">16</span><span class="video-title">Building a Slider Component</span><div class="video-tags"><span class="tag tag-concept">slider</span><span class="tag tag-dom">keydown</span><span class="tag tag-concept">dots de navigation</span></div></div>
+    <div class="video-row"><span class="video-num">17</span><span class="video-title">Lifecycle DOM Events</span><div class="video-tags"><span class="tag tag-dom">DOMContentLoaded</span><span class="tag tag-dom">load</span><span class="tag tag-dom">beforeunload</span></div></div>
+    <div class="video-row"><span class="video-num">18</span><span class="video-title">Efficient Script Loading: defer and async</span><div class="video-tags"><span class="tag tag-dom">defer</span><span class="tag tag-dom">async</span><span class="tag tag-concept">chargement script</span><span class="tag tag-concept">parsing HTML</span></div></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">createElement()</span><span class="pill">prepend() / append()</span><span class="pill">remove()</span><span class="pill">insertAdjacentHTML()</span><span class="pill">getComputedStyle()</span><span class="pill">getBoundingClientRect()</span><span class="pill">.closest()</span><span class="pill">event bubbling</span><span class="pill">event capturing</span><span class="pill">event delegation</span><span class="pill">stopPropagation()</span><span class="pill">e.target</span><span class="pill">e.currentTarget</span><span class="pill">IntersectionObserver</span><span class="pill">data-* dataset</span><span class="pill">setAttribute()</span><span class="pill">getAttribute()</span><span class="pill">scrollIntoView()</span><span class="pill">window.scrollY</span><span class="pill">DOMContentLoaded</span><span class="pill">defer</span><span class="pill">async</span><span class="pill">parentElement</span><span class="pill">children</span><span class="pill">nextElementSibling</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 14 — OOP with JavaScript
+════════════════════════════════════ -->
+<section class="section-block" id="s12">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s12);background:var(--s12bg)">S14</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 14</div>
+      <div class="section-title">Object-Oriented Programming (OOP) with JavaScript</div>
+      <div class="section-project">Prototypes, constructeurs, classes ES6, héritage, encapsulation.</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">What is Object-Oriented Programming?</span><div class="video-tags"><span class="tag tag-oop">OOP</span><span class="tag tag-oop">abstraction</span><span class="tag tag-oop">encapsulation</span><span class="tag tag-oop">héritage</span><span class="tag tag-oop">polymorphisme</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">OOP in JavaScript</span><div class="video-tags"><span class="tag tag-oop">prototype</span><span class="tag tag-oop">prototype chain</span><span class="tag tag-oop">prototypal inheritance</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">Constructor Functions and the new Operator</span><div class="video-tags"><span class="tag tag-oop">constructor function</span><span class="tag tag-syntax">new</span><span class="tag tag-concept">instanciation</span><span class="tag tag-concept">4 étapes du new</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">Prototypes</span><div class="video-tags"><span class="tag tag-oop">.prototype</span><span class="tag tag-oop">__proto__</span><span class="tag tag-method">Object.getPrototypeOf()</span></div></div>
+    <div class="video-row"><span class="video-num">5</span><span class="video-title">Prototypal Inheritance and The Prototype Chain</span><div class="video-tags"><span class="tag tag-oop">prototype chain</span><span class="tag tag-oop">héritage implicite</span></div></div>
+    <div class="video-row"><span class="video-num">6</span><span class="video-title">Prototypal Inheritance on Built-In Objects</span><div class="video-tags"><span class="tag tag-oop">Array.prototype</span><span class="tag tag-oop">Object.prototype</span><span class="tag tag-concept">chaîne native</span></div></div>
+    <div class="video-row"><span class="video-num">7</span><span class="video-title challenge">Coding Challenge #1</span></div>
+    <div class="video-row"><span class="video-num">8</span><span class="video-title">ES6 Classes</span><div class="video-tags"><span class="tag tag-syntax">class</span><span class="tag tag-syntax">constructor()</span><span class="tag tag-oop">méthode de classe</span><span class="tag tag-oop">sucre syntaxique</span></div></div>
+    <div class="video-row"><span class="video-num">9</span><span class="video-title">Setters and Getters</span><div class="video-tags"><span class="tag tag-syntax">get</span><span class="tag tag-syntax">set</span><span class="tag tag-oop">accesseur</span><span class="tag tag-oop">mutateur</span></div></div>
+    <div class="video-row"><span class="video-num">10</span><span class="video-title">Static Methods</span><div class="video-tags"><span class="tag tag-syntax">static</span><span class="tag tag-oop">méthode statique</span><span class="tag tag-oop">méthode de classe</span></div></div>
+    <div class="video-row"><span class="video-num">11</span><span class="video-title">Object.create</span><div class="video-tags"><span class="tag tag-method">Object.create()</span><span class="tag tag-oop">prototype direct</span></div></div>
+    <div class="video-row"><span class="video-num">12</span><span class="video-title challenge">Coding Challenge #2</span></div>
+    <div class="video-row"><span class="video-num">13</span><span class="video-title">Inheritance Between "Classes": Constructor Functions</span><div class="video-tags"><span class="tag tag-oop">héritage manuel</span><span class="tag tag-method">Object.create()</span><span class="tag tag-method">.call()</span></div></div>
+    <div class="video-row"><span class="video-num">14</span><span class="video-title challenge">Coding Challenge #3</span></div>
+    <div class="video-row"><span class="video-num">15</span><span class="video-title">Inheritance Between "Classes": ES6 Classes</span><div class="video-tags"><span class="tag tag-syntax">extends</span><span class="tag tag-syntax">super()</span><span class="tag tag-oop">héritage ES6</span></div></div>
+    <div class="video-row"><span class="video-num">16</span><span class="video-title">Inheritance Between "Classes": Object.create</span><div class="video-tags"><span class="tag tag-method">Object.create()</span></div></div>
+    <div class="video-row"><span class="video-num">17</span><span class="video-title">Another Class Example</span><div class="video-tags"><span class="tag tag-oop">class Account</span></div></div>
+    <div class="video-row"><span class="video-num">18</span><span class="video-title">Encapsulation: Private Class Fields and Methods</span><div class="video-tags"><span class="tag tag-syntax">#privateField</span><span class="tag tag-oop">encapsulation</span><span class="tag tag-oop">champ privé</span><span class="tag tag-oop">méthode privée</span></div></div>
+    <div class="video-row"><span class="video-num">19</span><span class="video-title">Chaining Methods</span><div class="video-tags"><span class="tag tag-concept">return this</span><span class="tag tag-concept">fluent interface</span></div></div>
+    <div class="video-row"><span class="video-num">20</span><span class="video-title">ES6 Classes Summary</span></div>
+    <div class="video-row"><span class="video-num">21</span><span class="video-title challenge">Coding Challenge #4</span></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">OOP</span><span class="pill">prototype</span><span class="pill">__proto__</span><span class="pill">prototype chain</span><span class="pill">constructor function</span><span class="pill">new</span><span class="pill">class</span><span class="pill">constructor()</span><span class="pill">extends</span><span class="pill">super()</span><span class="pill">get / set</span><span class="pill">static</span><span class="pill">#privateField</span><span class="pill">Object.create()</span><span class="pill">Object.getPrototypeOf()</span><span class="pill">instanceof</span><span class="pill">encapsulation</span><span class="pill">polymorphisme</span><span class="pill">héritage</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 15 — Mapty App
+════════════════════════════════════ -->
+<section class="section-block" id="s13">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s13);background:var(--s13bg)">S15</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 15</div>
+      <div class="section-title">Mapty App — OOP, Geolocation, External Libraries</div>
+      <div class="section-project"><span style="color:var(--accent3);background:var(--s3bg);border:1px solid var(--s3)">🗺 Projet</span> Mapty (workout tracker avec carte)</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">Project Overview</span><div class="video-tags"><span class="tag tag-concept">flowchart</span><span class="tag tag-concept">architecture</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">How to Plan a Web Project</span><div class="video-tags"><span class="tag tag-concept">user stories</span><span class="tag tag-concept">features</span><span class="tag tag-concept">flowchart</span><span class="tag tag-concept">architecture</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">Using the Geolocation API</span><div class="video-tags"><span class="tag tag-method">navigator.geolocation.getCurrentPosition()</span><span class="tag tag-concept">Geolocation API</span><span class="tag tag-concept">callback success/error</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">Displaying a Map Using Leaflet Library</span><div class="video-tags"><span class="tag tag-tools">Leaflet.js</span><span class="tag tag-concept">librairie externe</span><span class="tag tag-tools">CDN</span></div></div>
+    <div class="video-row"><span class="video-num">5</span><span class="video-title">Displaying a Map Marker</span><div class="video-tags"><span class="tag tag-tools">L.marker()</span><span class="tag tag-tools">L.popup()</span></div></div>
+    <div class="video-row"><span class="video-num">6</span><span class="video-title">Rendering Workout Input Form</span><div class="video-tags"><span class="tag tag-dom">form</span><span class="tag tag-dom">submit event</span><span class="tag tag-dom">e.preventDefault()</span></div></div>
+    <div class="video-row"><span class="video-num">7</span><span class="video-title">Project Architecture</span><div class="video-tags"><span class="tag tag-oop">classe App</span><span class="tag tag-oop">classe Workout</span></div></div>
+    <div class="video-row"><span class="video-num">8</span><span class="video-title">Refactoring for Project Architecture</span></div>
+    <div class="video-row"><span class="video-num">9</span><span class="video-title">Managing Workout Data: Creating Classes</span><div class="video-tags"><span class="tag tag-oop">héritage</span><span class="tag tag-oop">extends</span></div></div>
+    <div class="video-row"><span class="video-num">10</span><span class="video-title">Creating a New Workout</span></div>
+    <div class="video-row"><span class="video-num">11</span><span class="video-title">Rendering Workouts</span></div>
+    <div class="video-row"><span class="video-num">12</span><span class="video-title">Move to Marker on Click</span><div class="video-tags"><span class="tag tag-tools">.setView()</span></div></div>
+    <div class="video-row"><span class="video-num">13</span><span class="video-title">Working with localStorage</span><div class="video-tags"><span class="tag tag-method">localStorage.setItem()</span><span class="tag tag-method">localStorage.getItem()</span><span class="tag tag-method">JSON.stringify()</span><span class="tag tag-method">JSON.parse()</span></div></div>
+    <div class="video-row"><span class="video-num">14</span><span class="video-title">Final Considerations</span><div class="video-tags"><span class="tag tag-concept">limitations localStorage</span><span class="tag tag-concept">prototype perdu JSON</span></div></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">navigator.geolocation</span><span class="pill">getCurrentPosition()</span><span class="pill">Leaflet.js</span><span class="pill">localStorage</span><span class="pill">JSON.stringify()</span><span class="pill">JSON.parse()</span><span class="pill">e.preventDefault()</span><span class="pill">submit event</span><span class="pill">user stories</span><span class="pill">flowchart</span><span class="pill">architecture MVC implicite</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 16 — Async JavaScript
+════════════════════════════════════ -->
+<section class="section-block" id="s14">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s14);background:var(--s14bg)">S16</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 16</div>
+      <div class="section-title">Asynchronous JavaScript: Promises, Async/Await & AJAX</div>
+      <div class="section-project">Event loop, Promises, fetch, async/await, gestion d'erreurs, API REST.</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">Asynchronous JavaScript, AJAX and APIs</span><div class="video-tags"><span class="tag tag-async">asynchrone</span><span class="tag tag-async">AJAX</span><span class="tag tag-async">API REST</span><span class="tag tag-async">HTTP</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">Our First AJAX Call: XMLHttpRequest</span><div class="video-tags"><span class="tag tag-obj">XMLHttpRequest</span><span class="tag tag-concept">callback hell (preview)</span><span class="tag tag-dom">load event</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">Welcome to Callback Hell</span><div class="video-tags"><span class="tag tag-async">callback hell</span><span class="tag tag-concept">pyramid of doom</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">Promises and the Fetch API</span><div class="video-tags"><span class="tag tag-method">fetch()</span><span class="tag tag-async">Promise</span><span class="tag tag-async">pending / fulfilled / rejected</span></div></div>
+    <div class="video-row"><span class="video-num">5</span><span class="video-title">Consuming Promises</span><div class="video-tags"><span class="tag tag-method">.then()</span><span class="tag tag-method">.json()</span><span class="tag tag-concept">Promise chaining</span></div></div>
+    <div class="video-row"><span class="video-num">6</span><span class="video-title">Chaining Promises</span><div class="video-tags"><span class="tag tag-async">chaîne de promesses</span><span class="tag tag-concept">return promise</span></div></div>
+    <div class="video-row"><span class="video-num">7</span><span class="video-title">Handling Rejected Promises</span><div class="video-tags"><span class="tag tag-method">.catch()</span><span class="tag tag-method">.finally()</span><span class="tag tag-async">gestion d'erreur</span></div></div>
+    <div class="video-row"><span class="video-num">8</span><span class="video-title">Throwing Errors Manually</span><div class="video-tags"><span class="tag tag-syntax">throw new Error()</span><span class="tag tag-concept">rejection manuelle</span></div></div>
+    <div class="video-row"><span class="video-num">9</span><span class="video-title challenge">Coding Challenge #1</span></div>
+    <div class="video-row"><span class="video-num">10</span><span class="video-title">Asynchronous Behind the Scenes: The Event Loop</span><div class="video-tags"><span class="tag tag-async">event loop</span><span class="tag tag-async">microtask queue</span><span class="tag tag-async">callback queue</span><span class="tag tag-async">call stack</span><span class="tag tag-async">Web APIs</span></div></div>
+    <div class="video-row"><span class="video-num">11</span><span class="video-title">The Event Loop in Practice</span><div class="video-tags"><span class="tag tag-async">Promise.resolve()</span><span class="tag tag-concept">priorité microtask</span></div></div>
+    <div class="video-row"><span class="video-num">12</span><span class="video-title">Building a Simple Promise</span><div class="video-tags"><span class="tag tag-obj">new Promise()</span><span class="tag tag-concept">executor function</span><span class="tag tag-concept">resolve / reject</span></div></div>
+    <div class="video-row"><span class="video-num">13</span><span class="video-title">Promisifying the Geolocation API</span><div class="video-tags"><span class="tag tag-concept">promisifier</span><span class="tag tag-concept">wrapper Promise</span></div></div>
+    <div class="video-row"><span class="video-num">14</span><span class="video-title challenge">Coding Challenge #2</span></div>
+    <div class="video-row"><span class="video-num">15</span><span class="video-title">Consuming Promises with Async/Await</span><div class="video-tags"><span class="tag tag-syntax">async</span><span class="tag tag-syntax">await</span><span class="tag tag-concept">syntaxe synchrone</span></div></div>
+    <div class="video-row"><span class="video-num">16</span><span class="video-title">Error Handling with try...catch</span><div class="video-tags"><span class="tag tag-syntax">try</span><span class="tag tag-syntax">catch</span><span class="tag tag-syntax">finally</span><span class="tag tag-concept">gestion async errors</span></div></div>
+    <div class="video-row"><span class="video-num">17</span><span class="video-title">Returning Values from Async Functions</span><div class="video-tags"><span class="tag tag-async">async retourne une Promise</span><span class="tag tag-concept">IIFE async</span></div></div>
+    <div class="video-row"><span class="video-num">18</span><span class="video-title">Running Promises in Parallel</span><div class="video-tags"><span class="tag tag-method">Promise.all()</span><span class="tag tag-concept">parallélisme</span><span class="tag tag-concept">short-circuit si rejet</span></div></div>
+    <div class="video-row"><span class="video-num">19</span><span class="video-title">Other Promise Combinators: race, allSettled, any</span><div class="video-tags"><span class="tag tag-method">Promise.race()</span><span class="tag tag-method">Promise.allSettled()</span><span class="tag tag-method">Promise.any()</span></div></div>
+    <div class="video-row"><span class="video-num">20</span><span class="video-title challenge">Coding Challenge #3</span></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">fetch()</span><span class="pill">Promise</span><span class="pill">.then()</span><span class="pill">.catch()</span><span class="pill">.finally()</span><span class="pill">async</span><span class="pill">await</span><span class="pill">try / catch</span><span class="pill">event loop</span><span class="pill">microtask queue</span><span class="pill">callback queue</span><span class="pill">XMLHttpRequest</span><span class="pill">new Promise()</span><span class="pill">resolve / reject</span><span class="pill">Promise.all()</span><span class="pill">Promise.race()</span><span class="pill">Promise.allSettled()</span><span class="pill">Promise.any()</span><span class="pill">.json()</span><span class="pill">AJAX</span><span class="pill">REST API</span><span class="pill">callback hell</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 17 — Modern JS: Modules & Tooling
+════════════════════════════════════ -->
+<section class="section-block" id="s15">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s15);background:var(--s15bg)">S17</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 17</div>
+      <div class="section-title">Modern JavaScript Development: Modules, Tooling & Functional</div>
+      <div class="section-project">ES Modules, NPM, Parcel, Babel, fonctionnel (map/filter/reduce).</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">An Overview of Modern JavaScript Development</span><div class="video-tags"><span class="tag tag-module">bundler</span><span class="tag tag-module">transpiler</span><span class="tag tag-tools">NPM</span><span class="tag tag-tools">build process</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">An Overview of Modules in JavaScript</span><div class="video-tags"><span class="tag tag-module">ES Module</span><span class="tag tag-module">CommonJS</span><span class="tag tag-module">import / export</span><span class="tag tag-module">scope isolé</span><span class="tag tag-module">type="module"</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">Exporting and Importing in ES6 Modules</span><div class="video-tags"><span class="tag tag-syntax">export</span><span class="tag tag-syntax">export default</span><span class="tag tag-syntax">import</span><span class="tag tag-syntax">import * as</span><span class="tag tag-syntax">named exports</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">Top-Level await (ES2022)</span><div class="video-tags"><span class="tag tag-async">top-level await</span><span class="tag tag-module">module-only</span></div></div>
+    <div class="video-row"><span class="video-num">5</span><span class="video-title">The Module Pattern</span><div class="video-tags"><span class="tag tag-concept">module pattern (IIFE)</span><span class="tag tag-concept">namespace</span></div></div>
+    <div class="video-row"><span class="video-num">6</span><span class="video-title">CommonJS Modules</span><div class="video-tags"><span class="tag tag-module">require()</span><span class="tag tag-module">module.exports</span><span class="tag tag-tools">Node.js modules</span></div></div>
+    <div class="video-row"><span class="video-num">7</span><span class="video-title">A Brief Introduction to the Command Line</span><div class="video-tags"><span class="tag tag-tools">CLI</span><span class="tag tag-tools">cd, ls, mkdir</span></div></div>
+    <div class="video-row"><span class="video-num">8</span><span class="video-title">Introduction to NPM</span><div class="video-tags"><span class="tag tag-tools">NPM</span><span class="tag tag-tools">package.json</span><span class="tag tag-tools">node_modules</span><span class="tag tag-tools">npm install</span><span class="tag tag-tools">dependencies</span></div></div>
+    <div class="video-row"><span class="video-num">9</span><span class="video-title">Bundling with Parcel and NPM Scripts</span><div class="video-tags"><span class="tag tag-tools">Parcel</span><span class="tag tag-tools">bundling</span><span class="tag tag-tools">npm scripts</span><span class="tag tag-tools">parcel build</span></div></div>
+    <div class="video-row"><span class="video-num">10</span><span class="video-title">Configuring Babel and Polyfilling</span><div class="video-tags"><span class="tag tag-tools">Babel</span><span class="tag tag-tools">transpilation</span><span class="tag tag-tools">polyfill</span><span class="tag tag-tools">core-js</span><span class="tag tag-tools">regenerator-runtime</span></div></div>
+    <div class="video-row"><span class="video-num">11</span><span class="video-title">Review: Writing Clean and Modern JavaScript</span><div class="video-tags"><span class="tag tag-concept">clean code</span><span class="tag tag-concept">DRY</span><span class="tag tag-concept">single responsibility</span></div></div>
+    <div class="video-row"><span class="video-num">12</span><span class="video-title">Let's Fix Some Bad Code — Part 1 & 2</span><div class="video-tags"><span class="tag tag-concept">refactoring</span></div></div>
+    <div class="video-row"><span class="video-num">13</span><span class="video-title">Declarative and Functional JavaScript Principles</span><div class="video-tags"><span class="tag tag-concept">déclaratif</span><span class="tag tag-concept">impératif</span><span class="tag tag-concept">programmation fonctionnelle</span><span class="tag tag-concept">immutabilité</span><span class="tag tag-concept">side effects</span><span class="tag tag-concept">pure functions</span></div></div>
+    <div class="video-row"><span class="video-num">14</span><span class="video-title">Let's Fix Some Bad Code — Part 3 & 4</span><div class="video-tags"><span class="tag tag-concept">code fonctionnel</span><span class="tag tag-method">Object.freeze()</span></div></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">export / import</span><span class="pill">export default</span><span class="pill">import * as</span><span class="pill">type="module"</span><span class="pill">top-level await</span><span class="pill">NPM</span><span class="pill">package.json</span><span class="pill">npm install</span><span class="pill">Parcel</span><span class="pill">Babel</span><span class="pill">polyfill</span><span class="pill">core-js</span><span class="pill">CommonJS require()</span><span class="pill">module.exports</span><span class="pill">pure functions</span><span class="pill">immutabilité</span><span class="pill">Object.freeze()</span><span class="pill">side effects</span><span class="pill">clean code</span><span class="pill">DRY</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 18 — Forkify App
+════════════════════════════════════ -->
+<section class="section-block" id="s16">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s16);background:var(--s16bg)">S18</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 18</div>
+      <div class="section-title">Forkify App — Building a Modern Application</div>
+      <div class="section-project"><span style="color:var(--accent3);background:var(--s3bg);border:1px solid var(--s3)">🍽 Projet Final</span> Forkify — application de recettes complète</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">Project Overview and Planning</span><div class="video-tags"><span class="tag tag-concept">user stories</span><span class="tag tag-concept">features</span><span class="tag tag-concept">flowchart</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">Loading a Recipe from API</span><div class="video-tags"><span class="tag tag-async">fetch()</span><span class="tag tag-async">async/await</span><span class="tag tag-concept">forkify API</span></div></div>
+    <div class="video-row"><span class="video-num">3</span><span class="video-title">Rendering the Recipe</span><div class="video-tags"><span class="tag tag-dom">insertAdjacentHTML()</span></div></div>
+    <div class="video-row"><span class="video-num">4</span><span class="video-title">Listening for load and hashchange Events</span><div class="video-tags"><span class="tag tag-dom">hashchange event</span><span class="tag tag-dom">window.location.hash</span><span class="tag tag-dom">load event</span></div></div>
+    <div class="video-row"><span class="video-num">5</span><span class="video-title">The MVC Architecture</span><div class="video-tags"><span class="tag tag-concept">MVC</span><span class="tag tag-concept">Model</span><span class="tag tag-concept">View</span><span class="tag tag-concept">Controller</span><span class="tag tag-concept">publisher-subscriber</span></div></div>
+    <div class="video-row"><span class="video-num">6</span><span class="video-title">Refactoring for MVC</span><div class="video-tags"><span class="tag tag-concept">séparation des responsabilités</span></div></div>
+    <div class="video-row"><span class="video-num">7</span><span class="video-title">Helpers and Configuration Files</span><div class="video-tags"><span class="tag tag-concept">config.js</span><span class="tag tag-concept">helpers.js</span><span class="tag tag-concept">constantes globales</span></div></div>
+    <div class="video-row"><span class="video-num">8</span><span class="video-title">Event Handlers in MVC</span><div class="video-tags"><span class="tag tag-concept">publisher-subscriber pattern</span><span class="tag tag-concept">init()</span></div></div>
+    <div class="video-row"><span class="video-num">9</span><span class="video-title">Implementing Error and Success Messages</span></div>
+    <div class="video-row"><span class="video-num">10</span><span class="video-title">Implementing Search Results</span><div class="video-tags"><span class="tag tag-dom">input.value</span><span class="tag tag-async">fetch</span></div></div>
+    <div class="video-row"><span class="video-num">11</span><span class="video-title">Rendering Search Results</span></div>
+    <div class="video-row"><span class="video-num">12</span><span class="video-title">Implementing Pagination</span><div class="video-tags"><span class="tag tag-concept">pagination</span><span class="tag tag-method">Math.ceil()</span></div></div>
+    <div class="video-row"><span class="video-num">13</span><span class="video-title">Updating Recipe Servings</span></div>
+    <div class="video-row"><span class="video-num">14</span><span class="video-title">Developing a DOM Updating Algorithm</span><div class="video-tags"><span class="tag tag-dom">nodeType</span><span class="tag tag-dom">nodeValue</span><span class="tag tag-dom">isEqualNode()</span><span class="tag tag-dom">virtual DOM concept</span></div></div>
+    <div class="video-row"><span class="video-num">15</span><span class="video-title">Implementing Bookmarks</span><div class="video-tags"><span class="tag tag-concept">state management</span></div></div>
+    <div class="video-row"><span class="video-num">16</span><span class="video-title">Storing Bookmarks with localStorage</span><div class="video-tags"><span class="tag tag-method">localStorage</span><span class="tag tag-method">JSON.stringify()</span></div></div>
+    <div class="video-row"><span class="video-num">17</span><span class="video-title">Adding Recipe Uploads</span><div class="video-tags"><span class="tag tag-dom">FormData</span><span class="tag tag-syntax">Object.fromEntries()</span></div></div>
+    <div class="video-row"><span class="video-num">18</span><span class="video-title">Wrapping Up: Final Considerations</span></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">MVC architecture</span><span class="pill">publisher-subscriber</span><span class="pill">hashchange event</span><span class="pill">window.location.hash</span><span class="pill">FormData</span><span class="pill">Object.fromEntries()</span><span class="pill">isEqualNode()</span><span class="pill">nodeValue</span><span class="pill">virtual DOM concept</span><span class="pill">pagination</span><span class="pill">state management</span><span class="pill">config.js</span>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+     SECTION 19 — Git & Deployment
+════════════════════════════════════ -->
+<section class="section-block" id="s17">
+  <div class="section-header">
+    <div class="section-badge" style="color:var(--s17);background:var(--s17bg)">S19</div>
+    <div class="section-title-wrap">
+      <div class="section-num">Section 19</div>
+      <div class="section-title">Setting Up Git and Deployment</div>
+      <div class="section-project">Git, GitHub, déploiement Netlify.</div>
+    </div>
+  </div>
+  <div class="video-grid">
+    <div class="video-row"><span class="video-num">1</span><span class="video-title">Setting Up Git and GitHub</span><div class="video-tags"><span class="tag tag-tools">git</span><span class="tag tag-tools">git init</span><span class="tag tag-tools">git add</span><span class="tag tag-tools">git commit</span><span class="tag tag-tools">git push</span><span class="tag tag-tools">GitHub</span></div></div>
+    <div class="video-row"><span class="video-num">2</span><span class="video-title">Deploying to Netlify</span><div class="video-tags"><span class="tag tag-tools">Netlify</span><span class="tag tag-tools">CI/CD</span><span class="tag tag-tools">deploy</span><span class="tag tag-tools">parcel build</span></div></div>
+  </div>
+  <div class="topic-pills">
+    <span class="pill">git init</span><span class="pill">git add</span><span class="pill">git commit</span><span class="pill">git push</span><span class="pill">GitHub</span><span class="pill">Netlify</span><span class="pill">déploiement continu</span>
+  </div>
+</section>
+
+
+</main>
+</div>
+
+<script>
+// ─── NAVIGATION ACTIVE ───
+function setActive(el) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ─── SEARCH ───
+const searchBox = document.getElementById('searchBox');
+const allRows = document.querySelectorAll('.video-row');
+const allSections = document.querySelectorAll('.section-block');
+const allPills = document.querySelectorAll('.pill');
+
+searchBox.addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  if (!q) {
+    allRows.forEach(r => r.classList.remove('hidden'));
+    allSections.forEach(s => s.classList.remove('hidden'));
+    allPills.forEach(p => {
+      p.style.background = '';
+      p.style.color = '';
+      p.style.borderColor = '';
+    });
+    return;
+  }
+
+  // highlight pills
+  allPills.forEach(p => {
+    if (p.textContent.toLowerCase().includes(q)) {
+      p.style.background = '#f7c94830';
+      p.style.color = '#f7c948';
+      p.style.borderColor = '#f7c948';
+    } else {
+      p.style.background = '';
+      p.style.color = '';
+      p.style.borderColor = '';
+    }
+  });
+
+  // show/hide rows
+  allSections.forEach(sec => {
+    let anyVisible = false;
+    sec.querySelectorAll('.video-row').forEach(row => {
+      const txt = row.textContent.toLowerCase();
+      if (txt.includes(q)) {
+        row.classList.remove('hidden');
+        anyVisible = true;
+      } else {
+        row.classList.add('hidden');
+      }
+    });
+    // also check topic pills
+    const hasPill = Array.from(sec.querySelectorAll('.pill')).some(p => p.textContent.toLowerCase().includes(q));
+    if (anyVisible || hasPill) {
+      sec.classList.remove('hidden');
+    } else {
+      sec.classList.add('hidden');
+    }
+  });
+});
+
+// ─── HIGHLIGHT VIDEO ROW ON CLICK ───
+allRows.forEach(row => {
+  row.style.cursor = 'pointer';
+  row.addEventListener('click', function() {
+    allRows.forEach(r => r.style.outline = '');
+    this.style.outline = '1px solid #f7c94860';
+    this.style.background = '#f7c9480a';
+  });
+});
+
+// ─── SET FIRST NAV ITEM ACTIVE ───
+document.querySelector('.nav-item').classList.add('active');
+</script>
+</body>
+</html>
