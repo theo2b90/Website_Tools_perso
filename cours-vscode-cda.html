@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VSCode — Cours Complet CDA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e11;
+    --surface: #16161a;
+    --surface2: #1c1c22;
+    --surface3: #242430;
+    --border: #2a2a38;
+    --border2: #363648;
+    --accent: #7c6af7;
+    --accent2: #5b4fd1;
+    --accent-glow: rgba(124,106,247,0.15);
+    --green: #3ecf8e;
+    --orange: #f97316;
+    --blue: #38bdf8;
+    --red: #f87171;
+    --yellow: #fbbf24;
+    --pink: #e879f9;
+    --text: #e2e2ef;
+    --text2: #9292b0;
+    --text3: #5c5c78;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+    --display: 'Syne', sans-serif;
+    --radius: 8px;
+    --radius-lg: 14px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ─── SCROLLBAR ─────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* ─── LAYOUT ────────────────────────────── */
+  .page-wrapper {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ─── SIDEBAR ───────────────────────────── */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 2rem 0;
+  }
+
+  .sidebar-logo {
+    padding: 0 1.5rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+  }
+  .sidebar-logo .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: .3rem;
+  }
+  .sidebar-logo h2 {
+    font-family: var(--display);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .nav-section {
+    padding: 0 .75rem;
+    margin-bottom: 1.2rem;
+  }
+  .nav-section-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: .25rem .75rem .5rem;
+  }
+  .nav-section a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: .45rem .75rem;
+    border-radius: var(--radius);
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 13.5px;
+    transition: all .15s;
+  }
+  .nav-section a:hover { background: var(--surface3); color: var(--text); }
+  .nav-section a.active { background: var(--accent-glow); color: var(--accent); }
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border2);
+    flex-shrink: 0;
+  }
+  .nav-section a.active .nav-dot,
+  .nav-section a:hover .nav-dot { background: var(--accent); }
+
+  /* ─── MAIN ──────────────────────────────── */
+  main {
+    padding: 3rem 4rem 6rem;
+    max-width: 900px;
+  }
+
+  /* ─── HERO ──────────────────────────────── */
+  .hero {
+    margin-bottom: 4rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(124,106,247,.3);
+    border-radius: 999px;
+    padding: .3rem .9rem;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: .06em;
+    margin-bottom: 1.5rem;
+  }
+  .hero-badge::before { content:'◆'; font-size: 8px; }
+  .hero h1 {
+    font-family: var(--display);
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: .75rem;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text2);
+    max-width: 580px;
+    line-height: 1.8;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .hero-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text3);
+  }
+  .hero-meta-item span { color: var(--green); }
+
+  /* ─── SECTION ───────────────────────────── */
+  .section {
+    margin-bottom: 4rem;
+    scroll-margin-top: 2rem;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.75rem;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: var(--accent-glow);
+    border: 1px solid rgba(124,106,247,.25);
+    padding: .2rem .6rem;
+    border-radius: var(--radius);
+  }
+  .section h2 {
+    font-family: var(--display);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  h3 {
+    font-family: var(--display);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 2rem 0 .75rem;
+  }
+  h3:first-child { margin-top: 0; }
+
+  p { margin-bottom: 1rem; color: var(--text); }
+  p:last-child { margin-bottom: 0; }
+
+  /* ─── CALLOUT BOXES ──────────────────────── */
+  .callout {
+    border-radius: var(--radius-lg);
+    padding: 1.1rem 1.4rem;
+    margin: 1.5rem 0;
+    border-left: 3px solid;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .callout-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-bottom: .35rem;
+  }
+  .callout.info { background: rgba(56,189,248,.07); border-color: var(--blue); }
+  .callout.info .callout-title { color: var(--blue); }
+  .callout.tip { background: rgba(62,207,142,.07); border-color: var(--green); }
+  .callout.tip .callout-title { color: var(--green); }
+  .callout.warn { background: rgba(249,115,22,.07); border-color: var(--orange); }
+  .callout.warn .callout-title { color: var(--orange); }
+  .callout.important { background: rgba(124,106,247,.07); border-color: var(--accent); }
+  .callout.important .callout-title { color: var(--accent); }
+
+  /* ─── CODE ───────────────────────────────── */
+  code {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--surface3);
+    color: var(--accent);
+    padding: .15em .45em;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  pre {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+    position: relative;
+  }
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.8;
+  }
+  .pre-label {
+    position: absolute;
+    top: .6rem;
+    right: 1rem;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .kw { color: var(--pink); }
+  .str { color: var(--green); }
+  .cmt { color: var(--text3); font-style: italic; }
+  .fn { color: var(--blue); }
+  .num { color: var(--orange); }
+  .var { color: var(--text); }
+  .prop { color: #c084fc; }
+
+  /* ─── KEYBOARD SHORTCUTS ─────────────────── */
+  kbd {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    background: var(--surface3);
+    border: 1px solid var(--border2);
+    border-bottom: 2px solid var(--border2);
+    border-radius: 5px;
+    padding: .2em .5em;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  /* ─── SHORTCUT TABLE ──────────────────────── */
+  .shortcut-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  .shortcut-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .shortcut-card-header {
+    background: var(--surface3);
+    padding: .65rem 1rem;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+  }
+  .shortcut-list { padding: .5rem 0; }
+  .shortcut-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .45rem 1rem;
+    font-size: 13px;
+    transition: background .1s;
+  }
+  .shortcut-row:hover { background: var(--surface3); }
+  .shortcut-desc { color: var(--text2); }
+  .shortcut-keys { display: flex; gap: 4px; align-items: center; }
+
+  /* ─── FEATURE CARDS ──────────────────────── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: .85rem;
+    margin: 1.25rem 0;
+  }
+  .feature-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.1rem;
+    transition: border-color .2s, background .2s;
+  }
+  .feature-card:hover { border-color: var(--border2); background: var(--surface3); }
+  .feature-card-icon {
+    width: 36px; height: 36px;
+    border-radius: var(--radius);
+    background: var(--accent-glow);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    margin-bottom: .85rem;
+  }
+  .feature-card h4 {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: .3rem;
+  }
+  .feature-card p {
+    font-size: 12.5px;
+    color: var(--text2);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ─── EXTENSION BADGES ───────────────────── */
+  .ext-list {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    margin: 1rem 0;
+  }
+  .ext-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: .8rem 1rem;
+    transition: border-color .15s;
+  }
+  .ext-item:hover { border-color: var(--border2); }
+  .ext-icon {
+    width: 34px; height: 34px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .ext-info { flex: 1; }
+  .ext-name { font-weight: 600; font-size: 13.5px; color: var(--text); }
+  .ext-desc { font-size: 12px; color: var(--text2); }
+  .ext-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: .2em .6em;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+  .tag-essential { background: rgba(124,106,247,.15); color: var(--accent); }
+  .tag-java { background: rgba(249,115,22,.12); color: var(--orange); }
+  .tag-dotnet { background: rgba(56,189,248,.12); color: var(--blue); }
+  .tag-web { background: rgba(62,207,142,.12); color: var(--green); }
+  .tag-db { background: rgba(251,191,36,.12); color: var(--yellow); }
+  .tag-git { background: rgba(232,121,249,.12); color: var(--pink); }
+  .tag-devops { background: rgba(248,113,113,.12); color: var(--red); }
+
+  /* ─── DIVIDER ────────────────────────────── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 3rem 0;
+  }
+
+  /* ─── SETTINGS JSON ──────────────────────── */
+  .json-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.9;
+    overflow-x: auto;
+    margin: 1rem 0;
+  }
+  .j-key { color: #c084fc; }
+  .j-str { color: var(--green); }
+  .j-bool { color: var(--orange); }
+  .j-num { color: var(--blue); }
+  .j-cmt { color: var(--text3); font-style: italic; }
+
+  /* ─── MEMO SECTION ───────────────────────── */
+  .memo-header {
+    background: linear-gradient(135deg, rgba(124,106,247,.12) 0%, rgba(56,189,248,.06) 100%);
+    border: 1px solid rgba(124,106,247,.2);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .memo-header-icon {
+    width: 52px; height: 52px;
+    border-radius: var(--radius-lg);
+    background: var(--accent-glow);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+  .memo-header h2 {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: .2rem;
+  }
+  .memo-header p { color: var(--text2); font-size: 14px; margin: 0; }
+
+  /* ─── TABLE ──────────────────────────────── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin: 1rem 0;
+  }
+  th {
+    text-align: left;
+    padding: .6rem 1rem;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--text3);
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: .6rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    vertical-align: middle;
+  }
+  tr:hover td { background: var(--surface2); }
+  tr:last-child td { border-bottom: none; }
+
+  /* ─── TAG PILL ───────────────────────────── */
+  .pill {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: .15em .6em;
+    border-radius: 999px;
+    border: 1px solid;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .pill-win { color: var(--blue); border-color: rgba(56,189,248,.3); background: rgba(56,189,248,.08); }
+  .pill-mac { color: var(--green); border-color: rgba(62,207,142,.3); background: rgba(62,207,142,.08); }
+
+  /* ─── RESPONSIVE NAV ─────────────────────── */
+  @media (max-width: 900px) {
+    .page-wrapper { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    main { padding: 2rem 1.5rem 4rem; max-width: 100%; }
+    .hero h1 { font-size: 36px; }
+    .shortcut-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ─── PROGRESS BAR (decorative) ─────────── */
+  .progress-bar {
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--blue));
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform .1s;
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<div class="page-wrapper">
+
+  <!-- ─── SIDEBAR ─────────────────── -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="label">Formation CDA</div>
+      <h2>📘 Cours VSCode</h2>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Cours</div>
+      <a href="#intro" class="active"><span class="nav-dot"></span>Introduction</a>
+      <a href="#interface"><span class="nav-dot"></span>Interface</a>
+      <a href="#editeur"><span class="nav-dot"></span>Éditeur & IntelliSense</a>
+      <a href="#terminal"><span class="nav-dot"></span>Terminal intégré</a>
+      <a href="#git"><span class="nav-dot"></span>Git & contrôle de sources</a>
+      <a href="#extensions"><span class="nav-dot"></span>Extensions clés</a>
+      <a href="#config"><span class="nav-dot"></span>Configuration & settings.json</a>
+      <a href="#debug"><span class="nav-dot"></span>Débogage</a>
+      <a href="#workspace"><span class="nav-dot"></span>Workspace & multi-projet</a>
+      <a href="#snippets"><span class="nav-dot"></span>Snippets</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Mémo</div>
+      <a href="#shortcuts"><span class="nav-dot"></span>Raccourcis essentiels</a>
+      <a href="#palette"><span class="nav-dot"></span>Palette de commandes</a>
+      <a href="#multiline"><span class="nav-dot"></span>Édition multi-curseurs</a>
+      <a href="#tips"><span class="nav-dot"></span>Trucs & astuces</a>
+    </div>
+  </nav>
+
+  <!-- ─── MAIN CONTENT ────────────── -->
+  <main>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-badge">Visual Studio Code · Formation CDA</div>
+      <h1>Maîtriser <span>VSCode</span><br>de A à Z</h1>
+      <p class="hero-sub">
+        Un cours complet sur l'éditeur de code le plus utilisé au monde — son fonctionnement réel, ses mécanismes profonds, et les automatismes à avoir dès le premier projet.
+      </p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">⚡ <span>Cours</span> + Mémo pratique</div>
+        <div class="hero-meta-item">🎯 <span>Adapté</span> au programme CDA</div>
+        <div class="hero-meta-item">🛠 <span>Java · .NET · Web · Git</span></div>
+      </div>
+    </div>
+
+    <!-- ─── 1. INTRO ─────────────────── -->
+    <div class="section" id="intro">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2>Qu'est-ce que VSCode vraiment ?</h2>
+      </div>
+
+      <p>VSCode est souvent présenté comme un simple éditeur de texte amélioré. C'est beaucoup plus que ça. Il repose sur <strong>Electron</strong> (Chrome + Node.js), ce qui signifie que l'application tourne en réalité dans un navigateur web embarqué. Ça explique pourquoi les extensions sont écrites en TypeScript/JavaScript, et pourquoi certaines choses (comme les performances sur de très gros projets) ont leurs limites.</p>
+
+      <div class="callout info">
+        <div class="callout-title">📌 VSCode vs Visual Studio</div>
+        Ne pas confondre les deux. <strong>Visual Studio</strong> est un IDE lourd de Microsoft (plusieurs Go), principalement pour .NET/C#. <strong>VSCode</strong> est léger, gratuit, multi-langage, open-source. Tu utiliseras VSCode pour Java, HTML/CSS/JS, et même du C# avec les bonnes extensions. Pour certains projets .NET complexes (WPF, WinForms, Xamarin), Visual Studio reste nécessaire.
+      </div>
+
+      <h3>Architecture : comment ça marche sous le capot</h3>
+      <p>VSCode sépare en deux processus distincts :</p>
+      <div class="card-grid">
+        <div class="feature-card">
+          <div class="feature-card-icon">🖼</div>
+          <h4>Renderer Process</h4>
+          <p>L'interface visuelle. Ce que tu vois. Tourne dans Electron/Chromium.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">⚙️</div>
+          <h4>Extension Host</h4>
+          <p>Process isolé qui exécute les extensions. Un crash d'extension ne plante pas l'éditeur.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">🔌</div>
+          <h4>Language Server Protocol</h4>
+          <p>Les extensions de langage (Java, C#…) communiquent via LSP — un protocole standardisé.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">🔍</div>
+          <h4>Debug Adapter Protocol</h4>
+          <p>Le débogueur parle au langage cible via DAP — même principe que LSP.</p>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-title">💡 Pourquoi c'est important</div>
+        Comprendre l'architecture LSP explique pourquoi il faut parfois attendre quelques secondes au démarrage : l'extension lance un serveur de langage en arrière-plan (ex : le Java Language Server). Si ton IntelliSense ne fonctionne pas, c'est souvent que le language server n'a pas encore fini de s'initialiser.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── 2. INTERFACE ──────────────── -->
+    <div class="section" id="interface">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2>L'interface et ses zones</h2>
+      </div>
+
+      <p>L'interface VSCode suit une logique très précise qu'il faut intérioriser. Chaque zone a un rôle et peut être masquée/déplacée.</p>
+
+      <pre>
+<span class="pre-label">LAYOUT</span>┌─────────────────────────────────────────────┐
+│  TITRE  │  Menu  │  ...                        │  ← Title Bar
+├──────┬──────────────────────────────────────┤
+│      │  Onglets ouverts (tabs)               │  ← Tab Bar
+│  A   │  ─────────────────────────────────── │
+│  C   │                                       │
+│  T   │   ÉDITEUR PRINCIPAL                   │
+│  I   │                                       │
+│  V   │  ─────────────────────────────────── │
+│  I   │                                       │
+│  T   │                                       │
+│  Y   ├──────────────────────────────────────┤
+│  B   │  TERMINAL INTÉGRÉ                     │  ← Panel
+│  A   ├──────────────────────────────────────┤
+│  R   │  Colonnes : Ligne | Col | Espaces | Git│  ← Status Bar
+└──────┴──────────────────────────────────────┘</pre>
+
+      <h3>La barre d'activité (Activity Bar)</h3>
+      <div class="card-grid">
+        <div class="feature-card">
+          <div class="feature-card-icon">📁</div>
+          <h4>Explorer</h4>
+          <p>Arborescence de fichiers, gestion du projet. Glisser-déposer, renommer, supprimer.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">🔎</div>
+          <h4>Search</h4>
+          <p>Recherche globale dans tous les fichiers. Supporte les regex. Indispensable.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">🌿</div>
+          <h4>Source Control (Git)</h4>
+          <p>Commits, branches, diffs visuels — directement dans l'IDE.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">▶️</div>
+          <h4>Run & Debug</h4>
+          <p>Configurations de lancement, breakpoints, inspection des variables.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">🧩</div>
+          <h4>Extensions</h4>
+          <p>Marketplace pour installer, désactiver, mettre à jour les extensions.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">🔵</div>
+          <h4>Remote Explorer</h4>
+          <p>Connexion SSH, conteneurs Docker, WSL. Utile pour DevOps.</p>
+        </div>
+      </div>
+
+      <h3>La Status Bar (barre du bas)</h3>
+      <p>La barre de statut est bien plus qu'un affichage. Chaque élément est cliquable :</p>
+      <div class="callout info">
+        <div class="callout-title">Éléments cliquables de la Status Bar</div>
+        <strong>Branche Git</strong> (ex: <code>main</code>) → changer de branche ou créer une nouvelle · <strong>Erreurs/Warnings</strong> (🔴 0 ⚠️ 2) → ouvre les Problems · <strong>Langage</strong> (ex: <code>Java</code>) → forcer la coloration syntaxique · <strong>Encodage</strong> (ex: <code>UTF-8</code>) → reencoder le fichier · <strong>Fin de ligne</strong> (CRLF/LF) → crucial en équipe, Git peut signaler des diffs à cause de ça
+      </div>
+
+      <div class="callout warn">
+        <div class="callout-title">⚠️ Windows vs Linux/Mac : les fins de ligne</div>
+        Windows utilise <code>CRLF</code> (\r\n), Linux/Mac utilisent <code>LF</code> (\n). En équipe sur Git, c'est une source de conflits silencieux. Configurer <code>files.eol</code> dans settings.json ou utiliser un <code>.editorconfig</code> à la racine du projet.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── 3. EDITEUR ───────────────── -->
+    <div class="section" id="editeur">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2>L'éditeur et IntelliSense</h2>
+      </div>
+
+      <h3>IntelliSense : plus qu'une autocomplétion</h3>
+      <p>IntelliSense est le nom générique de Microsoft pour un ensemble de fonctionnalités d'assistance à la saisie. Il ne se résume pas à proposer des mots : il analyse le contexte, les types, les importations disponibles.</p>
+
+      <div class="card-grid">
+        <div class="feature-card">
+          <div class="feature-card-icon">🧠</div>
+          <h4>Complétion contextuelle</h4>
+          <p>Propose des méthodes/propriétés selon le type réel de l'objet.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">📖</div>
+          <h4>Parameter hints</h4>
+          <p>Affiche la signature de la méthode en cours de saisie des arguments.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">🔍</div>
+          <h4>Quick Info</h4>
+          <p>Hover sur un symbole → documentation inline, type, fichier source.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">📦</div>
+          <h4>Auto-imports</h4>
+          <p>Ajoute automatiquement l'import manquant en acceptant la suggestion.</p>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-title">💡 Déclencher manuellement IntelliSense</div>
+        Si la suggestion n'apparaît pas : <kbd>Ctrl</kbd>+<kbd>Espace</kbd>. Pour les hints de paramètres : <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Espace</kbd>. Pour naviguer dans les suggestions : <kbd>↑</kbd> <kbd>↓</kbd>, valider avec <kbd>Tab</kbd> ou <kbd>Entrée</kbd>.
+      </div>
+
+      <h3>Navigation dans le code</h3>
+      <p>VSCode transforme la navigation en quelque chose de fluide. Ces actions changent la façon de travailler :</p>
+      <div class="callout important">
+        <div class="callout-title">🚀 Les actions de navigation essentielles</div>
+        <strong>Go to Definition</strong> <kbd>F12</kbd> — saute vers la déclaration du symbole sous le curseur, même dans un autre fichier ou une bibliothèque.<br><br>
+        <strong>Peek Definition</strong> <kbd>Alt</kbd>+<kbd>F12</kbd> — affiche la définition <em>en inline</em> sans quitter le fichier courant.<br><br>
+        <strong>Find All References</strong> <kbd>Shift</kbd>+<kbd>F12</kbd> — liste tous les endroits où ce symbole est utilisé dans le projet.<br><br>
+        <strong>Rename Symbol</strong> <kbd>F2</kbd> — renomme intelligemment un symbole partout dans le projet (pas un simple Ctrl+H).
+      </div>
+
+      <h3>Refactoring et actions de code</h3>
+      <p>Quand une ampoule 💡 apparaît à gauche d'une ligne, c'est que VSCode (ou une extension) propose une <strong>Quick Action</strong>. Déclencher avec <kbd>Ctrl</kbd>+<kbd>.</kbd> ou cliquer sur l'ampoule. Exemples typiques :</p>
+      <div class="callout info">
+        <div class="callout-title">Exemples de Quick Actions selon le langage</div>
+        En <strong>Java</strong> : extraire une méthode, implémenter une interface, générer getters/setters, ajouter un import.<br>
+        En <strong>C#</strong> : générer un constructeur, extraire une interface, convertir en expression lambda.<br>
+        En <strong>HTML/CSS</strong> : extraire du CSS inline vers une règle, wrapper un élément dans un tag.
+      </div>
+
+      <h3>Minimap et breadcrumbs</h3>
+      <p>La <strong>minimap</strong> (côté droit de l'éditeur) donne une vue aérienne du fichier. Elle affiche aussi les erreurs et les résultats de recherche en surbrillance. Elle peut être désactivée si tu travailles sur un petit écran (<code>editor.minimap.enabled: false</code>).</p>
+      <p>Les <strong>breadcrumbs</strong> (fil d'Ariane en haut de l'éditeur) affichent le chemin <code>fichier → classe → méthode → élément actuel</code>. Cliquables pour naviguer rapidement dans la structure.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── 4. TERMINAL ──────────────── -->
+    <div class="section" id="terminal">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2>Le terminal intégré</h2>
+      </div>
+
+      <p>Le terminal intégré n'est pas qu'une commodité — c'est l'environnement depuis lequel tu lanceras des compilateurs, des serveurs, Maven/Gradle pour Java, MSBuild pour .NET, npm pour le web, et tous tes scripts Git.</p>
+
+      <h3>Profils de terminal</h3>
+      <p>VSCode supporte plusieurs profils de terminal en parallèle. Sur Windows, tu peux avoir PowerShell, Git Bash et WSL (Ubuntu) en simultané — chacun dans un onglet. Pour changer le profil par défaut : <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> → <em>Terminal: Select Default Profile</em>.</p>
+
+      <div class="callout tip">
+        <div class="callout-title">💡 Plusieurs terminaux en parallèle</div>
+        Clique sur le <strong>+</strong> dans le terminal pour ouvrir un second terminal. Tu peux en avoir autant que tu veux — un pour ton serveur Java, un pour npm watch, un pour Git. Chaque terminal garde son historique et son répertoire courant indépendamment.
+      </div>
+
+      <h3>Le terminal comprend le projet</h3>
+      <p>Quand tu ouvres un terminal depuis VSCode, il se positionne automatiquement à la racine du workspace. Plus besoin de naviguer jusqu'au projet avec <code>cd</code>. Les variables d'environnement définies dans le workspace sont aussi injectées automatiquement.</p>
+
+      <div class="callout warn">
+        <div class="callout-title">⚠️ Encoding et PowerShell</div>
+        Sur Windows, PowerShell peut afficher des caractères bizarres avec certaines commandes UTF-8. Si tu rencontres ça avec Java ou Maven : ajouter <code>$OutputEncoding = [Console]::OutputEncoding = [Text.Encoding]::UTF8</code> dans ton profil PowerShell, ou passer sur Git Bash.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── 5. GIT ────────────────────── -->
+    <div class="section" id="git">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2>Git & contrôle de sources</h2>
+      </div>
+
+      <p>VSCode dispose d'une intégration Git native très complète. Tu n'auras pas toujours besoin de la ligne de commande — mais il faut comprendre ce que l'interface fait réellement.</p>
+
+      <h3>Le Gutter Git (la gouttière colorée)</h3>
+      <p>Dans la gouttière (à gauche des numéros de ligne), des barres colorées apparaissent automatiquement quand le fichier fait partie d'un dépôt Git :</p>
+      <div class="card-grid">
+        <div class="feature-card">
+          <div class="feature-card-icon" style="background: rgba(62,207,142,.15)">🟢</div>
+          <h4>Ligne ajoutée</h4>
+          <p>Cette ligne n'existait pas dans le dernier commit. Nouveau code.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon" style="background: rgba(56,189,248,.15)">🔵</div>
+          <h4>Ligne modifiée</h4>
+          <p>Ligne existante dont le contenu a changé depuis le dernier commit.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon" style="background: rgba(248,113,113,.15)">🔴</div>
+          <h4>Ligne supprimée</h4>
+          <p>Indique qu'une ou plusieurs lignes ont été supprimées à cet endroit.</p>
+        </div>
+      </div>
+
+      <p>Cliquer sur une barre colorée affiche un <strong>diff inline</strong> et propose des actions : <em>Stage Hunk</em>, <em>Revert Hunk</em>, <em>View Diff</em>. C'est extrêmement utile pour ne stager que certaines modifications d'un fichier.</p>
+
+      <h3>Workflow Git dans VSCode</h3>
+      <p>Le panneau Source Control (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>) présente :</p>
+      <div class="callout info">
+        <div class="callout-title">Structure du panneau Source Control</div>
+        <strong>Changes</strong> → fichiers modifiés non stagés (équivalent <code>git status</code>)<br>
+        <strong>Staged Changes</strong> → fichiers prêts à être commités (après <code>git add</code>)<br>
+        <strong>Merge Changes</strong> → fichiers en conflit lors d'un merge<br><br>
+        Le champ texte en haut = message de commit → <kbd>Ctrl</kbd>+<kbd>Entrée</kbd> pour commiter.
+      </div>
+
+      <h3>GitLens (extension recommandée)</h3>
+      <p>L'extension <strong>GitLens</strong> enrichit massivement l'intégration native : elle affiche sur chaque ligne qui a modifié ce code et quand (<em>git blame</em> inline), permet de visualiser l'historique d'un fichier ou d'une fonction, et de comparer des branches visuellement. Incontournable dès que tu travailles en équipe.</p>
+
+      <div class="callout important">
+        <div class="callout-title">🔑 Pratique recommandée dès le début</div>
+        Prendre l'habitude de faire des commits fréquents et granulaires depuis le début de la formation. Un commit par fonctionnalité, pas un gros commit en fin de journée. VSCode facilite ça avec le staging par hunk (morceau de code) plutôt que par fichier entier.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── 6. EXTENSIONS ─────────────── -->
+    <div class="section" id="extensions">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2>Extensions clés pour ton programme</h2>
+      </div>
+
+      <p>Les extensions transforment VSCode. Voici les indispensables pour chaque technologie de ta formation — avec la logique derrière chaque choix.</p>
+
+      <h3>Essentielles (tout projet)</h3>
+      <div class="ext-list">
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(124,106,247,.15); font-size:18px">🔍</div>
+          <div class="ext-info">
+            <div class="ext-name">ESLint / Error Lens</div>
+            <div class="ext-desc">Affiche les erreurs et warnings directement sur la ligne fautive, sans devoir aller dans Problems</div>
+          </div>
+          <span class="ext-tag tag-essential">essentiel</span>
+        </div>
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(124,106,247,.15); font-size:18px">🎨</div>
+          <div class="ext-info">
+            <div class="ext-name">Prettier – Code Formatter</div>
+            <div class="ext-desc">Formateur automatique universel (JS, HTML, CSS, JSON, YAML). Format on save = code toujours propre</div>
+          </div>
+          <span class="ext-tag tag-essential">essentiel</span>
+        </div>
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(232,121,249,.15); font-size:18px">🌿</div>
+          <div class="ext-info">
+            <div class="ext-name">GitLens</div>
+            <div class="ext-desc">Git blame inline, historique par fichier/ligne, comparaison de branches. Indispensable en équipe</div>
+          </div>
+          <span class="ext-tag tag-git">git</span>
+        </div>
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(124,106,247,.15); font-size:18px">⚙️</div>
+          <div class="ext-info">
+            <div class="ext-name">EditorConfig for VS Code</div>
+            <div class="ext-desc">Respect automatique du fichier .editorconfig du projet (indentation, fin de ligne). Uniformité en équipe</div>
+          </div>
+          <span class="ext-tag tag-essential">essentiel</span>
+        </div>
+      </div>
+
+      <h3>Java</h3>
+      <div class="ext-list">
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(249,115,22,.12); font-size:18px">☕</div>
+          <div class="ext-info">
+            <div class="ext-name">Extension Pack for Java (Microsoft)</div>
+            <div class="ext-desc">Pack officiel : Language Support, Debugger, Test Runner, Maven, Project Manager, IntelliCode</div>
+          </div>
+          <span class="ext-tag tag-java">java</span>
+        </div>
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(249,115,22,.12); font-size:18px">🧪</div>
+          <div class="ext-info">
+            <div class="ext-name">Test Runner for Java</div>
+            <div class="ext-desc">Lance JUnit/TestNG directement dans VSCode avec rapport visuel et debug des tests</div>
+          </div>
+          <span class="ext-tag tag-java">java</span>
+        </div>
+      </div>
+
+      <h3>C# / .NET</h3>
+      <div class="ext-list">
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(56,189,248,.12); font-size:18px">🔷</div>
+          <div class="ext-info">
+            <div class="ext-name">C# (Microsoft) + C# Dev Kit</div>
+            <div class="ext-desc">Language server Roslyn, IntelliSense complet, refactoring, débogage .NET. Le Dev Kit ajoute la gestion de solutions</div>
+          </div>
+          <span class="ext-tag tag-dotnet">.NET</span>
+        </div>
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(56,189,248,.12); font-size:18px">🧪</div>
+          <div class="ext-info">
+            <div class="ext-name">.NET Core Test Explorer</div>
+            <div class="ext-desc">Visualise et lance les tests xUnit/NUnit/MSTest directement depuis VSCode</div>
+          </div>
+          <span class="ext-tag tag-dotnet">.NET</span>
+        </div>
+      </div>
+
+      <h3>Web (HTML / CSS / JS)</h3>
+      <div class="ext-list">
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(62,207,142,.12); font-size:18px">⚡</div>
+          <div class="ext-info">
+            <div class="ext-name">Live Server</div>
+            <div class="ext-desc">Serveur local avec rechargement automatique à chaque sauvegarde. Essentiel pour le dev front-end</div>
+          </div>
+          <span class="ext-tag tag-web">web</span>
+        </div>
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(62,207,142,.12); font-size:18px">🏷</div>
+          <div class="ext-info">
+            <div class="ext-name">Auto Rename Tag</div>
+            <div class="ext-desc">Renomme automatiquement la balise fermante quand tu modifies l'ouvrante (et vice-versa)</div>
+          </div>
+          <span class="ext-tag tag-web">web</span>
+        </div>
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(62,207,142,.12); font-size:18px">🎯</div>
+          <div class="ext-info">
+            <div class="ext-name">Path IntelliSense</div>
+            <div class="ext-desc">Autocomplétion des chemins de fichiers dans les imports, src, href, etc.</div>
+          </div>
+          <span class="ext-tag tag-web">web</span>
+        </div>
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(62,207,142,.12); font-size:18px">💅</div>
+          <div class="ext-info">
+            <div class="ext-name">Tailwind CSS IntelliSense</div>
+            <div class="ext-desc">Si tu utilises Bootstrap ou Tailwind : autocomplétion des classes, hover preview</div>
+          </div>
+          <span class="ext-tag tag-web">web</span>
+        </div>
+      </div>
+
+      <h3>Base de données</h3>
+      <div class="ext-list">
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(251,191,36,.12); font-size:18px">🗄</div>
+          <div class="ext-info">
+            <div class="ext-name">SQL Server (mssql) — Microsoft</div>
+            <div class="ext-desc">Connexion à SQL Server, exécution de requêtes .sql, visualisation des résultats directement dans VSCode</div>
+          </div>
+          <span class="ext-tag tag-db">SQL</span>
+        </div>
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(251,191,36,.12); font-size:18px">🍃</div>
+          <div class="ext-info">
+            <div class="ext-name">MongoDB for VS Code</div>
+            <div class="ext-desc">Connexion à MongoDB Atlas ou local, exploration de collections, exécution de requêtes NoSQL</div>
+          </div>
+          <span class="ext-tag tag-db">NoSQL</span>
+        </div>
+      </div>
+
+      <h3>DevOps</h3>
+      <div class="ext-list">
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(248,113,113,.12); font-size:18px">🐳</div>
+          <div class="ext-info">
+            <div class="ext-name">Docker (Microsoft)</div>
+            <div class="ext-desc">Gestion des conteneurs, images, Dockerfile et docker-compose avec IntelliSense</div>
+          </div>
+          <span class="ext-tag tag-devops">devops</span>
+        </div>
+        <div class="ext-item">
+          <div class="ext-icon" style="background: rgba(248,113,113,.12); font-size:18px">🌐</div>
+          <div class="ext-info">
+            <div class="ext-name">Remote – SSH</div>
+            <div class="ext-desc">Éditer et exécuter du code sur un serveur distant comme s'il était local. Essentiel pour le déploiement</div>
+          </div>
+          <span class="ext-tag tag-devops">devops</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── 7. CONFIG ────────────────── -->
+    <div class="section" id="config">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2>Configuration et settings.json</h2>
+      </div>
+
+      <p>VSCode a deux niveaux de configuration : les <strong>User Settings</strong> (global, pour tous tes projets) et les <strong>Workspace Settings</strong> (spécifique à un projet, stocké dans <code>.vscode/settings.json</code> à la racine). Les workspace settings surchargent les user settings.</p>
+
+      <h3>Accéder aux settings</h3>
+      <div class="callout info">
+        <div class="callout-title">3 façons d'accéder aux paramètres</div>
+        <strong>Interface graphique</strong> : <kbd>Ctrl</kbd>+<kbd>,</kbd> — pratique pour explorer<br>
+        <strong>JSON direct</strong> : <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> → <em>Open User Settings (JSON)</em> — plus puissant<br>
+        <strong>Workspace</strong> : créer/modifier <code>.vscode/settings.json</code> à la racine du projet
+      </div>
+
+      <h3>Configuration recommandée</h3>
+      <p>Voici une base solide de <code>settings.json</code> pour ta formation :</p>
+      <div class="json-block">
+{<br>
+&nbsp;&nbsp;<span class="j-cmt">// Formatage automatique à la sauvegarde</span><br>
+&nbsp;&nbsp;<span class="j-key">"editor.formatOnSave"</span>: <span class="j-bool">true</span>,<br>
+&nbsp;&nbsp;<span class="j-key">"editor.defaultFormatter"</span>: <span class="j-str">"esbenp.prettier-vscode"</span>,<br>
+<br>
+&nbsp;&nbsp;<span class="j-cmt">// Indentation (Java/C# : 4 espaces ; JS/HTML : 2)</span><br>
+&nbsp;&nbsp;<span class="j-key">"editor.tabSize"</span>: <span class="j-num">4</span>,<br>
+&nbsp;&nbsp;<span class="j-key">"editor.insertSpaces"</span>: <span class="j-bool">true</span>,<br>
+<br>
+&nbsp;&nbsp;<span class="j-cmt">// Affichage</span><br>
+&nbsp;&nbsp;<span class="j-key">"editor.wordWrap"</span>: <span class="j-str">"on"</span>,<br>
+&nbsp;&nbsp;<span class="j-key">"editor.renderWhitespace"</span>: <span class="j-str">"boundary"</span>,<br>
+&nbsp;&nbsp;<span class="j-key">"editor.bracketPairColorization.enabled"</span>: <span class="j-bool">true</span>,<br>
+&nbsp;&nbsp;<span class="j-key">"editor.guides.bracketPairs"</span>: <span class="j-bool">true</span>,<br>
+<br>
+&nbsp;&nbsp;<span class="j-cmt">// Fichiers</span><br>
+&nbsp;&nbsp;<span class="j-key">"files.eol"</span>: <span class="j-str">"\n"</span>,<br>
+&nbsp;&nbsp;<span class="j-key">"files.trimTrailingWhitespace"</span>: <span class="j-bool">true</span>,<br>
+&nbsp;&nbsp;<span class="j-key">"files.insertFinalNewline"</span>: <span class="j-bool">true</span>,<br>
+<br>
+&nbsp;&nbsp;<span class="j-cmt">// Terminal</span><br>
+&nbsp;&nbsp;<span class="j-key">"terminal.integrated.defaultProfile.windows"</span>: <span class="j-str">"Git Bash"</span>,<br>
+<br>
+&nbsp;&nbsp;<span class="j-cmt">// Git</span><br>
+&nbsp;&nbsp;<span class="j-key">"git.confirmSync"</span>: <span class="j-bool">false</span>,<br>
+&nbsp;&nbsp;<span class="j-key">"git.autofetch"</span>: <span class="j-bool">true</span><br>
+}
+      </div>
+
+      <h3>Le dossier .vscode</h3>
+      <p>Au-delà de <code>settings.json</code>, le dossier <code>.vscode/</code> peut contenir :</p>
+      <div class="callout info">
+        <div class="callout-title">Fichiers dans .vscode/</div>
+        <code>settings.json</code> — paramètres du workspace (à commiter dans Git pour partager la config en équipe)<br>
+        <code>launch.json</code> — configurations de lancement/debug (Java, .NET, Node...)<br>
+        <code>tasks.json</code> — tâches automatisées (build, run, lint, tests)<br>
+        <code>extensions.json</code> — extensions recommandées pour le projet (s'affichent automatiquement à l'ouverture)
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── 8. DEBUG ──────────────────── -->
+    <div class="section" id="debug">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2>Le débogage</h2>
+      </div>
+
+      <p>Le débogueur de VSCode est l'un des plus puissants disponibles dans un éditeur. Il repose sur le <strong>Debug Adapter Protocol (DAP)</strong> — chaque extension de langage fournit son propre adaptateur.</p>
+
+      <h3>Les breakpoints</h3>
+      <p>Un <strong>breakpoint</strong> est une instruction "pause ici pendant l'exécution". Cliquer dans la gouttière à gauche d'un numéro de ligne pour en placer un. La ligne devient marquée en rouge. À l'exécution en mode debug, le programme s'arrête sur cette ligne et tu peux inspecter l'état de la mémoire.</p>
+
+      <div class="card-grid">
+        <div class="feature-card">
+          <div class="feature-card-icon">🔴</div>
+          <h4>Breakpoint simple</h4>
+          <p>Pause inconditionnelle. Clic dans la gouttière.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">🟡</div>
+          <h4>Conditional breakpoint</h4>
+          <p>Pause seulement si une condition est vraie. Clic droit sur le breakpoint.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">🔢</div>
+          <h4>Hit count</h4>
+          <p>Pause après N passages sur cette ligne. Utile dans les boucles.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">📝</div>
+          <h4>Logpoint</h4>
+          <p>Affiche un message dans la console sans stopper l'exécution. Alternative au console.log.</p>
+        </div>
+      </div>
+
+      <h3>Les actions de débogage</h3>
+      <div class="callout important">
+        <div class="callout-title">🎮 Contrôles de débogage</div>
+        <kbd>F5</kbd> <strong>Continue</strong> — reprend l'exécution jusqu'au prochain breakpoint<br>
+        <kbd>F10</kbd> <strong>Step Over</strong> — exécute la ligne courante, passe à la suivante (sans entrer dans les fonctions)<br>
+        <kbd>F11</kbd> <strong>Step Into</strong> — entre dans la fonction appelée sur la ligne courante<br>
+        <kbd>Shift</kbd>+<kbd>F11</kbd> <strong>Step Out</strong> — sort de la fonction courante, remonte dans l'appelant<br>
+        <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F5</kbd> <strong>Restart</strong> — relance la session de debug<br>
+        <kbd>Shift</kbd>+<kbd>F5</kbd> <strong>Stop</strong> — arrête la session de debug
+      </div>
+
+      <h3>La vue Variables et Watch</h3>
+      <p>Quand le programme est en pause, le panneau de gauche affiche :</p>
+      <div class="callout info">
+        <div class="callout-title">Panneaux disponibles en mode debug</div>
+        <strong>Variables</strong> — état de toutes les variables dans le scope courant, leur type et leur valeur. Les objets sont explorables.<br>
+        <strong>Watch</strong> — expressions personnalisées à surveiller (ex: <code>myList.size()</code>, <code>user.isAuthenticated()</code>)<br>
+        <strong>Call Stack</strong> — pile d'appels complète, cliquable pour naviguer dans les frames<br>
+        <strong>Breakpoints</strong> — liste de tous les breakpoints actifs, désactivables individuellement
+      </div>
+
+      <h3>launch.json : configurer le debug</h3>
+      <p>Pour des configurations répétables (arguments, variables d'env, ports), créer un <code>.vscode/launch.json</code>. VSCode propose un assistant à la création via le bouton "Créer un fichier launch.json" dans le panneau Run & Debug.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── 9. WORKSPACE ─────────────── -->
+    <div class="section" id="workspace">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2>Workspace et multi-projet</h2>
+      </div>
+
+      <p>Un <strong>workspace</strong> dans VSCode, c'est soit un dossier ouvert, soit un fichier <code>.code-workspace</code> qui regroupe plusieurs dossiers. Pendant ta formation, tu ouvriras souvent des dossiers de projet directement — c'est le cas le plus simple.</p>
+
+      <h3>Multi-root workspace</h3>
+      <p>Pour les projets avec un back-end Java et un front-end JS séparés par exemple, on peut ouvrir plusieurs dossiers dans le même workspace via <em>File → Add Folder to Workspace</em>. Chaque dossier conserve ses propres settings, son propre Git, mais tout est visible dans un seul Explorer.</p>
+
+      <div class="callout tip">
+        <div class="callout-title">💡 Ouvrir VSCode depuis le terminal</div>
+        La commande <code>code .</code> ouvre VSCode dans le répertoire courant. <code>code fichier.java</code> ouvre directement un fichier. C'est la façon la plus rapide de travailler — naviguer vers ton projet dans le terminal, puis <code>code .</code>.
+      </div>
+
+      <h3>Explorer avancé</h3>
+      <p>L'explorateur de fichiers supporte les <strong>filtres</strong> (<kbd>Ctrl</kbd>+<kbd>F</kbd> dans l'explorer) et les <strong>exclusions</strong> via <code>files.exclude</code> dans settings.json. Pour les projets Java, il est utile d'exclure <code>target/</code> et <code>.class</code> ; pour .NET, <code>bin/</code> et <code>obj/</code>.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── 10. SNIPPETS ─────────────── -->
+    <div class="section" id="snippets">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2>Snippets</h2>
+      </div>
+
+      <p>Les snippets sont des modèles de code déclenchés par un mot-clé. Ils font gagner énormément de temps sur les structures répétitives.</p>
+
+      <h3>Snippets natifs</h3>
+      <p>VSCode intègre des snippets pour la plupart des langages. En HTML, taper <code>!</code> puis <kbd>Tab</kbd> génère une page HTML5 complète. En JavaScript, <code>clg</code> + <kbd>Tab</kbd> génère <code>console.log()</code>.</p>
+
+      <h3>Créer ses propres snippets</h3>
+      <p><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> → <em>Snippets: Configure User Snippets</em> → choisir le langage. Format JSON avec des <code>$1</code>, <code>$2</code> comme positions du curseur et <code>$TM_FILENAME</code> comme variables.</p>
+      <pre>
+<span class="pre-label">JSON · snippet Java</span><span class="j-key">"Méthode standard"</span>: {
+  <span class="j-key">"prefix"</span>: <span class="j-str">"meth"</span>,
+  <span class="j-key">"body"</span>: [
+    <span class="j-str">"public ${1:void} ${2:nomMethode}(${3:params}) {"</span>,
+    <span class="j-str">"    $0"</span>,
+    <span class="j-str">"}"</span>
+  ],
+  <span class="j-key">"description"</span>: <span class="j-str">"Déclare une méthode Java"</span>
+}</pre>
+
+      <div class="callout tip">
+        <div class="callout-title">💡 Emmet : snippets HTML/CSS intégrés</div>
+        VSCode intègre <strong>Emmet</strong> nativement. Taper <code>ul>li*5>a</code> puis <kbd>Tab</kbd> génère une liste avec 5 éléments et des liens. En CSS : <code>m10</code> → <code>margin: 10px</code>. Chercher "Emmet cheat sheet" pour la syntaxe complète.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ════════════════════════════════════ -->
+    <!--             MÉMO                    -->
+    <!-- ════════════════════════════════════ -->
+
+    <div class="memo-header">
+      <div class="memo-header-icon">⚡</div>
+      <div>
+        <h2>Mémo — Raccourcis & Références rapides</h2>
+        <p>Tout ce qu'il faut avoir sous la main au quotidien</p>
+      </div>
+    </div>
+
+    <!-- ─── SHORTCUTS ─────────────────── -->
+    <div class="section" id="shortcuts">
+      <div class="section-header">
+        <span class="section-num">M1</span>
+        <h2>Raccourcis essentiels</h2>
+      </div>
+
+      <div class="shortcut-grid">
+        <!-- Fichiers & Navigation -->
+        <div class="shortcut-card">
+          <div class="shortcut-card-header">📁 Fichiers &amp; Navigation</div>
+          <div class="shortcut-list">
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Ouvrir un fichier</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>P</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Fermer l'onglet actif</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>W</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Rouvrir le dernier onglet fermé</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>T</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Naviguer entre onglets</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Tab</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Aller à la ligne N</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>G</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Aller au symbole du fichier</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Aller à la définition</span>
+              <div class="shortcut-keys"><kbd>F12</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Retour (après navigation)</span>
+              <div class="shortcut-keys"><kbd>Alt</kbd>+<kbd>←</kbd></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Édition -->
+        <div class="shortcut-card">
+          <div class="shortcut-card-header">✏️ Édition</div>
+          <div class="shortcut-list">
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Dupliquer une ligne</span>
+              <div class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↓</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Déplacer une ligne</span>
+              <div class="shortcut-keys"><kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Supprimer une ligne</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Commenter/décommenter</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>/</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Indenter / désindenter</span>
+              <div class="shortcut-keys"><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Formater le fichier</span>
+              <div class="shortcut-keys"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Renommer un symbole</span>
+              <div class="shortcut-keys"><kbd>F2</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Quick Fix / ampoule</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>.</kbd></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recherche -->
+        <div class="shortcut-card">
+          <div class="shortcut-card-header">🔍 Recherche</div>
+          <div class="shortcut-list">
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Rechercher dans le fichier</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>F</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Remplacer dans le fichier</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>H</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Recherche globale</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Remplacement global</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Sélectionner occurrence suivante</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>D</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Sélectionner toutes occurrences</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Find All References</span>
+              <div class="shortcut-keys"><kbd>Shift</kbd>+<kbd>F12</kbd></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Terminal & Panneaux -->
+        <div class="shortcut-card">
+          <div class="shortcut-card-header">🖥 Terminal &amp; Panneaux</div>
+          <div class="shortcut-list">
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Ouvrir/fermer le terminal</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>`</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Nouveau terminal</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>`</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Explorer fichiers</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Source Control (Git)</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Extensions</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Problems (erreurs)</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Paramètres</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>,</kbd></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Debug -->
+        <div class="shortcut-card">
+          <div class="shortcut-card-header">🐛 Débogage</div>
+          <div class="shortcut-list">
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Lancer le debug</span>
+              <div class="shortcut-keys"><kbd>F5</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Lancer sans debug</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>F5</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Step Over</span>
+              <div class="shortcut-keys"><kbd>F10</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Step Into</span>
+              <div class="shortcut-keys"><kbd>F11</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Step Out</span>
+              <div class="shortcut-keys"><kbd>Shift</kbd>+<kbd>F11</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Poser/retirer breakpoint</span>
+              <div class="shortcut-keys"><kbd>F9</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Stopper le debug</span>
+              <div class="shortcut-keys"><kbd>Shift</kbd>+<kbd>F5</kbd></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Affichage -->
+        <div class="shortcut-card">
+          <div class="shortcut-card-header">🪟 Affichage</div>
+          <div class="shortcut-list">
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Zoom +/-</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>+</kbd>/<kbd>-</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Reset zoom</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>0</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Diviser l'éditeur</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>\</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Basculer sidebar</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>B</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Mode Zen (plein écran)</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>K</kbd> <kbd>Z</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Plier/déplier le code</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>[</kbd>/<kbd>]</kbd></div>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Déplier tout</span>
+              <div class="shortcut-keys"><kbd>Ctrl</kbd>+<kbd>K</kbd> <kbd>Ctrl</kbd>+<kbd>J</kbd></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-title">💡 Mac : Ctrl → ⌘ Cmd / Alt → ⌥ Option</div>
+        Sur Mac, tous les <kbd>Ctrl</kbd> deviennent <kbd>⌘ Cmd</kbd> et les <kbd>Alt</kbd> deviennent <kbd>⌥ Option</kbd>. Quelques exceptions existent — en cas de doute, passer par la palette de commandes <kbd>⌘ Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── PALETTE ───────────────────── -->
+    <div class="section" id="palette">
+      <div class="section-header">
+        <span class="section-num">M2</span>
+        <h2>La palette de commandes</h2>
+      </div>
+
+      <p>La palette de commandes (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) est l'outil le plus puissant de VSCode. Elle donne accès à <strong>toutes</strong> les commandes disponibles — extensions incluses — avec une recherche fuzzy.</p>
+
+      <div class="callout important">
+        <div class="callout-title">🚀 Le préfixe change le mode</div>
+        <strong>Sans préfixe</strong> (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) → toutes les commandes<br>
+        <strong><code>></code></strong> → commandes (équivalent à Ctrl+Shift+P)<br>
+        <strong><code>@</code></strong> → symboles dans le fichier courant (méthodes, classes...)<br>
+        <strong><code>#</code></strong> → symboles dans tout le workspace<br>
+        <strong><code>:</code></strong> → aller à la ligne (équivalent à Ctrl+G)<br>
+        <strong><code>?</code></strong> → aide sur les modes disponibles<br><br>
+        Tout ça est accessible depuis <kbd>Ctrl</kbd>+<kbd>P</kbd> en tapant le bon préfixe !
+      </div>
+
+      <h3>Commandes utiles à connaître</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Commande</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>&gt; Format Document</code></td><td>Formate le fichier entier</td></tr>
+          <tr><td><code>&gt; Sort Lines Ascending</code></td><td>Trie les lignes sélectionnées</td></tr>
+          <tr><td><code>&gt; Transform to Uppercase/Lowercase</code></td><td>Change la casse de la sélection</td></tr>
+          <tr><td><code>&gt; Developer: Reload Window</code></td><td>Redémarre VSCode sans fermer</td></tr>
+          <tr><td><code>&gt; Open Settings (JSON)</code></td><td>Ouvre le settings.json directement</td></tr>
+          <tr><td><code>&gt; GitLens: Toggle Line Blame</code></td><td>Active/désactive le git blame inline</td></tr>
+          <tr><td><code>&gt; Java: Clean Language Server</code></td><td>Recharge le serveur Java si IntelliSense plante</td></tr>
+          <tr><td><code>&gt; Terminal: Select Default Profile</code></td><td>Changer le shell par défaut</td></tr>
+          <tr><td><code>&gt; File: Save without Formatting</code></td><td>Sauvegarder sans déclencher Prettier</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── MULTICURSOR ───────────────── -->
+    <div class="section" id="multiline">
+      <div class="section-header">
+        <span class="section-num">M3</span>
+        <h2>Édition multi-curseurs</h2>
+      </div>
+
+      <p>Les multi-curseurs permettent d'éditer plusieurs endroits simultanément. C'est l'une des fonctionnalités qui différencie les utilisateurs rapides des lents.</p>
+
+      <div class="callout info">
+        <div class="callout-title">🖱 Façons d'obtenir plusieurs curseurs</div>
+        <kbd>Alt</kbd> + <strong>clic</strong> → ajouter un curseur là où tu cliques<br>
+        <kbd>Ctrl</kbd>+<kbd>D</kbd> → sélectionner la prochaine occurrence du mot sélectionné (cumulatif)<br>
+        <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd> → sélectionner <strong>toutes</strong> les occurrences<br>
+        <kbd>Alt</kbd>+<kbd>Shift</kbd> + <strong>glisser</strong> → sélection en bloc (curseurs sur toutes les lignes)<br>
+        <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>↑/↓</kbd> → ajouter un curseur sur la ligne au-dessus/dessous
+      </div>
+
+      <h3>Cas d'usage typiques</h3>
+      <div class="card-grid">
+        <div class="feature-card">
+          <div class="feature-card-icon">🔄</div>
+          <h4>Renommer partout</h4>
+          <p>Sélectionner une variable, <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd>, taper le nouveau nom. Toutes les occurrences sont remplacées.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">📋</div>
+          <h4>Modifier plusieurs lignes</h4>
+          <p>Ajouter un préfixe ou suffixe identique sur 10 lignes en une seule opération avec multi-curseurs.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">🎯</div>
+          <h4>Alignement de code</h4>
+          <p>Sélectionner en bloc (<kbd>Alt</kbd>+<kbd>Shift</kbd>+glisser) pour aligner des valeurs sur plusieurs lignes.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── TIPS ──────────────────────── -->
+    <div class="section" id="tips">
+      <div class="section-header">
+        <span class="section-num">M4</span>
+        <h2>Trucs, astuces &amp; bonnes pratiques</h2>
+      </div>
+
+      <h3>Trucs peu connus mais très utiles</h3>
+      <div class="callout tip">
+        <div class="callout-title">💡 Sélectionner jusqu'à une correspondance</div>
+        <kbd>Ctrl</kbd>+<kbd>M</kbd> (ou cliquer sur une parenthèse/accolade) puis <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> — sélectionne tout le bloc entre parenthèses/accolades. Très utile pour copier/supprimer un bloc entier.
+      </div>
+      <div class="callout tip">
+        <div class="callout-title">💡 Scroll sans bouger le curseur</div>
+        <kbd>Ctrl</kbd>+<kbd>↑/↓</kbd> scrolle l'éditeur sans déplacer le curseur. Pratique pour consulter du code en haut/bas sans perdre sa position.
+      </div>
+      <div class="callout tip">
+        <div class="callout-title">💡 Comparer deux fichiers</div>
+        Dans l'Explorer : clic droit sur un fichier → <em>Select for Compare</em>, puis clic droit sur l'autre → <em>Compare with Selected</em>. Diff visuel immédiat.
+      </div>
+      <div class="callout tip">
+        <div class="callout-title">💡 Timeline</div>
+        Dans l'Explorer, en bas, il y a un panneau <strong>Timeline</strong> : il montre l'historique de sauvegarde locale (même sans Git) et les commits Git du fichier ouvert. Récupérer une version perdue d'un fichier sans Git est possible grâce à ça.
+      </div>
+
+      <h3>Bonnes pratiques à adopter dès le début</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Pratique</th>
+            <th>Pourquoi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Toujours ouvrir un <strong>dossier</strong>, jamais juste un fichier</td>
+            <td>IntelliSense, Git et les extensions ont besoin du contexte du projet entier</td>
+          </tr>
+          <tr>
+            <td>Activer <strong>Format on Save</strong> dès le début</td>
+            <td>Garde le code lisible automatiquement, évite les disputes de style en équipe</td>
+          </tr>
+          <tr>
+            <td>Commiter le dossier <code>.vscode/</code> dans Git</td>
+            <td>Partager la configuration avec l'équipe, tout le monde a le même environnement</td>
+          </tr>
+          <tr>
+            <td>Utiliser <kbd>F12</kbd> au lieu de scroller pour trouver du code</td>
+            <td>Aller à la définition est bien plus rapide que de chercher manuellement</td>
+          </tr>
+          <tr>
+            <td>Apprendre <kbd>Ctrl</kbd>+<kbd>P</kbd> et <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></td>
+            <td>Ces deux raccourcis ouvrent 90% des fonctionnalités sans mémoriser tout le reste</td>
+          </tr>
+          <tr>
+            <td>Utiliser le terminal intégré plutôt qu'un terminal séparé</td>
+            <td>Contexte partagé, historique conservé, intégration avec les tasks VSCode</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Personnaliser les thèmes</h3>
+      <p>Les thèmes changent plus que la couleur — ils affectent la lisibilité du code pendant des heures. <kbd>Ctrl</kbd>+<kbd>K</kbd> puis <kbd>Ctrl</kbd>+<kbd>T</kbd> pour prévisualiser les thèmes installés. Thèmes populaires chez les développeurs : <strong>One Dark Pro</strong>, <strong>GitHub Dark</strong>, <strong>Dracula</strong>, <strong>Tokyo Night</strong>. Installer via le Marketplace d'extensions.</p>
+
+      <p>Pour les icônes de fichiers (qui rendent l'Explorer plus lisible) : <strong>Material Icon Theme</strong> est la référence.</p>
+
+      <div class="callout info">
+        <div class="callout-title">📱 VSCode sur le Web</div>
+        <strong>vscode.dev</strong> est une version entièrement dans le navigateur — sans installation. Pratique pour consulter un repo GitHub rapidement. Sur GitHub, sur n'importe quel repo : appuyer sur la touche <kbd>.</kbd> (point) pour ouvrir directement VSCode dans le navigateur.
+      </div>
+    </div>
+
+    <!-- Fin -->
+    <div style="text-align: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+      <p style="color: var(--text3); font-family: var(--mono); font-size: 12px; letter-spacing: .08em;">
+        Cours VSCode · Formation CDA · ARFP – Centre de Réadaptation de Mulhouse
+      </p>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const el = document.getElementById('progress');
+    const h = document.documentElement;
+    const pct = h.scrollTop / (h.scrollHeight - h.clientHeight);
+    el.style.transform = `scaleX(${pct})`;
+  });
+
+  // Active nav link
+  const sections = document.querySelectorAll('.section');
+  const navLinks = document.querySelectorAll('.nav-section a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-section a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3, rootMargin: '-80px 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
