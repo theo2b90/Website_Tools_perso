@@ -861,6 +861,64 @@
             populateTypeOptions();
         }
 
+        function countPerfumesBySeason(perfumeList) {
+            const counts = Object.fromEntries(SEASONS.map(season => [season, 0]));
+            perfumeList.forEach(perfume => {
+                if (!Array.isArray(perfume.seasons)) return;
+                perfume.seasons.forEach(season => {
+                    if (counts[season] !== undefined) {
+                        counts[season] += 1;
+                    }
+                });
+            });
+            return counts;
+        }
+
+        function countPerfumesByType(perfumeList) {
+            const counts = Object.fromEntries(perfumeTypes.map(type => [type, 0]));
+            perfumeList.forEach(perfume => {
+                if (!Array.isArray(perfume.types)) return;
+                perfume.types.forEach(type => {
+                    if (counts[type] !== undefined) {
+                        counts[type] += 1;
+                    }
+                });
+            });
+            return counts;
+        }
+
+        function updateFilterOptionCounts() {
+            const seasonFilter = document.getElementById('seasonFilter');
+            const typeFilter = document.getElementById('typeFilter');
+
+            const perfumesMatchingSeason = selectedSeasonFilter === 'all'
+                ? perfumes
+                : perfumes.filter(perfume => Array.isArray(perfume.seasons) && perfume.seasons.includes(selectedSeasonFilter));
+
+            const perfumesMatchingType = selectedTypeFilter === 'all'
+                ? perfumes
+                : perfumes.filter(perfume => Array.isArray(perfume.types) && perfume.types.includes(selectedTypeFilter));
+
+            const seasonCounts = countPerfumesBySeason(perfumesMatchingType);
+            const typeCounts = countPerfumesByType(perfumesMatchingSeason);
+
+            Array.from(seasonFilter.options).forEach(option => {
+                if (option.value === 'all') {
+                    option.textContent = `Toutes les saisons (${perfumesMatchingType.length})`;
+                    return;
+                }
+                option.textContent = `${capitalizeSeason(option.value)} (${seasonCounts[option.value] || 0})`;
+            });
+
+            Array.from(typeFilter.options).forEach(option => {
+                if (option.value === 'all') {
+                    option.textContent = `Tous les types (${perfumesMatchingSeason.length})`;
+                    return;
+                }
+                option.textContent = `${option.value} (${typeCounts[option.value] || 0})`;
+            });
+        }
+
         function populateTypeFilterSelect() {
             const typeFilter = document.getElementById('typeFilter');
             const currentValue = typeFilter.value;
@@ -874,6 +932,8 @@
                 typeFilter.value = 'all';
                 selectedTypeFilter = 'all';
             }
+
+            updateFilterOptionCounts();
         }
 
         function addTypeOption() {
@@ -1075,6 +1135,7 @@
             const container = document.getElementById('perfumesContainer');
             const emptyState = document.getElementById('emptyState');
             const resultCount = document.getElementById('resultCount');
+            updateFilterOptionCounts();
             const filteredPerfumes = perfumes.filter(perfume => {
                 const matchesSeason = selectedSeasonFilter === 'all' ||
                     (Array.isArray(perfume.seasons) && perfume.seasons.includes(selectedSeasonFilter));
