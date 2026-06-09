@@ -7,138 +7,940 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ma Collection de Parfums</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-start: #0f172a;
+            --bg-mid: #1e293b;
+            --bg-end: #334155;
+            --surface: rgba(255, 255, 255, 0.92);
+            --surface-strong: #ffffff;
+            --border-soft: #d6deff;
+            --text-main: #1f2a44;
+            --text-soft: #55617f;
+            --accent: #3358ff;
+            --accent-2: #1f40cd;
+            --ok: #12966f;
+            --danger: #d24141;
+            --danger-2: #b23030;
+            --chip-bg: #edf1ff;
+            --shadow-main: 0 18px 45px rgba(16, 26, 56, 0.24);
+            --shadow-soft: 0 8px 20px rgba(28, 40, 80, 0.14);
+        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background:
+                radial-gradient(circle at 15% 20%, #3b82f6 0%, transparent 33%),
+                radial-gradient(circle at 80% 0%, #14b8a6 0%, transparent 35%),
+                linear-gradient(135deg, var(--bg-start) 0%, var(--bg-mid) 45%, var(--bg-end) 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 24px;
+            color: var(--text-main);
         }
         .container {
-            max-width: 1000px;
+            max-width: 1220px;
             margin: 0 auto;
         }
+        .hero {
+            background: linear-gradient(130deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.06));
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(7px);
+            border-radius: 18px;
+            padding: 20px 22px;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow-soft);
+        }
         h1 {
-            color: white;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5em;
+            color: #f8fbff;
+            text-align: left;
+            margin-bottom: 6px;
+            font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        .hero-subtitle {
+            color: rgba(238, 245, 255, 0.9);
+            font-size: 0.98rem;
         }
         .form-section {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: var(--surface);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-main);
+        }
+        .section-title {
+            font-size: 1.05rem;
+            margin-bottom: 14px;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .section-header .section-title {
+            margin-bottom: 0;
+        }
+        .toggle-form-btn {
+            background: linear-gradient(140deg, #4f46e5, #2563eb);
+            font-size: 0.84rem;
+            padding: 8px 12px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+        .toggle-form-btn:hover {
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.25);
+        }
+        .form-content.hidden {
+            display: none;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 16px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            align-items: end;
+        }
+        .field {
             display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .field-label {
+            font-size: 0.82rem;
+            color: #425175;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            padding-left: 1px;
+        }
+        .add-btn-wrap {
+            display: flex;
+            align-items: end;
+        }
+        .season-section {
+            margin-top: 8px;
+        }
+        .season-title {
+            font-size: 0.92rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .season-options {
+            display: flex;
+            flex-wrap: wrap;
             gap: 10px;
         }
-        input {
-            flex: 1;
+        .season-option {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f8f9ff;
+            border: 1px solid var(--border-soft);
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 0.88rem;
+            color: var(--text-main);
+        }
+        .season-option input {
+            flex: unset;
+            width: 16px;
+            height: 16px;
+            padding: 0;
+            border: none;
+        }
+        .type-section {
+            margin-top: 14px;
+            border-top: 1px solid #e8edff;
+            padding-top: 14px;
+        }
+        .type-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .type-actions {
+            display: grid;
+            grid-template-columns: minmax(220px, 1fr) auto minmax(180px, 240px) auto;
+            gap: 12px;
+            align-items: center;
+        }
+        .type-select-title {
+            font-size: 0.92rem;
+            color: var(--text-main);
+            font-weight: 600;
+            margin: 0;
+        }
+        .manage-types-btn {
+            background: linear-gradient(140deg, #1f40cd, #2563eb);
+            font-size: 0.84rem;
+            padding: 8px 12px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+        .selected-types-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+            min-height: 24px;
+        }
+        .selected-type-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #e8eeff;
+            border: 1px solid #c7d6ff;
+            color: #2e3c7d;
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+        .selected-type-chip button {
+            background: #4f46e5;
+            border-radius: 999px;
+            font-size: 0.74rem;
+            padding: 2px 6px;
+            min-width: auto;
+            line-height: 1;
+        }
+        .selected-types-empty {
+            font-size: 0.84rem;
+            color: var(--text-soft);
+            font-style: italic;
+        }
+        .type-manager-panel {
+            margin-top: 8px;
+            border: 1px solid #d8e3ff;
+            border-radius: 12px;
             padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 1em;
+            background: #f9fbff;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .type-manager-panel.hidden {
+            display: none;
+        }
+        .type-search {
+            max-width: 320px;
+        }
+        .type-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .type-option {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: #f8f9ff;
+            border: 1px solid var(--border-soft);
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            color: var(--text-main);
+        }
+        .type-add-btn {
+            background: #138a72;
+        }
+        .type-add-btn:hover {
+            background: #0f735f;
+        }
+        .type-remove-btn {
+            background: #d95f09;
+        }
+        .type-remove-btn:hover {
+            background: #b74f07;
+        }
+        input {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #ced6f5;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            background: #ffffff;
+            color: var(--text-main);
         }
         input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(51, 88, 255, 0.15);
         }
         button {
-            padding: 12px 25px;
-            background: #667eea;
+            padding: 11px 16px;
+            background: linear-gradient(140deg, var(--accent), var(--accent-2));
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: background 0.3s;
+            font-size: 0.93rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            transition: transform 0.18s, box-shadow 0.18s;
+            font-family: inherit;
         }
         button:hover {
-            background: #764ba2;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(39, 67, 200, 0.25);
+        }
+        .add-btn {
+            min-width: 130px;
+            width: 100%;
+            height: 42px;
         }
         .perfumes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 14px;
         }
         .perfume-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            text-decoration: none;
-            color: #333;
-            transition: transform 0.3s, box-shadow 0.3s;
+            border-radius: 14px;
+            perspective: 1000px;
+            min-height: 250px;
         }
-        .perfume-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        .perfume-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 250px;
+            transform-style: preserve-3d;
+            transition: transform 0.45s ease;
+        }
+        .perfume-card:hover .perfume-card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-face {
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            border: 1px solid #e5eafe;
+            box-shadow: var(--shadow-soft);
+            background: var(--surface-strong);
+            padding: 16px;
+            overflow: hidden;
+            backface-visibility: hidden;
+        }
+        .card-face::before {
+            content: '';
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 4px;
+            background: linear-gradient(180deg, #5578ff, #7d52ff);
+        }
+        .info-face {
+            transform: rotateY(0deg);
+            background:
+                radial-gradient(circle at 85% 15%, rgba(125, 82, 255, 0.18), transparent 45%),
+                radial-gradient(circle at 10% 90%, rgba(85, 120, 255, 0.16), transparent 40%),
+                linear-gradient(155deg, #ffffff 0%, #f6f9ff 100%);
+        }
+        .action-face {
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .front-badge {
+            margin-left: 8px;
+            margin-bottom: 10px;
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #3041a0;
+            background: #e7edff;
+            border: 1px solid #ccd8ff;
+            border-radius: 999px;
+            padding: 4px 9px;
+        }
+        .action-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #2f3f85;
+            margin-left: 8px;
+            margin-bottom: 4px;
         }
         .perfume-name {
-            font-size: 1.3em;
-            font-weight: bold;
+            font-size: 1.12rem;
+            font-weight: 800;
             margin-bottom: 8px;
-            color: #667eea;
+            color: #2943c8;
+            padding-left: 8px;
         }
         .perfume-brand {
-            color: #666;
-            font-size: 0.95em;
+            color: var(--text-soft);
+            font-size: 0.92rem;
             margin-bottom: 10px;
+            padding-left: 8px;
+        }
+        .perfume-meta-list {
+            margin: 4px 0 8px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .meta-item {
+            display: flex;
+            gap: 8px;
+            align-items: baseline;
+            font-size: 0.83rem;
+            color: #334155;
+        }
+        .meta-label {
+            min-width: 62px;
+            font-weight: 700;
+            color: #2e3c7d;
+        }
+        .meta-value {
+            font-weight: 600;
+            color: #4b5f9f;
+            line-height: 1.3;
         }
         .loading {
-            color: #999;
-            font-size: 0.85em;
+            color: #78839f;
+            font-size: 0.84rem;
             font-style: italic;
+            padding-left: 8px;
+        }
+        .status-found {
+            color: var(--ok);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding-left: 8px;
+        }
+        .status-missing {
+            color: #a16207;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding-left: 8px;
+        }
+        .perfume-label {
+            display: none;
         }
         .error {
             color: #e74c3c;
         }
         .remove-btn {
             width: 100%;
-            margin-top: 15px;
-            background: #e74c3c;
-            font-size: 0.9em;
-            padding: 8px;
+            margin-top: 14px;
+            background: var(--danger);
+            font-size: 0.88rem;
+            padding: 9px;
         }
         .remove-btn:hover {
-            background: #c0392b;
+            background: var(--danger-2);
+            box-shadow: 0 8px 18px rgba(187, 53, 53, 0.26);
+        }
+        .link-edit-btn {
+            width: 78%;
+            max-width: 240px;
+            background: linear-gradient(135deg, #0369a1, #0284c7);
+            font-size: 0.84rem;
+            padding: 8px 10px;
+        }
+        .link-edit-btn:hover {
+            box-shadow: 0 8px 18px rgba(2, 132, 199, 0.24);
+        }
+        .open-link-btn {
+            width: 92%;
+            max-width: 285px;
+            background: linear-gradient(135deg, #1e40af, #2563eb);
+            font-size: 1rem;
+            padding: 13px 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 800;
+            box-shadow: 0 12px 24px rgba(30, 64, 175, 0.3);
+        }
+        .open-link-btn:hover {
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 16px 28px rgba(30, 64, 175, 0.38);
+        }
+        .open-link-btn.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        .action-face .remove-btn {
+            margin-top: 0;
+            width: 78%;
+            max-width: 240px;
+        }
+        .filters-section {
+            background: var(--surface);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-main);
+        }
+        .filters-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .filter-label {
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 0.9rem;
+        }
+        select {
+            padding: 10px 12px;
+            border: 1px solid #ced6f5;
+            border-radius: 10px;
+            font-size: 0.93rem;
+            min-width: 210px;
+            background: white;
+            color: var(--text-main);
+            font-family: inherit;
+        }
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(51, 88, 255, 0.15);
+        }
+        .stats-pill {
+            margin-left: auto;
+            background: #eef2ff;
+            color: #2f46ae;
+            border: 1px solid #d6defd;
+            border-radius: 999px;
+            padding: 7px 11px;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+        .season-tags {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding-left: 8px;
+        }
+        .season-tag {
+            background: var(--chip-bg);
+            color: #3041a0;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+        .type-tag {
+            margin-top: 10px;
+            display: inline-block;
+            margin-left: 8px;
+            background: #fff3e6;
+            color: #9a5018;
+            border-radius: 999px;
+            padding: 5px 11px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .actions-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .export-btn {
+            background: linear-gradient(135deg, #119974, #0f7c61);
+        }
+        .import-btn {
+            background: linear-gradient(135deg, #1677cc, #115da0);
         }
         .empty-state {
             text-align: center;
-            color: white;
-            font-size: 1.2em;
-            padding: 40px;
+            color: #f6f9ff;
+            font-size: 1.06rem;
+            padding: 34px 18px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 14px;
+        }
+        @media (max-width: 980px) {
+            .form-group {
+                grid-template-columns: 1fr 1fr;
+            }
+            .add-btn-wrap {
+                grid-column: 1 / -1;
+            }
+            .type-row {
+                grid-template-columns: 1fr;
+            }
+            .type-actions {
+                grid-template-columns: 1fr;
+            }
+            .stats-pill {
+                margin-left: 0;
+            }
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 14px;
+            }
+            .hero {
+                padding: 16px;
+            }
+            .form-section,
+            .filters-section {
+                padding: 14px;
+            }
+            .form-group {
+                grid-template-columns: 1fr;
+            }
+            .add-btn-wrap {
+                grid-column: auto;
+            }
+            select {
+                min-width: 100%;
+            }
+            .filters-row {
+                align-items: stretch;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🧴 Ma Collection de Parfums</h1>
+        <div class="hero">
+            <h1>Ma Collection de Parfums</h1>
+            <p class="hero-subtitle">Ajoute, categorise et retrouve rapidement tes parfums par saison et famille olfactive.</p>
+        </div>
         
         <div class="form-section">
-            <div class="form-group">
-                <input type="text" id="perfumeName" placeholder="Nom du parfum (ex: Bleu de Chanel)">
-                <input type="text" id="perfumeBrand" placeholder="Marque (optionnel)">
-                <button onclick="addPerfume()">Ajouter</button>
+            <div class="section-header">
+                <h2 class="section-title">Ajouter un parfum</h2>
+                <button id="toggleFormBtn" class="toggle-form-btn" type="button" aria-expanded="true">Masquer le formulaire</button>
             </div>
+            <div id="formContent" class="form-content">
+                <div class="form-group">
+                    <div class="field">
+                        <label class="field-label" for="perfumeName">Nom du parfum</label>
+                        <input type="text" id="perfumeName" placeholder="Ex: Bleu de Chanel">
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="perfumeBrand">Marque</label>
+                        <input type="text" id="perfumeBrand" placeholder="Optionnel">
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="perfumeLink">Lien Fragrantica</label>
+                        <input type="url" id="perfumeLink" placeholder="https://www.fragrantica.com/...">
+                    </div>
+                    <div class="add-btn-wrap">
+                        <button class="add-btn" onclick="addPerfume()">Ajouter</button>
+                    </div>
+                </div>
+                <div class="type-section">
+                    <div class="type-row">
+                        <div class="type-select-title">Types du parfum (plusieurs choix possibles)</div>
+                        <button id="toggleTypeManagerBtn" class="manage-types-btn" type="button" aria-expanded="false">Gerer les types</button>
+                    </div>
+                    <div id="selectedTypesPreview" class="selected-types-preview"></div>
+                    <div id="typeManagerPanel" class="type-manager-panel hidden">
+                        <input class="type-search" type="text" id="typeSearchInput" placeholder="Rechercher un type...">
+                        <div class="type-options" id="typeOptions"></div>
+                        <div class="type-actions">
+                            <input type="text" id="newTypeInput" placeholder="Ajouter un nouveau type">
+                            <button class="type-add-btn" onclick="addTypeOption()">Ajouter le type</button>
+                            <select id="perfumeTypeManager"></select>
+                            <button class="type-remove-btn" onclick="removeSelectedType()">Supprimer le type selectionne</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="season-section">
+                    <div class="season-title">Saisons (plusieurs choix possibles)</div>
+                    <div class="season-options" id="seasonOptions">
+                        <label class="season-option"><input type="checkbox" value="printemps">Printemps</label>
+                        <label class="season-option"><input type="checkbox" value="ete">Ete</label>
+                        <label class="season-option"><input type="checkbox" value="automne">Automne</label>
+                        <label class="season-option"><input type="checkbox" value="hiver">Hiver</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="filters-section">
+            <h2 class="section-title">Filtres</h2>
+            <div class="filters-row">
+                <label class="filter-label" for="seasonFilter">Filtrer par saison :</label>
+                <select id="seasonFilter">
+                    <option value="all">Toutes les saisons</option>
+                    <option value="printemps">Printemps</option>
+                    <option value="ete">Ete</option>
+                    <option value="automne">Automne</option>
+                    <option value="hiver">Hiver</option>
+                </select>
+                <label class="filter-label" for="typeFilter">Filtrer par type :</label>
+                <select id="typeFilter">
+                    <option value="all">Tous les types</option>
+                </select>
+                <div id="resultCount" class="stats-pill">0 parfum</div>
+            </div>
+        </div>
+
+        <div class="actions-bar">
+            <button class="export-btn" onclick="exportPerfumes()">Exporter en JSON</button>
+            <button class="import-btn" onclick="importPerfumes()">Importer JSON</button>
         </div>
 
         <div id="perfumesContainer" class="perfumes-grid"></div>
         <div id="emptyState" class="empty-state">Aucun parfum ajouté pour le moment</div>
+        <input type="file" id="fileInput" accept=".json" style="display: none;">
     </div>
 
     <script>
+        const SEASONS = ['printemps', 'ete', 'automne', 'hiver'];
+        const DEFAULT_TYPES = [
+            'Floral',
+            'Ambre',
+            'Boise',
+            'Frais',
+            'Hesperide',
+            'Aromatique',
+            'Fruite',
+            'Aquatique',
+            'Chypre',
+            'Fougere',
+            'Gourmand',
+            'Cuir',
+            'Musque',
+            'Poudre'
+        ];
         let perfumes = JSON.parse(localStorage.getItem('perfumes')) || [];
+        let perfumeTypes = JSON.parse(localStorage.getItem('perfumeTypes')) || [];
+        let uiPreferences = JSON.parse(localStorage.getItem('perfumeUiPreferences')) || {};
+        let selectedSeasonFilter = 'all';
+        let selectedTypeFilter = 'all';
+        let selectedTypesDraft = [];
+
+        function capitalizeSeason(season) {
+            if (!season) return '';
+            return season.charAt(0).toUpperCase() + season.slice(1);
+        }
+
+        function normalizePerfume(perfume) {
+            let seasons = perfume.seasons;
+            if (!Array.isArray(seasons)) {
+                seasons = typeof seasons === 'string' ? [seasons] : [];
+            }
+
+            seasons = seasons
+                .map(s => String(s).trim().toLowerCase())
+                .filter(s => SEASONS.includes(s));
+
+            let types = perfume.types;
+            if (!Array.isArray(types)) {
+                const legacyType = typeof perfume.type === 'string' ? perfume.type.trim() : '';
+                types = legacyType ? [legacyType] : [];
+            }
+
+            types = types
+                .map(normalizeTypeLabel)
+                .filter(Boolean);
+
+            return {
+                ...perfume,
+                seasons: Array.from(new Set(seasons)),
+                types: Array.from(new Set(types)),
+                type: ''
+            };
+        }
+
+        function normalizeTypeLabel(type) {
+            if (!type) return '';
+            const cleaned = String(type).trim();
+            if (!cleaned) return '';
+            return cleaned
+                .split(/\s+/)
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                .join(' ');
+        }
+
+        function normalizeTypeList(types) {
+            if (!Array.isArray(types)) return [];
+            return Array.from(new Set(types
+                .map(normalizeTypeLabel)
+                .filter(Boolean)));
+        }
+
+        function normalizeUiPreferences(preferences) {
+            return {
+                isFormOpen: typeof preferences?.isFormOpen === 'boolean' ? preferences.isFormOpen : true
+            };
+        }
+
+        function savePerfumeTypes() {
+            localStorage.setItem('perfumeTypes', JSON.stringify(perfumeTypes));
+        }
+
+        function saveUiPreferences() {
+            localStorage.setItem('perfumeUiPreferences', JSON.stringify(uiPreferences));
+        }
+
+        function ensureDefaultTypes() {
+            perfumeTypes = normalizeTypeList([...DEFAULT_TYPES, ...perfumeTypes]);
+            savePerfumeTypes();
+        }
+
+        function populateTypeSelect() {
+            const typeSelect = document.getElementById('perfumeTypeManager');
+            const currentValue = typeSelect.value;
+            typeSelect.innerHTML = '<option value="">Selectionner un type</option>' +
+                perfumeTypes.map(type => `<option value="${type}">${type}</option>`).join('');
+
+            if (currentValue && perfumeTypes.includes(currentValue)) {
+                typeSelect.value = currentValue;
+            }
+        }
+
+        function populateTypeOptions() {
+            const typeOptions = document.getElementById('typeOptions');
+            const searchInput = document.getElementById('typeSearchInput');
+            const searchValue = searchInput ? searchInput.value.trim().toLowerCase() : '';
+            const visibleTypes = perfumeTypes.filter(type => type.toLowerCase().includes(searchValue));
+
+            typeOptions.innerHTML = visibleTypes.map(type => {
+                const checked = selectedTypesDraft.includes(type) ? 'checked' : '';
+                return `<label class="type-option"><input type="checkbox" value="${type}" ${checked}>${type}</label>`;
+            }).join('');
+
+            typeOptions.querySelectorAll('input[type="checkbox"]').forEach(input => {
+                input.addEventListener('change', (event) => {
+                    const value = normalizeTypeLabel(event.target.value);
+                    if (event.target.checked) {
+                        if (!selectedTypesDraft.includes(value)) {
+                            selectedTypesDraft.push(value);
+                        }
+                    } else {
+                        selectedTypesDraft = selectedTypesDraft.filter(type => type !== value);
+                    }
+                    renderSelectedTypesPreview();
+                });
+            });
+        }
+
+        function renderSelectedTypesPreview() {
+            const preview = document.getElementById('selectedTypesPreview');
+            if (!selectedTypesDraft.length) {
+                preview.innerHTML = '<div class="selected-types-empty">Aucun type selectionne</div>';
+                return;
+            }
+
+            preview.innerHTML = selectedTypesDraft.map(type => {
+                return `<span class="selected-type-chip">${type}<button type="button" onclick="removeDraftType('${encodeURIComponent(type)}')">x</button></span>`;
+            }).join('');
+        }
+
+        function removeDraftType(encodedType) {
+            const type = decodeURIComponent(encodedType);
+            selectedTypesDraft = selectedTypesDraft.filter(t => t !== type);
+            renderSelectedTypesPreview();
+            populateTypeOptions();
+        }
+
+        function populateTypeFilterSelect() {
+            const typeFilter = document.getElementById('typeFilter');
+            const currentValue = typeFilter.value;
+            typeFilter.innerHTML = '<option value="all">Tous les types</option>' +
+                perfumeTypes.map(type => `<option value="${type}">${type}</option>`).join('');
+
+            if (currentValue && (currentValue === 'all' || perfumeTypes.includes(currentValue))) {
+                typeFilter.value = currentValue;
+                selectedTypeFilter = currentValue;
+            } else {
+                typeFilter.value = 'all';
+                selectedTypeFilter = 'all';
+            }
+        }
+
+        function addTypeOption() {
+            const input = document.getElementById('newTypeInput');
+            const normalizedType = normalizeTypeLabel(input.value);
+
+            if (!normalizedType) {
+                alert('Veuillez entrer un type valide');
+                return;
+            }
+
+            if (perfumeTypes.includes(normalizedType)) {
+                alert('Ce type existe deja');
+                input.value = '';
+                return;
+            }
+
+            perfumeTypes.push(normalizedType);
+            perfumeTypes = normalizeTypeList(perfumeTypes);
+            savePerfumeTypes();
+
+            if (!selectedTypesDraft.includes(normalizedType)) {
+                selectedTypesDraft.push(normalizedType);
+            }
+
+            populateTypeSelect();
+            populateTypeOptions();
+            populateTypeFilterSelect();
+            document.getElementById('perfumeTypeManager').value = normalizedType;
+            input.value = '';
+            renderSelectedTypesPreview();
+        }
+
+        function removeSelectedType() {
+            const typeSelect = document.getElementById('perfumeTypeManager');
+            const selectedType = typeSelect.value;
+
+            if (!selectedType) {
+                alert('Veuillez selectionner un type a supprimer');
+                return;
+            }
+
+            perfumeTypes = perfumeTypes.filter(type => type !== selectedType);
+            savePerfumeTypes();
+            selectedTypesDraft = selectedTypesDraft.filter(type => type !== selectedType);
+
+            perfumes = perfumes.map(perfume => {
+                if (Array.isArray(perfume.types) && perfume.types.includes(selectedType)) {
+                    return { ...perfume, types: perfume.types.filter(type => type !== selectedType) };
+                }
+                return perfume;
+            });
+            savePerfumes();
+
+            populateTypeSelect();
+            populateTypeOptions();
+            populateTypeFilterSelect();
+            renderSelectedTypesPreview();
+            renderPerfumes();
+        }
+
+        perfumes = perfumes.map(normalizePerfume);
+        savePerfumes();
+        perfumeTypes = normalizeTypeList(perfumeTypes);
+        ensureDefaultTypes();
+        uiPreferences = normalizeUiPreferences(uiPreferences);
+        saveUiPreferences();
 
         async function searchPerfume(name, brand = '') {
             try {
@@ -159,14 +961,49 @@
             }
         }
 
+        function normalizeFragranticaUrl(url) {
+            if (!url) return '';
+            const trimmed = url.trim();
+            if (!trimmed) return '';
+            if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+                return trimmed;
+            }
+            return `https://${trimmed}`;
+        }
+
+        function formatPerfumeLabel(perfume) {
+            const typeText = Array.isArray(perfume.types) && perfume.types.length
+                ? perfume.types.join(' / ')
+                : 'Type non defini';
+            const seasonsText = Array.isArray(perfume.seasons) && perfume.seasons.length
+                ? perfume.seasons.map(capitalizeSeason).join(' / ')
+                : 'Saison non definie';
+            return `${typeText} • ${seasonsText}`;
+        }
+
         async function addPerfume() {
             const nameInput = document.getElementById('perfumeName');
             const brandInput = document.getElementById('perfumeBrand');
+            const linkInput = document.getElementById('perfumeLink');
+            const seasonsInputs = document.querySelectorAll('#seasonOptions input[type="checkbox"]:checked');
             const name = nameInput.value.trim();
             const brand = brandInput.value.trim();
+            const manualUrl = normalizeFragranticaUrl(linkInput.value);
+            const seasons = Array.from(seasonsInputs).map(input => input.value);
+            const types = Array.from(new Set(selectedTypesDraft.map(normalizeTypeLabel).filter(Boolean)));
 
             if (!name) {
                 alert('Veuillez entrer un nom de parfum');
+                return;
+            }
+
+            if (seasons.length === 0) {
+                alert('Veuillez selectionner au moins une saison');
+                return;
+            }
+
+            if (types.length === 0) {
+                alert('Veuillez selectionner au moins un type de parfum');
                 return;
             }
 
@@ -174,26 +1011,58 @@
                 id: Date.now(),
                 name: name,
                 brand: brand,
-                url: null,
-                searching: true
+                types: Array.from(new Set(types)),
+                url: manualUrl || null,
+                searching: !manualUrl,
+                seasons: seasons
             };
 
             perfumes.push(perfume);
             savePerfumes();
             renderPerfumes();
 
-            const url = await searchPerfume(name, brand);
-            perfume.url = url;
-            perfume.searching = false;
-            savePerfumes();
-            renderPerfumes();
+            if (!manualUrl) {
+                const url = await searchPerfume(name, brand);
+                perfume.url = url;
+                perfume.searching = false;
+                savePerfumes();
+                renderPerfumes();
+            }
 
             nameInput.value = '';
             brandInput.value = '';
+            linkInput.value = '';
+            document.querySelectorAll('#seasonOptions input[type="checkbox"]').forEach(input => {
+                input.checked = false;
+            });
+            selectedTypesDraft = [];
+            renderSelectedTypesPreview();
+            populateTypeOptions();
         }
 
         function removePerfume(id) {
             perfumes = perfumes.filter(p => p.id !== id);
+            savePerfumes();
+            renderPerfumes();
+        }
+
+        function editPerfumeLink(id) {
+            const perfume = perfumes.find(p => p.id === id);
+            if (!perfume) return;
+
+            const current = perfume.url || '';
+            const userValue = prompt(
+                'Entrez le lien Fragrantica.\nLaissez vide pour supprimer le lien.',
+                current
+            );
+
+            if (userValue === null) {
+                return;
+            }
+
+            const normalized = normalizeFragranticaUrl(userValue);
+            perfume.url = normalized || null;
+            perfume.searching = false;
             savePerfumes();
             renderPerfumes();
         }
@@ -205,27 +1074,63 @@
         function renderPerfumes() {
             const container = document.getElementById('perfumesContainer');
             const emptyState = document.getElementById('emptyState');
+            const resultCount = document.getElementById('resultCount');
+            const filteredPerfumes = perfumes.filter(perfume => {
+                const matchesSeason = selectedSeasonFilter === 'all' ||
+                    (Array.isArray(perfume.seasons) && perfume.seasons.includes(selectedSeasonFilter));
+                const matchesType = selectedTypeFilter === 'all' ||
+                    (Array.isArray(perfume.types) && perfume.types.includes(selectedTypeFilter));
+                return matchesSeason && matchesType;
+            });
 
-            if (perfumes.length === 0) {
+            resultCount.textContent = `${filteredPerfumes.length} parfum${filteredPerfumes.length > 1 ? 's' : ''}`;
+
+            if (filteredPerfumes.length === 0) {
                 container.innerHTML = '';
+                if (selectedSeasonFilter === 'all' && selectedTypeFilter === 'all') {
+                    emptyState.textContent = 'Aucun parfum ajouté pour le moment';
+                } else if (selectedSeasonFilter !== 'all' && selectedTypeFilter !== 'all') {
+                    emptyState.textContent = `Aucun parfum pour ${capitalizeSeason(selectedSeasonFilter)} et le type ${selectedTypeFilter}`;
+                } else if (selectedSeasonFilter !== 'all') {
+                    emptyState.textContent = `Aucun parfum pour la saison ${capitalizeSeason(selectedSeasonFilter)}`;
+                } else {
+                    emptyState.textContent = `Aucun parfum pour le type ${selectedTypeFilter}`;
+                }
                 emptyState.style.display = 'block';
                 return;
             }
 
             emptyState.style.display = 'none';
-            container.innerHTML = perfumes.map(perfume => {
-                const content = `
-                    <div class="perfume-name">${perfume.name}</div>
-                    ${perfume.brand ? `<div class="perfume-brand">${perfume.brand}</div>` : ''}
-                    ${perfume.searching ? '<div class="loading">Recherche en cours...</div>' : '<div style="color: #27ae60; font-size: 0.9em;">✓ Lien trouvé</div>'}
-                    <button class="remove-btn" onclick="removePerfume(${perfume.id})">Supprimer</button>
-                `;
-
-                if (perfume.url && !perfume.searching) {
-                    return `<a href="${perfume.url}" target="_blank" class="perfume-card" onclick="if(event.target.classList.contains('remove-btn')) { event.preventDefault(); removePerfume(${perfume.id}); }">${content}</a>`;
-                } else {
-                    return `<div class="perfume-card">${content}</div>`;
-                }
+            container.innerHTML = filteredPerfumes.map(perfume => {
+                const linkButtonClass = perfume.url ? 'open-link-btn' : 'open-link-btn disabled';
+                const linkHref = perfume.url || '#';
+                const typesText = Array.isArray(perfume.types) && perfume.types.length
+                    ? perfume.types.join(' / ')
+                    : 'Non defini';
+                const seasonsText = Array.isArray(perfume.seasons) && perfume.seasons.length
+                    ? perfume.seasons.map(capitalizeSeason).join(' / ')
+                    : 'Non definie';
+                return `
+                <div class="perfume-card">
+                    <div class="perfume-card-inner">
+                        <div class="card-face info-face">
+                            <div class="front-badge">Etiquette parfum</div>
+                            <div class="perfume-name">${perfume.name}</div>
+                            ${perfume.brand ? `<div class="perfume-brand">${perfume.brand}</div>` : '<div class="perfume-brand">Marque non definie</div>'}
+                            <div class="perfume-meta-list">
+                                <div class="meta-item"><span class="meta-label">Types</span><span class="meta-value">${typesText}</span></div>
+                                <div class="meta-item"><span class="meta-label">Saisons</span><span class="meta-value">${seasonsText}</span></div>
+                            </div>
+                            ${perfume.searching ? '<div class="loading">Recherche Fragrantica en cours...</div>' : (perfume.url ? '<div class="status-found">Lien Fragrantica configure</div>' : '<div class="status-missing">Lien Fragrantica non configure</div>')}
+                        </div>
+                        <div class="card-face action-face">
+                            <div class="action-title">Actions rapides</div>
+                            <button class="link-edit-btn" onclick="editPerfumeLink(${perfume.id})">Modifier le lien</button>
+                            <a class="${linkButtonClass}" href="${linkHref}" target="_blank" rel="noopener noreferrer">Visiter Fragrantica</a>
+                            <button class="remove-btn" onclick="removePerfume(${perfume.id})">Supprimer</button>
+                        </div>
+                    </div>
+                </div>`;
             }).join('');
         }
 
@@ -233,17 +1138,66 @@
             if (e.key === 'Enter') addPerfume();
         });
 
+        document.getElementById('newTypeInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addTypeOption();
+        });
+
+        document.getElementById('seasonFilter').addEventListener('change', (e) => {
+            selectedSeasonFilter = e.target.value;
+            renderPerfumes();
+        });
+
+        document.getElementById('typeFilter').addEventListener('change', (e) => {
+            selectedTypeFilter = e.target.value;
+            renderPerfumes();
+        });
+
+        document.getElementById('toggleTypeManagerBtn').addEventListener('click', () => {
+            const panel = document.getElementById('typeManagerPanel');
+            const button = document.getElementById('toggleTypeManagerBtn');
+            const isHidden = panel.classList.toggle('hidden');
+            button.textContent = isHidden ? 'Gerer les types' : 'Fermer la gestion';
+            button.setAttribute('aria-expanded', String(!isHidden));
+        });
+
+        document.getElementById('typeSearchInput').addEventListener('input', () => {
+            populateTypeOptions();
+        });
+
+        function applyFormVisibilityPreference() {
+            const formContent = document.getElementById('formContent');
+            const toggleBtn = document.getElementById('toggleFormBtn');
+            const isOpen = uiPreferences.isFormOpen;
+
+            formContent.classList.toggle('hidden', !isOpen);
+            toggleBtn.textContent = isOpen ? 'Masquer le formulaire' : 'Afficher le formulaire';
+            toggleBtn.setAttribute('aria-expanded', String(isOpen));
+        }
+
+        document.getElementById('toggleFormBtn').addEventListener('click', () => {
+            uiPreferences.isFormOpen = !uiPreferences.isFormOpen;
+            saveUiPreferences();
+            applyFormVisibilityPreference();
+        });
+
+        populateTypeSelect();
+        populateTypeOptions();
+        populateTypeFilterSelect();
+        renderSelectedTypesPreview();
+        applyFormVisibilityPreference();
+
         renderPerfumes();
     </script>
-    <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
-        <button onclick="exportPerfumes()" style="background: #27ae60;">📥 Exporter en JSON</button>
-        <button onclick="importPerfumes()" style="background: #3498db;">📤 Importer JSON</button>
-    </div>
-    <input type="file" id="fileInput" accept=".json" style="display: none;">
-
     <script>
     function exportPerfumes() {
-        const dataStr = JSON.stringify(perfumes, null, 2);
+        const exportPayload = {
+            version: 2,
+            exportedAt: new Date().toISOString(),
+            perfumes: perfumes,
+            perfumeTypes: perfumeTypes,
+            uiPreferences: uiPreferences
+        };
+        const dataStr = JSON.stringify(exportPayload, null, 2);
         const dataBlob = new Blob([dataStr], {type: 'application/json'});
         const url = URL.createObjectURL(dataBlob);
         const link = document.createElement('a');
@@ -265,8 +1219,33 @@
                 try {
                     const imported = JSON.parse(event.target.result);
                     if (Array.isArray(imported)) {
-                        perfumes = imported;
+                        // Legacy format support: old exports stored only the perfume list.
+                        perfumes = imported.map(normalizePerfume);
                         savePerfumes();
+                        renderPerfumes();
+                        alert('Parfums importés avec succès!');
+                        return;
+                    }
+
+                    if (imported && typeof imported === 'object' && Array.isArray(imported.perfumes)) {
+                        perfumes = imported.perfumes.map(normalizePerfume);
+                        savePerfumes();
+
+                        if (Array.isArray(imported.perfumeTypes)) {
+                            perfumeTypes = normalizeTypeList(imported.perfumeTypes);
+                            ensureDefaultTypes();
+                            savePerfumeTypes();
+                            populateTypeSelect();
+                            populateTypeOptions();
+                            populateTypeFilterSelect();
+                        }
+
+                        if (imported.uiPreferences && typeof imported.uiPreferences === 'object') {
+                            uiPreferences = normalizeUiPreferences(imported.uiPreferences);
+                            saveUiPreferences();
+                            applyFormVisibilityPreference();
+                        }
+
                         renderPerfumes();
                         alert('Parfums importés avec succès!');
                     }
